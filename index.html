@@ -1286,6 +1286,36 @@ let mapZoom         = MAP_ZOOM_DEFAULT;
 let lastViewTitle   = '← マップを選択してください';
 
 /* ══════════════════════════════════════════════════
+   URL連携（?map=<マップID>）
+══════════════════════════════════════════════════ */
+function mapIdFromUrl() {
+  const raw = new URLSearchParams(window.location.search).get('map');
+  if (raw === null || !/^\d+$/.test(raw)) return null;
+  const mid = Number(raw);
+  return MONSTER_DATA.maps.some(m => m.id === mid) ? mid : null;
+}
+
+function updateMapUrl(mid) {
+  try {
+    const url = new URL(window.location.href);
+    if (mid === null || mid === undefined) {
+      url.searchParams.delete('map');
+    } else {
+      url.searchParams.set('map', String(mid));
+    }
+    history.replaceState(null, '', url.href);
+  } catch (e) {
+    // file:// などでHistory APIが使えない場合も表示は継続する
+  }
+}
+
+function openMapFromUrl() {
+  const mid = mapIdFromUrl();
+  if (mid === null) return;
+  selectMap(mid);
+}
+
+/* ══════════════════════════════════════════════════
    初期化（scriptがbody末尾のためDOMContentLoaded不要・直接実行）
 ══════════════════════════════════════════════════ */
 function init() {
@@ -1304,6 +1334,7 @@ function init() {
     setupLvControl();
     setupFormulaPanel();
     setupMapControls();
+    openMapFromUrl();
     document.getElementById('loading').classList.add('hidden');
   } catch(e) {
     document.getElementById('loading').innerHTML =
@@ -1400,6 +1431,7 @@ function calcMapLv(mid) {
 function selectMap(mid) {
   currentMapId = mid;
   currentSearchBid = null;
+  updateMapUrl(mid);
   document.getElementById('main').classList.add('map-mode');
 
   // マップの代表レベルを自動設定
@@ -1539,6 +1571,7 @@ function renderSingleBreed(bid) {
   currentMapId = null;
   currentMapView = null;
   selectedGroupNo = null;
+  updateMapUrl(null);
   const main = document.getElementById('main');
   main.classList.remove('map-mode', 'map-no-image');
   document.getElementById('entity-panel').style.display = '';
