@@ -23,7 +23,7 @@
   --yellow:     #ffca28;
   --red:        #ef5350;
   --sidebar-w:  260px;
-  --header-h:   110px;
+  --header-h:   88px;
 }
 html, body { height: 100%; overflow: hidden; font-family: 'Segoe UI', 'Meiryo UI', Meiryo, sans-serif; font-size: 13px; background: var(--bg); color: var(--text); }
 
@@ -56,7 +56,7 @@ html, body { height: 100%; overflow: hidden; font-family: 'Segoe UI', 'Meiryo UI
 #main {
   background: var(--bg);
   overflow-y: auto;
-  padding: 16px;
+  padding: 12px 16px;
   scrollbar-width: thin;
   scrollbar-color: var(--border) transparent;
 }
@@ -233,6 +233,10 @@ html, body { height: 100%; overflow: hidden; font-family: 'Segoe UI', 'Meiryo UI
   padding-bottom: 8px;
   border-bottom: 1px solid var(--border);
 }
+/* マップ表示中はMAPツールバー側に名前を集約する（検索結果・計算式では表示） */
+#main.map-mode:not(.formula-mode) #main-title { display: none; }
+/* 地図画像の読み込みに失敗した場合だけ、マップ名の代わりにタイトルを戻す */
+#main.map-mode.map-no-image:not(.formula-mode) #main-title { display: block; }
 #monster-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
@@ -247,23 +251,30 @@ html, body { height: 100%; overflow: hidden; font-family: 'Segoe UI', 'Meiryo UI
 }
 
 /* ══════════════════════════════════════════════════
-   マップビュー（上部画像＋左一覧＋右カード）
+   マップビュー（左一覧＋右上マップ＋右下カード）
 ══════════════════════════════════════════════════ */
-#map-panel { display: none; margin-bottom: 16px; }
+#map-panel { display: none; margin-bottom: 0; }
 #main.map-mode #map-panel { display: block; }
 #main.map-mode #entity-panel { display: flex; }
 #main.map-mode #map-content {
   display: grid;
   grid-template-columns: 300px minmax(0, 1fr);
-  gap: 16px;
+  gap: 12px;
   align-items: start;
 }
-#main.map-mode #monster-grid {
+#map-main {
   display: flex;
   flex-direction: column;
   gap: 10px;
   min-width: 0;
 }
+#main.map-mode #monster-grid {
+  display: block;
+  column-width: 340px;
+  column-gap: 12px;
+  min-width: 0;
+}
+#main.map-mode #monster-grid > .placeholder { column-span: all; }
 #main.formula-mode #map-panel,
 #main.formula-mode #entity-panel,
 #main.formula-mode #monster-grid { display: none !important; }
@@ -279,11 +290,11 @@ html, body { height: 100%; overflow: hidden; font-family: 'Segoe UI', 'Meiryo UI
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 9px 12px;
+  padding: 6px 12px;
   border-bottom: 1px solid var(--border);
   background: linear-gradient(90deg, #0a2744 0%, #16213e 100%);
 }
-.map-toolbar-main { display: flex; align-items: center; gap: 9px; min-width: 0; flex-wrap: wrap; }
+.map-toolbar-main { display: flex; align-items: center; gap: 9px; min-width: 0; flex-wrap: nowrap; }
 .map-eyebrow {
   font-size: 9px;
   letter-spacing: 1.5px;
@@ -301,6 +312,14 @@ html, body { height: 100%; overflow: hidden; font-family: 'Segoe UI', 'Meiryo UI
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+#map-panel-meta {
+  font-size: 10px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 #map-legend { display: flex; align-items: center; gap: 9px; font-size: 10px; color: var(--text-muted); white-space: nowrap; }
 .map-legend-item { display: inline-flex; align-items: center; gap: 3px; }
@@ -331,7 +350,9 @@ html, body { height: 100%; overflow: hidden; font-family: 'Segoe UI', 'Meiryo UI
 }
 #map-viewport {
   position: relative;
-  max-height: 44vh;
+  /* 初期フィットはJS側で44vh基準。拡大時はここまで枠を伸ばして全体を見せる。 */
+  max-height: min(70vh, 760px);
+  padding: 14px;
   overflow: auto;
   background:
     linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
@@ -344,7 +365,7 @@ html, body { height: 100%; overflow: hidden; font-family: 'Segoe UI', 'Meiryo UI
 #map-plane {
   position: relative;
   width: 100%;
-  min-width: 280px;
+  min-width: 100px;
   transition: width .12s ease-out;
 }
 #map-image {
@@ -370,10 +391,10 @@ html, body { height: 100%; overflow: hidden; font-family: 'Segoe UI', 'Meiryo UI
   font-weight: bold;
   line-height: 17px;
   text-align: center;
-  cursor: pointer;
+  cursor: default;
   pointer-events: auto;
   box-shadow: 0 1px 3px rgba(0,0,0,.6);
-  transition: opacity .12s, transform .12s, background .12s, border-color .12s;
+  transition: background .12s, border-color .12s, color .12s;
   z-index: 1;
 }
 .map-marker.npc {
@@ -382,23 +403,18 @@ html, body { height: 100%; overflow: hidden; font-family: 'Segoe UI', 'Meiryo UI
   border-color: rgba(94, 170, 154, .85);
   color: #b8efe3;
 }
-.map-marker:hover { z-index: 8; transform: translate(-50%, -50%) scale(1.2); border-color: #fff; }
-.map-markers.has-selection .map-marker:not(.active) { opacity: .24; }
 .map-marker.active {
   z-index: 12;
   background: var(--accent);
   border-color: #fff;
   color: #fff;
-  transform: translate(-50%, -50%) scale(1.38);
-  box-shadow: 0 0 0 2px rgba(255,255,255,.85), 0 0 12px rgba(233,69,96,.9);
-  opacity: 1;
 }
 #map-status {
-  padding: 6px 12px;
+  padding: 4px 12px;
   border-top: 1px solid var(--border);
   font-size: 10px;
   color: var(--text-muted);
-  min-height: 26px;
+  min-height: 22px;
   line-height: 1.5;
 }
 #map-status b { color: var(--text); font-weight: bold; }
@@ -499,20 +515,13 @@ html, body { height: 100%; overflow: hidden; font-family: 'Segoe UI', 'Meiryo UI
 }
 .entity-meta { font-size: 9px; color: var(--text-muted); text-align: right; line-height: 1.35; white-space: nowrap; }
 
-/* ── 右：折りたたみカード ── */
-.card.entity-card { overflow: hidden; }
-.card.entity-card summary { cursor: pointer; list-style: none; }
-.card.entity-card summary::-webkit-details-marker { display: none; }
-.card.entity-card summary::after {
-  content: '▾';
-  color: var(--text-muted);
-  font-size: 11px;
-  margin-left: 6px;
-  flex-shrink: 0;
+/* ── 右：カード（常時展開・マルチカラム） ── */
+.card.entity-card {
+  overflow: hidden;
+  break-inside: avoid;
+  margin-bottom: 12px;
 }
-.card.entity-card:not([open]) summary::after { content: '▸'; }
-.card.entity-card[open] { border-color: rgba(233,69,96,.55); }
-.card.entity-card[open] summary { border-bottom-color: var(--accent); }
+.card.entity-card:hover { transform: none; box-shadow: none; }
 .card.entity-card.active { box-shadow: 0 0 0 1px rgba(233,69,96,.5); }
 .card-no {
   display: inline-block;
@@ -539,6 +548,7 @@ html, body { height: 100%; overflow: hidden; font-family: 'Segoe UI', 'Meiryo UI
   #main.map-mode #map-content { display: block; }
   #entity-panel { position: static; max-height: 300px; margin-bottom: 12px; }
   #map-viewport { max-height: 36vh; }
+  #map-legend { display: none; }
 }
 
 /* ══════════════════════════════════════════════════
@@ -561,6 +571,20 @@ html, body { height: 100%; overflow: hidden; font-family: 'Segoe UI', 'Meiryo UI
   border-bottom: 1px solid var(--border);
 }
 .card-name  { font-size: 15px; font-weight: bold; color: #fff; }
+.card-species-label {
+  display: inline-block;
+  margin-right: 5px;
+  padding: 1px 5px;
+  border: 1px solid #6d5520;
+  border-radius: 4px;
+  background: #2d240b;
+  color: var(--accent2);
+  font-size: 9px;
+  font-weight: bold;
+  line-height: 1.4;
+  vertical-align: 2px;
+}
+.card-alias { color: #a8c0dc; }
 .card-sub   { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
 .card-lv-badge {
   background: var(--accent);
@@ -574,6 +598,39 @@ html, body { height: 100%; overflow: hidden; font-family: 'Segoe UI', 'Meiryo UI
 }
 .card-body { padding: 10px 14px; }
 
+/* ── 画像＋ステータス（画像を左に2行分）── */
+/* 画像361枚の幅・高さの中央値 80×91px に統一 */
+.card-overview {
+  --thumb-w: 80px;
+  --thumb-h: 91px;
+  display: grid;
+  grid-template-columns: var(--thumb-w) minmax(0, 1fr);
+  gap: 8px;
+  align-items: stretch;
+  width: min(100%, 400px);
+  margin-bottom: 6px;
+}
+.card-overview-main { min-width: 0; }
+.card-thumb {
+  display: block;
+  width: 100%;
+  height: var(--thumb-h);
+  min-height: var(--thumb-h);
+  object-fit: contain;
+  background: #000;
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: 6px;
+}
+.card-thumb-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  font-size: 20px;
+  font-weight: bold;
+  border-style: dashed;
+}
+
 /* ── セクション見出し ── */
 .sec-title {
   font-size: 10px;
@@ -585,12 +642,12 @@ html, body { height: 100%; overflow: hidden; font-family: 'Segoe UI', 'Meiryo UI
 }
 .sec-title:first-child { margin-top: 0; }
 
-/* ── ステータスグリッド（2×4）── */
+/* ── ステータスグリッド（4＋3）── */
 .stat-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(52px, 1fr));
   gap: 4px;
-  margin-bottom: 4px;
+  margin-bottom: 0;
 }
 .stat-cell {
   background: rgba(0,0,0,.25);
@@ -598,8 +655,21 @@ html, body { height: 100%; overflow: hidden; font-family: 'Segoe UI', 'Meiryo UI
   padding: 4px 6px;
   text-align: center;
 }
-.stat-cell .sc-label { font-size: 9px; color: var(--text-muted); display: block; }
-.stat-cell .sc-val   { font-size: 13px; font-weight: bold; color: var(--blue); }
+.stat-cell .sc-label { font-size: 9px; color: var(--text-muted); display: block; white-space: nowrap; }
+.stat-cell .sc-val   { font-size: 13px; font-weight: bold; color: var(--blue); display: block; white-space: nowrap; }
+
+@media (max-width: 600px) {
+  .card-overview {
+    --thumb-w: 64px;
+    --thumb-h: 73px;
+    width: 100%;
+    grid-template-columns: var(--thumb-w) minmax(0, 1fr);
+    gap: 6px;
+  }
+  .stat-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .stat-cell { padding: 3px 3px; }
+  .stat-cell .sc-val { font-size: 12px; }
+}
 
 /* ── HP/CP/ATK/DEF バー ── */
 .combat-row {
@@ -778,7 +848,7 @@ html, body { height: 100%; overflow: hidden; font-family: 'Segoe UI', 'Meiryo UI
     <h1>🐉 JRS<br><span>モンスター図鑑</span></h1>
 
     <div id="search-wrap">
-      <label>🔍 モンスター名検索（部分一致）</label>
+      <label>🔍 モンスター名検索（種族名・マップ表示名の部分一致）</label>
       <div id="search-row">
         <input type="text" id="search-input" placeholder="例：コロッサス、スケルトン…"
                autocomplete="off" spellcheck="false">
@@ -792,8 +862,6 @@ html, body { height: 100%; overflow: hidden; font-family: 'Segoe UI', 'Meiryo UI
         <input type="number" id="lv-input" value="100" min="1" max="9999">
         <button class="btn btn-accent2" id="btn-apply-lv">再計算</button>
         <button class="btn btn-formula" id="btn-formula">計算式</button>
-        <p>※魔法抵抗のWIS補正 = WIS×5/100（WIS/20）／純モンスターは上限なし</p>
-        <p>※リポップ速度はMAPデータ上の値（サーバ設定で変動）</p>
       </div>
     </div>
   </header>
@@ -819,48 +887,50 @@ html, body { height: 100%; overflow: hidden; font-family: 'Segoe UI', 'Meiryo UI
   <main id="main">
     <div id="main-title">← マップを選択してください</div>
 
-    <!-- ── 上部：共有マップ画像 ── -->
-    <section id="map-panel" aria-label="マップ画像">
-      <div id="map-toolbar">
-        <div class="map-toolbar-main">
-          <span class="map-eyebrow">MAP</span>
-          <span id="map-panel-name"></span>
-          <span id="map-legend">
-            <span class="map-legend-item"><span class="map-legend-dot"></span>モンスター</span>
-            <span class="map-legend-item"><span class="map-legend-dot npc"></span>NPC</span>
-            <span class="map-legend-item"><span class="map-legend-dot active"></span>選択中</span>
-          </span>
-        </div>
-        <div id="map-zoom-controls">
-          <button type="button" class="map-zoom-btn" id="map-zoom-out" title="縮小">−</button>
-          <span id="map-zoom-label">100%</span>
-          <button type="button" class="map-zoom-btn" id="map-zoom-in" title="拡大">＋</button>
-          <button type="button" class="map-zoom-btn" id="map-zoom-reset" title="100%に戻す">⟲</button>
-        </div>
-      </div>
-      <div id="map-viewport">
-        <div id="map-plane">
-          <img id="map-image" alt="">
-          <div id="map-markers"></div>
-        </div>
-      </div>
-      <div id="map-status">マップ上の番号をクリックすると、その出現グループを選択します。</div>
-    </section>
-
-    <!-- ── 左：NPC / モンスター一覧／右：折りたたみカード ── -->
     <div id="map-content">
       <aside id="entity-panel" aria-label="NPC・モンスター一覧">
         <div id="entity-head">
           <div class="entity-head-title">NPC / モンスター</div>
-          <div class="entity-head-sub">番号をクリックで地点を強調</div>
+          <div class="entity-head-sub">左: マップ表示名 / 右カード: 種族名</div>
         </div>
         <div id="entity-list"></div>
       </aside>
 
-      <div id="monster-grid">
-        <div class="placeholder">
-          左のマップ一覧からマップを選ぶか、<br>
-          上の検索ボックスでモンスター名を検索してください。
+      <!-- ── 右上：共有マップ画像／右下：カード ── -->
+      <div id="map-main">
+        <section id="map-panel" aria-label="マップ画像">
+          <div id="map-toolbar">
+            <div class="map-toolbar-main">
+              <span class="map-eyebrow">MAP</span>
+              <span id="map-panel-name"></span>
+              <span id="map-panel-meta"></span>
+              <span id="map-legend">
+                <span class="map-legend-item"><span class="map-legend-dot"></span>モンスター</span>
+                <span class="map-legend-item"><span class="map-legend-dot npc"></span>NPC</span>
+                <span class="map-legend-item"><span class="map-legend-dot active"></span>選択中</span>
+              </span>
+            </div>
+            <div id="map-zoom-controls">
+              <button type="button" class="map-zoom-btn" id="map-zoom-out" title="縮小">−</button>
+              <span id="map-zoom-label">50%</span>
+              <button type="button" class="map-zoom-btn" id="map-zoom-in" title="拡大">＋</button>
+              <button type="button" class="map-zoom-btn" id="map-zoom-reset" title="初期倍率に戻す">⟲</button>
+            </div>
+          </div>
+          <div id="map-viewport">
+            <div id="map-plane">
+              <img id="map-image" alt="">
+              <div id="map-markers"></div>
+            </div>
+          </div>
+          <div id="map-status">左のNPC／モンスター一覧から選ぶと、その地点を強調します。</div>
+        </section>
+
+        <div id="monster-grid">
+          <div class="placeholder">
+            左のマップ一覧からマップを選ぶか、<br>
+            上の検索ボックスでモンスター名を検索してください。
+          </div>
         </div>
       </div>
     </div>
@@ -1012,6 +1082,7 @@ html, body { height: 100%; overflow: hidden; font-family: 'Segoe UI', 'Meiryo UI
 
 <!-- 生成された各データJSを読み込む -->
 <script src="monster_data.js"></script>
+<script src="monster_image_map.js"></script>
 <script src="skill_data.js"></script>
 <script>
 'use strict';
@@ -1188,9 +1259,13 @@ let currentLvFilter = 0;
 let searchTimer     = null;
 
 // マップビューの状態（番号→グループ、現在の選択）
+const MAP_ZOOM_DEFAULT = 0.5;
+const MAP_ZOOM_MIN = 0.1;
+const MAP_ZOOM_MAX = 2.6;
+let mapBaseZoom    = MAP_ZOOM_DEFAULT;
 let currentMapView  = null;
 let selectedGroupNo = null;
-let mapZoom         = 1;
+let mapZoom         = MAP_ZOOM_DEFAULT;
 let lastViewTitle   = '← マップを選択してください';
 
 /* ══════════════════════════════════════════════════
@@ -1343,6 +1418,28 @@ function mapLevelText(min, max) {
   return lo === hi ? `Lv ${lo}` : `Lv ${lo}–${hi}`;
 }
 
+/* job2.dat の Breed.Name。右カードの見出しに使う「種族名」。 */
+function breedSpeciesName(b) {
+  return b && b.name ? String(b.name).trim() : '';
+}
+
+/* job2 のブリードIDから生成済みモンスター画像を引く。 */
+function breedImagePath(b) {
+  if (!b || typeof MONSTER_IMAGES === 'undefined') return '';
+  return MONSTER_IMAGES[String(b.id)] || '';
+}
+
+/*
+ * RMD の MapActorSingle/MapActorGroup に付いている名前。
+ * 左一覧・地図マーカーに出す「マップ上の表示名（固有名）」。
+ * sp.npc はNPCではなくマップ上の表示名なので、この関数経由で扱う。
+ */
+function breedDisplayName(b, sp) {
+  const display = sp && (sp.npc || sp.group);
+  if (display && String(display).trim()) return String(display).trim();
+  return breedSpeciesName(b);
+}
+
 function buildMapGroups(map, mid) {
   let spawns = mapSpawns(mid);
 
@@ -1357,7 +1454,8 @@ function buildMapGroups(map, mid) {
     kind: 'monster',
     b,
     sp,
-    name: sp.npc || sp.group || b.name,
+    name: breedDisplayName(b, sp),   // 左一覧・地図に出す固有名
+    species: breedSpeciesName(b),    // 右カードの見出しに出す種族名
     min: Number(sp.min) || 0,
     max: Number(sp.max) || 0,
     cnt: Number(sp.cnt) || (Array.isArray(sp.points) ? sp.points.length : 0),
@@ -1425,9 +1523,9 @@ function renderSingleBreed(bid) {
   currentMapView = null;
   selectedGroupNo = null;
   const main = document.getElementById('main');
-  main.classList.remove('map-mode');
+  main.classList.remove('map-mode', 'map-no-image');
   document.getElementById('entity-panel').style.display = '';
-  title.textContent = `🔍 「${breed.name}」の検索結果`;
+  title.textContent = `🔍 種族「${breed.name}」の検索結果`;
   lastViewTitle = title.textContent;
   grid.innerHTML = '';
   grid.appendChild(buildCard(breed, currentLv, null, true));
@@ -1445,7 +1543,9 @@ function groupTooltip(g) {
   if (g.kind === 'npc') {
     return `${g.name} / NPC / ${g.cnt}地点`;
   }
-  return `${g.name} / ${mapLevelText(g.min, g.max)} / ${g.cnt}地点`;
+  const species = g.species || breedSpeciesName(g.b);
+  const speciesTxt = species && species !== g.name ? `（種族: ${species}）` : '';
+  return `${g.name}${speciesTxt} / ${mapLevelText(g.min, g.max)} / ${g.cnt}地点`;
 }
 
 function renderMapPanel(view) {
@@ -1454,11 +1554,20 @@ function renderMapPanel(view) {
   const img = document.getElementById('map-image');
   const markerRoot = document.getElementById('map-markers');
   const status = document.getElementById('map-status');
-  document.getElementById('map-panel-name').textContent = map.name || '';
-
+  const main = document.getElementById('main');
+  const meta = document.getElementById('map-panel-meta');
+  const nameEl = document.getElementById('map-panel-name');
+  const special = isSpecialMapName(map.name) || /secret|test|duel/i.test(map.file || '');
   const hasImage = Boolean(map.img && map.w > 0 && map.h > 0);
+
+  nameEl.textContent = map.name || '';
+  nameEl.title = map.name || '';
+  meta.textContent = `${view.monsterGroups.length}グループ / ${view.npcGroups.length}NPC` +
+    `${special ? ' ・ 特殊' : ''}${hasImage ? '' : ' ・ 画像なし'}`;
+  main.classList.toggle('map-no-image', !hasImage);
   panel.classList.toggle('no-image', !hasImage);
   if (!hasImage) {
+    mapBaseZoom = MAP_ZOOM_DEFAULT;
     img.removeAttribute('src');
     img.alt = '';
     markerRoot.innerHTML = '';
@@ -1469,17 +1578,46 @@ function renderMapPanel(view) {
 
   img.onerror = () => {
     panel.classList.add('no-image');
+    main.classList.add('map-no-image');
     status.textContent = 'マップ画像を読み込めませんでした。';
   };
-  img.onload = () => panel.classList.remove('no-image');
+  img.onload = () => {
+    panel.classList.remove('no-image');
+    main.classList.remove('map-no-image');
+  };
   img.src = encodeURI(map.img);
   img.alt = `${map.name} のマップ画像`;
 
-  // マップ切り替え時はズームをリセット
-  mapZoom = 1;
-  applyMapZoom(1, false);
+  // 通常は50%。縦長マップだけは表示枠に全体が収まる倍率まで下げる。
+  mapBaseZoom = initialMapZoom(map);
+  mapZoom = mapBaseZoom;
+  applyMapZoom(mapBaseZoom, false);
+  document.getElementById('map-zoom-reset').title =
+    `初期倍率（${Math.round(mapBaseZoom * 100)}%）に戻す`;
+  document.getElementById('map-zoom-label').title = mapBaseZoom < MAP_ZOOM_DEFAULT
+    ? '縦長マップのため、全体が収まる倍率に自動調整しています'
+    : '';
   renderMapMarkers(view, markerRoot);
-  status.textContent = '番号をクリックすると、その出現グループの地点を強調します。';
+  status.textContent = '左のNPC／モンスター一覧から選ぶと、その地点を強調します。';
+}
+
+function initialMapZoom(map) {
+  // 初期表示は上部を圧縮したいので44vh（モバイル36vh）を基準にする。
+  // CSSのmap-viewportはズーム時に70vhまで伸びる。
+  const viewport = document.getElementById('map-viewport');
+  if (!viewport || !map || !map.w || !map.h) return MAP_ZOOM_DEFAULT;
+
+  const cs = getComputedStyle(viewport);
+  const padX = (parseFloat(cs.paddingLeft) || 0) + (parseFloat(cs.paddingRight) || 0);
+  const padY = (parseFloat(cs.paddingTop) || 0) + (parseFloat(cs.paddingBottom) || 0);
+  const availW = Math.max(1, viewport.clientWidth - padX);
+  const maxH = window.matchMedia('(max-width: 820px)').matches
+    ? window.innerHeight * 0.36
+    : Math.min(window.innerHeight * 0.44, 500);
+  const availH = Math.max(1, maxH - padY);
+  const imageAspect = (map.w * 2) / map.h;
+  const fitZoom = (availH * imageAspect) / availW;
+  return Math.max(MAP_ZOOM_MIN, Math.min(MAP_ZOOM_DEFAULT, fitZoom));
 }
 
 function renderMapMarkers(view, markerRoot) {
@@ -1490,8 +1628,7 @@ function renderMapMarkers(view, markerRoot) {
 
   view.allGroups.forEach(g => {
     g.points.forEach(([x, y]) => {
-      const marker = document.createElement('button');
-      marker.type = 'button';
+      const marker = document.createElement('span');
       marker.className = `map-marker ${g.kind}`;
       marker.dataset.no = String(g.no);
       marker.dataset.kind = g.kind;
@@ -1500,13 +1637,11 @@ function renderMapMarkers(view, markerRoot) {
       marker.textContent = String(g.no);
       marker.title = groupTooltip(g) + `\n(${x}, ${y})`;
       marker.setAttribute('aria-label', `${g.no} ${groupTooltip(g)}`);
-      marker.addEventListener('click', () => activateGroup(g.no, { openCard: g.kind === 'monster' }));
       frag.appendChild(marker);
     });
   });
 
   markerRoot.innerHTML = '';
-  markerRoot.classList.remove('has-selection');
   markerRoot.appendChild(frag);
 }
 
@@ -1522,8 +1657,9 @@ function entityRowHtml(g) {
     sub = 'NPC';
     meta = `${g.cnt}地点`;
   } else {
-    const breedName = g.b && g.b.name && g.b.name !== g.name ? `${g.b.name} / ` : '';
-    sub = `${breedName}${g.b ? g.b.race : ''}`;
+    // 左の名前はマップ上の表示名。種族名は右カードの見出しなので、ここで明示する。
+    const species = g.species || breedSpeciesName(g.b);
+    sub = `種族: ${species}${g.b && g.b.race ? ` / ${g.b.race}` : ''}`;
     meta = `${mapLevelText(g.min, g.max)}<br>${g.cnt}体`;
   }
   return `<button type="button" class="entity-row ${isNpc ? 'npc' : 'monster'}"` +
@@ -1538,7 +1674,8 @@ function renderEntityList(view) {
   const list = document.getElementById('entity-list');
   const sub = document.querySelector('#entity-head .entity-head-sub');
   if (sub) {
-    sub.textContent = `NPC ${view.npcGroups.length} / モンスター ${view.monsterGroups.length}`;
+    sub.textContent = `左: マップ表示名 / 右カード: 種族名 ｜ ` +
+      `NPC ${view.npcGroups.length} / モンスター ${view.monsterGroups.length}`;
   }
 
   let html = '';
@@ -1557,14 +1694,13 @@ function renderEntityList(view) {
   list.innerHTML = html;
   list.querySelectorAll('.entity-row').forEach(row => {
     row.addEventListener('click', () => {
-      const no = parseInt(row.dataset.no, 10);
-      activateGroup(no, { openCard: row.dataset.kind === 'monster' });
+      activateGroup(parseInt(row.dataset.no, 10));
     });
   });
 }
 
 /* ══════════════════════════════════════════════════
-   右：折りたたみカード
+   右：常時展開カード
 ══════════════════════════════════════════════════ */
 function renderMonsterCards(view) {
   const grid = document.getElementById('monster-grid');
@@ -1577,15 +1713,6 @@ function renderMonsterCards(view) {
 
   view.monsterGroups.forEach(g => {
     const card = buildCard(g.b, currentLv, g.sp, false, { no: g.no });
-    card.dataset.gno = String(g.no);
-    card.addEventListener('toggle', () => {
-      if (!currentMapView || currentMapView !== view) return;
-      if (card.open) {
-        if (selectedGroupNo !== g.no) activateGroup(g.no, { openCard: false });
-      } else if (selectedGroupNo === g.no) {
-        clearGroupSelection({ closeCards: false });
-      }
-    });
     grid.appendChild(card);
   });
 }
@@ -1593,57 +1720,12 @@ function renderMonsterCards(view) {
 /* ══════════════════════════════════════════════════
    選択・強調
 ══════════════════════════════════════════════════ */
-function activateGroup(no, options = {}) {
+function activateGroup(no) {
   if (!currentMapView) return;
   const group = currentMapView.byNo.get(no);
   if (!group) return;
 
   selectedGroupNo = no;
-
-  if (group.kind === 'monster') {
-    if (options.openCard) {
-      openEntityCard(no, options.scrollCard !== false);
-    } else {
-      // カードの summary を直接開いた場合も、他のカードは閉じる。
-      closeOtherEntityCards(no);
-    }
-  } else if (group.kind === 'npc') {
-    closeAllEntityCards();
-  }
-
-  updateGroupSelectionUI();
-}
-
-function closeOtherEntityCards(exceptNo) {
-  document.querySelectorAll('#monster-grid .entity-card').forEach(card => {
-    if (Number(card.dataset.gno) !== exceptNo && card.open) card.open = false;
-  });
-}
-
-function openEntityCard(no, scroll = true) {
-  const grid = document.getElementById('monster-grid');
-  const card = grid.querySelector(`.entity-card[data-gno="${no}"]`);
-  if (!card) return;
-
-  grid.querySelectorAll('.entity-card').forEach(other => {
-    if (other !== card && other.open) other.open = false;
-  });
-  if (!card.open) card.open = true;
-  if (scroll) {
-    requestAnimationFrame(() => card.scrollIntoView({ block: 'nearest', behavior: 'smooth' }));
-  }
-}
-
-function closeAllEntityCards() {
-  document.querySelectorAll('#monster-grid .entity-card').forEach(card => {
-    if (card.open) card.open = false;
-  });
-}
-
-function clearGroupSelection(options = {}) {
-  if (selectedGroupNo === null) return;
-  selectedGroupNo = null;
-  if (options.closeCards !== false) closeAllEntityCards();
   updateGroupSelectionUI();
 }
 
@@ -1657,17 +1739,14 @@ function updateGroupSelectionUI() {
   document.querySelectorAll('#map-markers .map-marker').forEach(marker => {
     const active = selectedGroupNo !== null && Number(marker.dataset.no) === selectedGroupNo;
     marker.classList.toggle('active', active);
-    marker.classList.toggle('dim', selectedGroupNo !== null && !active);
   });
-  const markerRoot = document.getElementById('map-markers');
-  markerRoot.classList.toggle('has-selection', selectedGroupNo !== null);
   document.querySelectorAll('#monster-grid .entity-card').forEach(card => {
     card.classList.toggle('active', selectedGroupNo !== null && Number(card.dataset.gno) === selectedGroupNo);
   });
 
   const status = document.getElementById('map-status');
   if (selectedGroupNo === null) {
-    status.textContent = '番号をクリックすると、その出現グループの地点を強調します。';
+    status.textContent = '左のNPC／モンスター一覧から選ぶと、その地点を強調します。';
     return;
   }
   const g = view.byNo.get(selectedGroupNo);
@@ -1675,8 +1754,10 @@ function updateGroupSelectionUI() {
   if (g.kind === 'npc') {
     status.innerHTML = `<b>[${g.no}] ${escHtml(g.name)}</b> の ${g.cnt}地点を強調中（NPC）`;
   } else {
-    status.innerHTML = `<b>[${g.no}] ${escHtml(g.name)}</b> / ${escHtml(mapLevelText(g.min, g.max))} / ` +
-      `${g.cnt}地点を強調中`;
+    const species = g.species || breedSpeciesName(g.b);
+    const speciesTxt = species && species !== g.name ? `（種族: ${escHtml(species)}）` : '';
+    status.innerHTML = `<b>[${g.no}] ${escHtml(g.name)}${speciesTxt}</b> / ` +
+      `${escHtml(mapLevelText(g.min, g.max))} / ${g.cnt}地点を強調中`;
   }
 }
 
@@ -1688,15 +1769,15 @@ function setupMapControls() {
   const apply = (next) => applyMapZoom(next, true);
   document.getElementById('map-zoom-in').addEventListener('click', () => apply(mapZoom + 0.2));
   document.getElementById('map-zoom-out').addEventListener('click', () => apply(mapZoom - 0.2));
-  document.getElementById('map-zoom-reset').addEventListener('click', () => apply(1));
+  document.getElementById('map-zoom-reset').addEventListener('click', () => apply(mapBaseZoom));
   viewport.addEventListener('dblclick', e => {
     if (e.target.closest('.map-marker')) return;
-    apply(mapZoom >= 1.6 ? 1 : mapZoom + 0.4);
+    apply(mapZoom >= 1.6 ? mapBaseZoom : mapZoom + 0.4);
   });
 }
 
 function applyMapZoom(nextZoom, preserveCenter = true) {
-  mapZoom = Math.max(0.6, Math.min(2.6, nextZoom));
+  mapZoom = Math.max(MAP_ZOOM_MIN, Math.min(MAP_ZOOM_MAX, nextZoom));
   const viewport = document.getElementById('map-viewport');
   const plane = document.getElementById('map-plane');
   if (!viewport || !plane) return;
@@ -1841,7 +1922,10 @@ function buildCard(b, lv, mapInfo, showAllMaps = false, groupInfo = null) {
       if (!mp || !mp.img) return '';
       const lvTxt = bm.min === bm.max ? `Lv ${bm.min}` : `Lv ${bm.min}–${bm.max}`;
       const popTxt = bm.pop > 0 ? ` / 🔄${bm.pop}秒` : '';
-      const npcLabel = bm.npc ? `${escHtml(bm.npc)} (${escHtml(mp.name)})` : escHtml(mp.name);
+      const shownName = breedDisplayName(b, bm);
+      const npcLabel = shownName === mp.name
+        ? escHtml(shownName)
+        : `${escHtml(shownName)} (${escHtml(mp.name)})`;
       const corr = [];
       if (bm.chp !== 100) corr.push(`HP×${(bm.chp/100).toFixed(2)}`);
       if (bm.cexp !== 100) corr.push(`EXP×${(bm.cexp/100).toFixed(2)}`);
@@ -1850,25 +1934,31 @@ function buildCard(b, lv, mapInfo, showAllMaps = false, groupInfo = null) {
       return `<button class="tag tag-map-link" data-mid="${bm.mid}">${npcLabel} / ${lvTxt} / ${bm.cnt}体${popTxt}${escHtml(corrTxt)}</button>`;
     }).join('');
     const moreTxt = list.length > maxShow ? `<div class="map-more">…他 ${list.length - maxShow} 件</div>` : '';
-    mapSection = `<div class="sec-title">🗺 出現マップ<small style="color:var(--text-muted);margin-left:6px;font-weight:normal">(クリックで移動)</small></div><div class="tag-row">${mapLines}</div>${moreTxt}`;
+    mapSection = `<div class="sec-title">🗺 出現マップ<small style="color:var(--text-muted);margin-left:6px;font-weight:normal">(マップ表示名 / クリックで移動)</small></div><div class="tag-row">${mapLines}</div>${moreTxt}`;
   }
 
-  const spawnNpc = mapInfo && mapInfo.npc ? mapInfo.npc : b.name;
-  const breedLine = mapInfo && mapInfo.npc
-    ? `${b.name} (${b.race})`
-    : `${b.race} / ${b.lineage}`;
+  // 右カードの見出しは job2.dat の種族名。固有名は「マップ表示名」として副題に残す。
+  const speciesName = breedSpeciesName(b) || b.name;
+  const displayName = mapInfo ? breedDisplayName(b, mapInfo) : '';
+  const aliasHtml = displayName && displayName !== speciesName
+    ? `<span class="card-alias">マップ表示名: ${escHtml(displayName)}</span>`
+    : '';
   const cardNo = groupInfo && groupInfo.no ? groupInfo.no : null;
   const cardNoHtml = cardNo ? `<span class="card-no">${cardNo}</span>` : '';
+  const imagePath = breedImagePath(b);
+  const imageHtml = imagePath
+    ? `<img class="card-thumb" src="${escHtml(imagePath)}" alt="">`
+    : `<span class="card-thumb card-thumb-empty" title="画像なし" aria-hidden="true">?</span>`;
 
-  const card = document.createElement(groupInfo ? 'details' : 'div');
+  const card = document.createElement('div');
   card.className = 'card' + (groupInfo ? ' entity-card' : '');
   if (groupInfo) card.dataset.gno = String(cardNo);
   card.innerHTML = `
     <div class="card-header">
       <div>
-        <div class="card-name">${cardNoHtml}${escHtml(spawnNpc)} ${corrHtml}</div>
+        <div class="card-name">${cardNoHtml}<span class="card-species-label">種族</span>${escHtml(speciesName)} ${corrHtml}</div>
         <div class="card-sub">
-          ${escHtml(breedLine)} &nbsp;|&nbsp; 移動速度:${b.move_spd} &nbsp;攻撃速度:${b.atk_spd}
+          ${aliasHtml}${aliasHtml ? ' &nbsp;|&nbsp; ' : ''}${escHtml(b.race)} / ${escHtml(b.lineage)} &nbsp;|&nbsp; 移動速度:${b.move_spd} &nbsp;攻撃速度:${b.atk_spd}
           ${mapInfo && mapInfo.pop > 0 ? ` &nbsp;|&nbsp; <span title="マップデータ上の再出現周期（秒）。サーバ設定で短縮・延長される場合があります">🔄 ${mapInfo.pop}秒<span class="pop-note">（MAPデータ値）</span></span>` : ''}
           ${mapInfo && mapInfo.cnt ? `<span class="cnt-badge">${mapInfo.cnt}体</span>` : ''}
         </div>
@@ -1877,21 +1967,26 @@ function buildCard(b, lv, mapInfo, showAllMaps = false, groupInfo = null) {
     </div>
     <div class="card-body">
 
-      ${stateHtml}
-
-      <div class="sec-title">📊 ステータス（計算Lv=${calcLv}）</div>
-      <div class="stat-grid">
-        ${statCell('STR', c.str, b.str)}
-        ${statCell('AGI', c.agi, b.agi)}
-        ${statCell('CON', c.con, b.con)}
-        ${statCell('WIS', c.wis, baseW)}
-        ${statCell('INT', c.int, baseI)}
-        ${statCell('CHA', c.cha, b.cha)}
-        ${statCell('LCK', c.lck, b.lck)}
+      <div class="card-overview">
+        ${imageHtml}
+        <div class="card-overview-main">
+          <div class="sec-title">📊 ステータス（計算Lv=${calcLv}）</div>
+          <div class="stat-grid">
+            ${statCell('力', c.str, b.str)}
+            ${statCell('敏捷', c.agi, b.agi)}
+            ${statCell('健康', c.con, b.con)}
+            ${statCell('運', c.lck, b.lck)}
+            ${statCell('知識', c.int, baseI)}
+            ${statCell('知恵', c.wis, baseW)}
+            ${statCell('カリスマ', c.cha, b.cha)}
+          </div>
+        </div>
       </div>
       <div class="base-row" title="レベル補正前の基礎値">
-        基礎値: STR ${b.str} / AGI ${b.agi} / CON ${b.con} / WIS ${baseW} / INT ${baseI} / CHA ${b.cha} / LCK ${b.lck}
+        基礎値: 力 ${b.str} / 敏捷 ${b.agi} / 健康 ${b.con} / 運 ${b.lck} / 知識 ${baseI} / 知恵 ${baseW} / カリスマ ${b.cha}
       </div>
+
+      ${stateHtml}
 
       <div class="sec-title">⚔ 戦闘</div>
       <div class="combat-row">
@@ -1933,17 +2028,16 @@ function buildCard(b, lv, mapInfo, showAllMaps = false, groupInfo = null) {
       ${mapSection}
     </div>`;
 
-  // <details> の場合はヘッダー div を summary に置き換える。
-  // これでヘッダー全体が折りたたみの開閉トリガーになる。
-  if (groupInfo) {
-    const header = card.querySelector('.card-header');
-    if (header) {
-      const summary = document.createElement('summary');
-      summary.className = 'card-header';
-      while (header.firstChild) summary.appendChild(header.firstChild);
-      header.replaceWith(summary);
-    }
-  }
+  card.querySelectorAll('img.card-thumb').forEach(img => {
+    img.addEventListener('error', () => {
+      const ph = document.createElement('span');
+      ph.className = 'card-thumb card-thumb-empty';
+      ph.title = '画像なし';
+      ph.setAttribute('aria-hidden', 'true');
+      ph.textContent = '?';
+      img.replaceWith(ph);
+    }, { once: true });
+  });
 
   card.querySelectorAll('.tag-map-link[data-mid]').forEach(btn => {
     btn.addEventListener('click', () => selectMap(parseInt(btn.dataset.mid, 10)));
@@ -2018,10 +2112,15 @@ function doSearch(q) {
     const lvRange = lvs.length ? `Lv ${Math.min(...lvs)}–${Math.max(...lvs)}` : '';
     const npcMatches = [...new Set(b.maps
       .filter(sp => (sp.npc || '').includes(q) || (sp.group || '').includes(q))
-      .map(sp => sp.npc || sp.group)
+      .map(sp => {
+        // npc と group のどちらが検索語に一致したかを優先して表示する。
+        if (sp.npc && sp.npc.includes(q)) return sp.npc;
+        if (sp.group && sp.group.includes(q)) return sp.group;
+        return breedDisplayName(b, sp);
+      })
       .filter(Boolean))];
     const aliasTxt = (npcMatches.length && !npcMatches.every(n => n === b.name))
-      ? `<div class="search-item-meta">別名: ${escHtml(npcMatches.slice(0, 4).join(', '))}${npcMatches.length > 4 ? ' …' : ''}</div>`
+      ? `<div class="search-item-meta">マップ表示名: ${escHtml(npcMatches.slice(0, 4).join(', '))}${npcMatches.length > 4 ? ' …' : ''}</div>`
       : '';
     return `<div class="search-item" data-bid="${b.id}">
       <div>

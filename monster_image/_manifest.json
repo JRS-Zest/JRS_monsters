@@ -1,0 +1,5551 @@
+{
+  "job2": "C:\\JRS\\RED STONE\\Data\\Scenario\\Red Stone\\job2.dat",
+  "sad_dir": "C:\\JRS\\RED STONE\\Data\\monsters",
+  "body_names": 85,
+  "used_breeds": 837,
+  "image_jobs": 361,
+  "generated_images": 361,
+  "mapped_breeds": 836,
+  "missing": [
+    {
+      "id": 1590,
+      "name": "ボッサ",
+      "body": 286,
+      "variation": 0,
+      "reason": "Body→SAD対応なし"
+    }
+  ],
+  "warnings": [],
+  "errors": [],
+  "images": [
+    {
+      "file": "monster_image/AggressiveNative__p0.png",
+      "sad": "AggressiveNative.sad",
+      "palette": 0,
+      "plt": "AggressiveNative.plt",
+      "breeds": [
+        62,
+        371,
+        622
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 54,
+      "height": 67
+    },
+    {
+      "file": "monster_image/AggressiveNative__p1.png",
+      "sad": "AggressiveNative.sad",
+      "palette": 1,
+      "plt": "AggressiveNative.plt",
+      "breeds": [
+        60,
+        369,
+        620
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 54,
+      "height": 67
+    },
+    {
+      "file": "monster_image/AggressiveNative__p2.png",
+      "sad": "AggressiveNative.sad",
+      "palette": 2,
+      "plt": "AggressiveNative.plt",
+      "breeds": [
+        63,
+        372,
+        623
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 54,
+      "height": 67
+    },
+    {
+      "file": "monster_image/AggressiveNative__p3.png",
+      "sad": "AggressiveNative.sad",
+      "palette": 3,
+      "plt": "AggressiveNative.plt",
+      "breeds": [
+        373,
+        624,
+        1577
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 54,
+      "height": 67
+    },
+    {
+      "file": "monster_image/AggressiveNative__p4.png",
+      "sad": "AggressiveNative.sad",
+      "palette": 4,
+      "plt": "AggressiveNative.plt",
+      "breeds": [
+        61,
+        370,
+        621
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 54,
+      "height": 67
+    },
+    {
+      "file": "monster_image/Apostles_01__p0.png",
+      "sad": "Apostles_01.sad",
+      "palette": 0,
+      "plt": "Apostles.plt",
+      "breeds": [
+        1084
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 95,
+      "height": 114
+    },
+    {
+      "file": "monster_image/Apostles_01__p1.png",
+      "sad": "Apostles_01.sad",
+      "palette": 1,
+      "plt": "Apostles.plt",
+      "breeds": [
+        1085
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 95,
+      "height": 114
+    },
+    {
+      "file": "monster_image/Apostles_02__p3.png",
+      "sad": "Apostles_02.sad",
+      "palette": 3,
+      "plt": "Apostles.plt",
+      "breeds": [
+        1092
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 90,
+      "height": 118
+    },
+    {
+      "file": "monster_image/Apostles__p0.png",
+      "sad": "Apostles.sad",
+      "palette": 0,
+      "plt": "Apostles.plt",
+      "breeds": [
+        1079
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 90,
+      "height": 111
+    },
+    {
+      "file": "monster_image/Apostles__p1.png",
+      "sad": "Apostles.sad",
+      "palette": 1,
+      "plt": "Apostles.plt",
+      "breeds": [
+        1080,
+        1511
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 90,
+      "height": 111
+    },
+    {
+      "file": "monster_image/Apostles__p4.png",
+      "sad": "Apostles.sad",
+      "palette": 4,
+      "plt": "Apostles.plt",
+      "breeds": [
+        1488
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 90,
+      "height": 111
+    },
+    {
+      "file": "monster_image/Archmage__p0.png",
+      "sad": "Archmage.sad",
+      "palette": 0,
+      "plt": "Archmage.plt",
+      "breeds": [
+        95,
+        404,
+        655,
+        1136,
+        1433,
+        1558,
+        1581
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 117,
+      "width": 73,
+      "height": 92
+    },
+    {
+      "file": "monster_image/Archmage__p1.png",
+      "sad": "Archmage.sad",
+      "palette": 1,
+      "plt": "Archmage.plt",
+      "breeds": [
+        96,
+        405,
+        656
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 117,
+      "width": 73,
+      "height": 92
+    },
+    {
+      "file": "monster_image/Archmage__p2.png",
+      "sad": "Archmage.sad",
+      "palette": 2,
+      "plt": "Archmage.plt",
+      "breeds": [
+        406,
+        657,
+        1143,
+        1578
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 117,
+      "width": 73,
+      "height": 92
+    },
+    {
+      "file": "monster_image/Archmage__p3.png",
+      "sad": "Archmage.sad",
+      "palette": 3,
+      "plt": "Archmage.plt",
+      "breeds": [
+        1491
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 117,
+      "width": 73,
+      "height": 92
+    },
+    {
+      "file": "monster_image/Archmage__p4.png",
+      "sad": "Archmage.sad",
+      "palette": 4,
+      "plt": "Archmage.plt",
+      "breeds": [
+        658,
+        1144
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 117,
+      "width": 73,
+      "height": 92
+    },
+    {
+      "file": "monster_image/Assassin__p0.png",
+      "sad": "Assassin.sad",
+      "palette": 0,
+      "plt": "Assassin.plt",
+      "breeds": [
+        56,
+        365,
+        616
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 47,
+      "height": 66
+    },
+    {
+      "file": "monster_image/Assassin__p1.png",
+      "sad": "Assassin.sad",
+      "palette": 1,
+      "plt": "Assassin.plt",
+      "breeds": [
+        57,
+        366,
+        617
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 47,
+      "height": 66
+    },
+    {
+      "file": "monster_image/Assassin__p2.png",
+      "sad": "Assassin.sad",
+      "palette": 2,
+      "plt": "Assassin.plt",
+      "breeds": [
+        55,
+        364,
+        615,
+        1452
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 47,
+      "height": 66
+    },
+    {
+      "file": "monster_image/Assassin__p3.png",
+      "sad": "Assassin.sad",
+      "palette": 3,
+      "plt": "Assassin.plt",
+      "breeds": [
+        58,
+        367,
+        618
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 47,
+      "height": 66
+    },
+    {
+      "file": "monster_image/Assassin__p4.png",
+      "sad": "Assassin.sad",
+      "palette": 4,
+      "plt": "Assassin.plt",
+      "breeds": [
+        59,
+        619
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 47,
+      "height": 66
+    },
+    {
+      "file": "monster_image/Bahomate__p0.png",
+      "sad": "Bahomate.sad",
+      "palette": 0,
+      "plt": "Bahomate.plt",
+      "breeds": [
+        449,
+        700
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 113,
+      "height": 95
+    },
+    {
+      "file": "monster_image/Bahomate__p1.png",
+      "sad": "Bahomate.sad",
+      "palette": 1,
+      "plt": "Bahomate.plt",
+      "breeds": [
+        450,
+        701,
+        1266
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 113,
+      "height": 95
+    },
+    {
+      "file": "monster_image/Bahomate__p2.png",
+      "sad": "Bahomate.sad",
+      "palette": 2,
+      "plt": "Bahomate.plt",
+      "breeds": [
+        142,
+        451,
+        702
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 113,
+      "height": 95
+    },
+    {
+      "file": "monster_image/Bahomate__p3.png",
+      "sad": "Bahomate.sad",
+      "palette": 3,
+      "plt": "Bahomate.plt",
+      "breeds": [
+        452,
+        1437
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 113,
+      "height": 95
+    },
+    {
+      "file": "monster_image/Bahomate__p4.png",
+      "sad": "Bahomate.sad",
+      "palette": 4,
+      "plt": "Bahomate.plt",
+      "breeds": [
+        453,
+        704
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 113,
+      "height": 95
+    },
+    {
+      "file": "monster_image/BigMole__p2.png",
+      "sad": "BigMole.sad",
+      "palette": 2,
+      "plt": "BigMole.plt",
+      "breeds": [
+        501
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 40,
+      "width": 170,
+      "height": 109
+    },
+    {
+      "file": "monster_image/BigMole__p4.png",
+      "sad": "BigMole.sad",
+      "palette": 4,
+      "plt": "BigMole.plt",
+      "breeds": [
+        754,
+        1326
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 40,
+      "width": 170,
+      "height": 109
+    },
+    {
+      "file": "monster_image/Bone_Chimera_01__p0.png",
+      "sad": "Bone_Chimera_01.sad",
+      "palette": 0,
+      "plt": "Bone_Chimera.plt",
+      "breeds": [
+        859
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 113,
+      "height": 129
+    },
+    {
+      "file": "monster_image/Bone_Chimera_01__p1.png",
+      "sad": "Bone_Chimera_01.sad",
+      "palette": 1,
+      "plt": "Bone_Chimera.plt",
+      "breeds": [
+        860
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 113,
+      "height": 129
+    },
+    {
+      "file": "monster_image/Bone_Chimera_02__p1.png",
+      "sad": "Bone_Chimera_02.sad",
+      "palette": 1,
+      "plt": "Bone_Chimera.plt",
+      "breeds": [
+        1475
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 119,
+      "height": 71
+    },
+    {
+      "file": "monster_image/Bone_Chimera_02__p3.png",
+      "sad": "Bone_Chimera_02.sad",
+      "palette": 3,
+      "plt": "Bone_Chimera.plt",
+      "breeds": [
+        867
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 119,
+      "height": 71
+    },
+    {
+      "file": "monster_image/Bone_Chimera__p0.png",
+      "sad": "Bone_Chimera.sad",
+      "palette": 0,
+      "plt": "Bone_Chimera.plt",
+      "breeds": [
+        854,
+        1273
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 109,
+      "height": 81
+    },
+    {
+      "file": "monster_image/Bone_Chimera__p1.png",
+      "sad": "Bone_Chimera.sad",
+      "palette": 1,
+      "plt": "Bone_Chimera.plt",
+      "breeds": [
+        855
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 109,
+      "height": 81
+    },
+    {
+      "file": "monster_image/Bone_Chimera__p2.png",
+      "sad": "Bone_Chimera.sad",
+      "palette": 2,
+      "plt": "Bone_Chimera.plt",
+      "breeds": [
+        856
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 109,
+      "height": 81
+    },
+    {
+      "file": "monster_image/Centaurs__p0.png",
+      "sad": "Centaurs.sad",
+      "palette": 0,
+      "plt": "Centaurs.plt",
+      "breeds": [
+        220
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 124,
+      "width": 94,
+      "height": 123
+    },
+    {
+      "file": "monster_image/Centaurs__p1.png",
+      "sad": "Centaurs.sad",
+      "palette": 1,
+      "plt": "Centaurs.plt",
+      "breeds": [
+        221,
+        530,
+        781
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 124,
+      "width": 94,
+      "height": 123
+    },
+    {
+      "file": "monster_image/Centaurs__p2.png",
+      "sad": "Centaurs.sad",
+      "palette": 2,
+      "plt": "Centaurs.plt",
+      "breeds": [
+        531,
+        782
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 124,
+      "width": 94,
+      "height": 123
+    },
+    {
+      "file": "monster_image/Centaurs__p3.png",
+      "sad": "Centaurs.sad",
+      "palette": 3,
+      "plt": "Centaurs.plt",
+      "breeds": [
+        532,
+        783
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 124,
+      "width": 94,
+      "height": 123
+    },
+    {
+      "file": "monster_image/Centaurs__p4.png",
+      "sad": "Centaurs.sad",
+      "palette": 4,
+      "plt": "Centaurs.plt",
+      "breeds": [
+        784,
+        1336
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 124,
+      "width": 94,
+      "height": 123
+    },
+    {
+      "file": "monster_image/Cherubim_01__p1.png",
+      "sad": "Cherubim_01.sad",
+      "palette": 1,
+      "plt": "Cherubim.plt",
+      "breeds": [
+        1512
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 85,
+      "height": 93
+    },
+    {
+      "file": "monster_image/Cherubim_01__p4.png",
+      "sad": "Cherubim_01.sad",
+      "palette": 4,
+      "plt": "Cherubim.plt",
+      "breeds": [
+        1489
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 85,
+      "height": 93
+    },
+    {
+      "file": "monster_image/Cherubim_02__p4.png",
+      "sad": "Cherubim_02.sad",
+      "palette": 4,
+      "plt": "Cherubim.plt",
+      "breeds": [
+        1335
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 92,
+      "height": 105
+    },
+    {
+      "file": "monster_image/Cherubim__p0.png",
+      "sad": "Cherubim.sad",
+      "palette": 0,
+      "plt": "Cherubim.plt",
+      "breeds": [
+        1094
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 92,
+      "height": 110
+    },
+    {
+      "file": "monster_image/Cherubim__p4.png",
+      "sad": "Cherubim.sad",
+      "palette": 4,
+      "plt": "Cherubim.plt",
+      "breeds": [
+        1098
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 92,
+      "height": 110
+    },
+    {
+      "file": "monster_image/CockFighter__p0.png",
+      "sad": "CockFighter.sad",
+      "palette": 0,
+      "plt": "CockFighter.plt",
+      "breeds": [
+        110
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 81,
+      "height": 82
+    },
+    {
+      "file": "monster_image/CockFighter__p1.png",
+      "sad": "CockFighter.sad",
+      "palette": 1,
+      "plt": "CockFighter.plt",
+      "breeds": [
+        111,
+        420,
+        671,
+        1291
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 81,
+      "height": 82
+    },
+    {
+      "file": "monster_image/CockFighter__p2.png",
+      "sad": "CockFighter.sad",
+      "palette": 2,
+      "plt": "CockFighter.plt",
+      "breeds": [
+        114,
+        423,
+        674,
+        1294
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 81,
+      "height": 82
+    },
+    {
+      "file": "monster_image/CockFighter__p3.png",
+      "sad": "CockFighter.sad",
+      "palette": 3,
+      "plt": "CockFighter.plt",
+      "breeds": [
+        113,
+        422,
+        673,
+        1293
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 81,
+      "height": 82
+    },
+    {
+      "file": "monster_image/CockFighter__p4.png",
+      "sad": "CockFighter.sad",
+      "palette": 4,
+      "plt": "CockFighter.plt",
+      "breeds": [
+        112,
+        421,
+        672
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 81,
+      "height": 82
+    },
+    {
+      "file": "monster_image/Conjuerer__p0.png",
+      "sad": "Conjuerer.sad",
+      "palette": 0,
+      "plt": "Conjuerer.plt",
+      "breeds": [
+        80,
+        1430
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 32,
+      "height": 72
+    },
+    {
+      "file": "monster_image/Conjuerer__p1.png",
+      "sad": "Conjuerer.sad",
+      "palette": 1,
+      "plt": "Conjuerer.plt",
+      "breeds": [
+        81,
+        390,
+        641
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 32,
+      "height": 72
+    },
+    {
+      "file": "monster_image/Conjuerer__p2.png",
+      "sad": "Conjuerer.sad",
+      "palette": 2,
+      "plt": "Conjuerer.plt",
+      "breeds": [
+        82,
+        391,
+        642
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 32,
+      "height": 72
+    },
+    {
+      "file": "monster_image/Conjuerer__p3.png",
+      "sad": "Conjuerer.sad",
+      "palette": 3,
+      "plt": "Conjuerer.plt",
+      "breeds": [
+        83,
+        392,
+        643
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 32,
+      "height": 72
+    },
+    {
+      "file": "monster_image/Conjuerer__p4.png",
+      "sad": "Conjuerer.sad",
+      "palette": 4,
+      "plt": "Conjuerer.plt",
+      "breeds": [
+        644,
+        1574
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 32,
+      "height": 72
+    },
+    {
+      "file": "monster_image/DarkElf__p0.png",
+      "sad": "DarkElf.sad",
+      "palette": 0,
+      "plt": "DarkElf.plt",
+      "breeds": [
+        363,
+        614,
+        1301,
+        1568
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 46,
+      "height": 62
+    },
+    {
+      "file": "monster_image/DarkElf__p1.png",
+      "sad": "DarkElf.sad",
+      "palette": 1,
+      "plt": "DarkElf.plt",
+      "breeds": [
+        51,
+        360,
+        1427
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 46,
+      "height": 62
+    },
+    {
+      "file": "monster_image/DarkElf__p2.png",
+      "sad": "DarkElf.sad",
+      "palette": 2,
+      "plt": "DarkElf.plt",
+      "breeds": [
+        50,
+        359,
+        1501,
+        1554,
+        1567
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 46,
+      "height": 62
+    },
+    {
+      "file": "monster_image/DarkElf__p3.png",
+      "sad": "DarkElf.sad",
+      "palette": 3,
+      "plt": "DarkElf.plt",
+      "breeds": [
+        53,
+        362,
+        613
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 46,
+      "height": 62
+    },
+    {
+      "file": "monster_image/DarkElf__p4.png",
+      "sad": "DarkElf.sad",
+      "palette": 4,
+      "plt": "DarkElf.plt",
+      "breeds": [
+        52,
+        361,
+        612
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 46,
+      "height": 62
+    },
+    {
+      "file": "monster_image/DarkFire__p0.png",
+      "sad": "DarkFire.sad",
+      "palette": 0,
+      "plt": "DarkFire.plt",
+      "breeds": [
+        800,
+        1115
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 87,
+      "height": 106
+    },
+    {
+      "file": "monster_image/DarkFire__p1.png",
+      "sad": "DarkFire.sad",
+      "palette": 1,
+      "plt": "DarkFire.plt",
+      "breeds": [
+        241,
+        550,
+        801,
+        1146,
+        1151
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 87,
+      "height": 106
+    },
+    {
+      "file": "monster_image/DarkFire__p2.png",
+      "sad": "DarkFire.sad",
+      "palette": 2,
+      "plt": "DarkFire.plt",
+      "breeds": [
+        242,
+        551,
+        802,
+        1152,
+        1579
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 87,
+      "height": 106
+    },
+    {
+      "file": "monster_image/DarkFire__p3.png",
+      "sad": "DarkFire.sad",
+      "palette": 3,
+      "plt": "DarkFire.plt",
+      "breeds": [
+        552,
+        803,
+        1153
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 87,
+      "height": 106
+    },
+    {
+      "file": "monster_image/DarkFire__p4.png",
+      "sad": "DarkFire.sad",
+      "palette": 4,
+      "plt": "DarkFire.plt",
+      "breeds": [
+        1154
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 87,
+      "height": 106
+    },
+    {
+      "file": "monster_image/DarkPriest__p0.png",
+      "sad": "DarkPriest.sad",
+      "palette": 0,
+      "plt": "DarkPriest.plt",
+      "breeds": [
+        76,
+        385,
+        636
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 112,
+      "width": 70,
+      "height": 79
+    },
+    {
+      "file": "monster_image/DarkPriest__p1.png",
+      "sad": "DarkPriest.sad",
+      "palette": 1,
+      "plt": "DarkPriest.plt",
+      "breeds": [
+        78,
+        387,
+        638
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 112,
+      "width": 70,
+      "height": 79
+    },
+    {
+      "file": "monster_image/DarkPriest__p2.png",
+      "sad": "DarkPriest.sad",
+      "palette": 2,
+      "plt": "DarkPriest.plt",
+      "breeds": [
+        75,
+        384,
+        635
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 112,
+      "width": 70,
+      "height": 79
+    },
+    {
+      "file": "monster_image/DarkPriest__p3.png",
+      "sad": "DarkPriest.sad",
+      "palette": 3,
+      "plt": "DarkPriest.plt",
+      "breeds": [
+        77,
+        386,
+        637
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 112,
+      "width": 70,
+      "height": 79
+    },
+    {
+      "file": "monster_image/DarkPriest__p4.png",
+      "sad": "DarkPriest.sad",
+      "palette": 4,
+      "plt": "DarkPriest.plt",
+      "breeds": [
+        639
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 112,
+      "width": 70,
+      "height": 79
+    },
+    {
+      "file": "monster_image/Dark_Buffalo_01__p1.png",
+      "sad": "Dark_Buffalo_01.sad",
+      "palette": 1,
+      "plt": "Dark_Buffalo.plt",
+      "breeds": [
+        1055,
+        1329
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 117,
+      "height": 56
+    },
+    {
+      "file": "monster_image/Dark_Buffalo_02__p2.png",
+      "sad": "Dark_Buffalo_02.sad",
+      "palette": 2,
+      "plt": "Dark_Buffalo.plt",
+      "breeds": [
+        1486
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 131,
+      "height": 88
+    },
+    {
+      "file": "monster_image/Dark_Buffalo__p0.png",
+      "sad": "Dark_Buffalo.sad",
+      "palette": 0,
+      "plt": "Dark_Buffalo.plt",
+      "breeds": [
+        1286
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 142,
+      "height": 92
+    },
+    {
+      "file": "monster_image/Dark_Buffalo__p1.png",
+      "sad": "Dark_Buffalo.sad",
+      "palette": 1,
+      "plt": "Dark_Buffalo.plt",
+      "breeds": [
+        1050
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 142,
+      "height": 92
+    },
+    {
+      "file": "monster_image/DemiBeholder__p0.png",
+      "sad": "DemiBeholder.sad",
+      "palette": 0,
+      "plt": "DemiBeholder.plt",
+      "breeds": [
+        100,
+        409,
+        660,
+        1155,
+        1160
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 72,
+      "height": 73
+    },
+    {
+      "file": "monster_image/DemiBeholder__p1.png",
+      "sad": "DemiBeholder.sad",
+      "palette": 1,
+      "plt": "DemiBeholder.plt",
+      "breeds": [
+        101,
+        410,
+        661,
+        1455
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 72,
+      "height": 73
+    },
+    {
+      "file": "monster_image/DemiBeholder__p2.png",
+      "sad": "DemiBeholder.sad",
+      "palette": 2,
+      "plt": "DemiBeholder.plt",
+      "breeds": [
+        102,
+        411,
+        662,
+        1157,
+        1303
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 72,
+      "height": 73
+    },
+    {
+      "file": "monster_image/DemiBeholder__p3.png",
+      "sad": "DemiBeholder.sad",
+      "palette": 3,
+      "plt": "DemiBeholder.plt",
+      "breeds": [
+        412
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 72,
+      "height": 73
+    },
+    {
+      "file": "monster_image/DemiBeholder__p4.png",
+      "sad": "DemiBeholder.sad",
+      "palette": 4,
+      "plt": "DemiBeholder.plt",
+      "breeds": [
+        664
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 72,
+      "height": 73
+    },
+    {
+      "file": "monster_image/Demon__p0.png",
+      "sad": "Demon.sad",
+      "palette": 0,
+      "plt": "Demon.plt",
+      "breeds": [
+        443,
+        694,
+        1572
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 58,
+      "height": 92
+    },
+    {
+      "file": "monster_image/Demon__p1.png",
+      "sad": "Demon.sad",
+      "palette": 1,
+      "plt": "Demon.plt",
+      "breeds": [
+        440,
+        691
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 58,
+      "height": 92
+    },
+    {
+      "file": "monster_image/Demon__p2.png",
+      "sad": "Demon.sad",
+      "palette": 2,
+      "plt": "Demon.plt",
+      "breeds": [
+        132,
+        441,
+        692
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 58,
+      "height": 92
+    },
+    {
+      "file": "monster_image/Demon__p3.png",
+      "sad": "Demon.sad",
+      "palette": 3,
+      "plt": "Demon.plt",
+      "breeds": [
+        133,
+        693
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 58,
+      "height": 92
+    },
+    {
+      "file": "monster_image/Demon__p4.png",
+      "sad": "Demon.sad",
+      "palette": 4,
+      "plt": "Demon.plt",
+      "breeds": [
+        130,
+        439,
+        1458
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 58,
+      "height": 92
+    },
+    {
+      "file": "monster_image/ElfKing__p0.png",
+      "sad": "ElfKing.sad",
+      "palette": 0,
+      "plt": "ElfKing.plt",
+      "breeds": [
+        90,
+        399,
+        650
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 60,
+      "height": 73
+    },
+    {
+      "file": "monster_image/ElfKing__p1.png",
+      "sad": "ElfKing.sad",
+      "palette": 1,
+      "plt": "ElfKing.plt",
+      "breeds": [
+        91,
+        400,
+        651
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 60,
+      "height": 73
+    },
+    {
+      "file": "monster_image/ElfKing__p2.png",
+      "sad": "ElfKing.sad",
+      "palette": 2,
+      "plt": "ElfKing.plt",
+      "breeds": [
+        402
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 60,
+      "height": 73
+    },
+    {
+      "file": "monster_image/ElfKing__p3.png",
+      "sad": "ElfKing.sad",
+      "palette": 3,
+      "plt": "ElfKing.plt",
+      "breeds": [
+        92,
+        401,
+        652
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 60,
+      "height": 73
+    },
+    {
+      "file": "monster_image/ElfKing__p4.png",
+      "sad": "ElfKing.sad",
+      "palette": 4,
+      "plt": "ElfKing.plt",
+      "breeds": [
+        94,
+        403,
+        654
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 60,
+      "height": 73
+    },
+    {
+      "file": "monster_image/Escapee_01__p1.png",
+      "sad": "Escapee_01.sad",
+      "palette": 1,
+      "plt": "Escapee.plt",
+      "breeds": [
+        1478
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 91,
+      "height": 73
+    },
+    {
+      "file": "monster_image/Escapee_01__p2.png",
+      "sad": "Escapee_01.sad",
+      "palette": 2,
+      "plt": "Escapee.plt",
+      "breeds": [
+        1549
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 91,
+      "height": 73
+    },
+    {
+      "file": "monster_image/Escapee_02__p1.png",
+      "sad": "Escapee_02.sad",
+      "palette": 1,
+      "plt": "Escapee.plt",
+      "breeds": [
+        925
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 92,
+      "height": 74
+    },
+    {
+      "file": "monster_image/Escapee__p0.png",
+      "sad": "Escapee.sad",
+      "palette": 0,
+      "plt": "Escapee.plt",
+      "breeds": [
+        1277
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 43,
+      "height": 72
+    },
+    {
+      "file": "monster_image/Escapee__p2.png",
+      "sad": "Escapee.sad",
+      "palette": 2,
+      "plt": "Escapee.plt",
+      "breeds": [
+        916
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 43,
+      "height": 72
+    },
+    {
+      "file": "monster_image/FallenWizard__p0.png",
+      "sad": "FallenWizard.sad",
+      "palette": 0,
+      "plt": "FallenWizard.plt",
+      "breeds": [
+        65,
+        374,
+        1126,
+        1131
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 56,
+      "height": 72
+    },
+    {
+      "file": "monster_image/FallenWizard__p1.png",
+      "sad": "FallenWizard.sad",
+      "palette": 1,
+      "plt": "FallenWizard.plt",
+      "breeds": [
+        66,
+        375,
+        626,
+        1127
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 56,
+      "height": 72
+    },
+    {
+      "file": "monster_image/FallenWizard__p2.png",
+      "sad": "FallenWizard.sad",
+      "palette": 2,
+      "plt": "FallenWizard.plt",
+      "breeds": [
+        67,
+        376,
+        627,
+        1128
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 56,
+      "height": 72
+    },
+    {
+      "file": "monster_image/FallenWizard__p3.png",
+      "sad": "FallenWizard.sad",
+      "palette": 3,
+      "plt": "FallenWizard.plt",
+      "breeds": [
+        68,
+        377,
+        628,
+        1429,
+        1548
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 56,
+      "height": 72
+    },
+    {
+      "file": "monster_image/FallenWizard__p4.png",
+      "sad": "FallenWizard.sad",
+      "palette": 4,
+      "plt": "FallenWizard.plt",
+      "breeds": [
+        629
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 56,
+      "height": 72
+    },
+    {
+      "file": "monster_image/FireBogy__p0.png",
+      "sad": "FireBogy.sad",
+      "palette": 0,
+      "plt": "FireBogy.plt",
+      "breeds": [
+        200
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 128,
+      "width": 47,
+      "height": 70
+    },
+    {
+      "file": "monster_image/FireBogy__p1.png",
+      "sad": "FireBogy.sad",
+      "palette": 1,
+      "plt": "FireBogy.plt",
+      "breeds": [
+        201,
+        510
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 128,
+      "width": 47,
+      "height": 70
+    },
+    {
+      "file": "monster_image/FireBogy__p2.png",
+      "sad": "FireBogy.sad",
+      "palette": 2,
+      "plt": "FireBogy.plt",
+      "breeds": [
+        202,
+        511,
+        762,
+        1587
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 128,
+      "width": 47,
+      "height": 70
+    },
+    {
+      "file": "monster_image/FireBogy__p3.png",
+      "sad": "FireBogy.sad",
+      "palette": 3,
+      "plt": "FireBogy.plt",
+      "breeds": [
+        203,
+        763
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 128,
+      "width": 47,
+      "height": 70
+    },
+    {
+      "file": "monster_image/FireBogy__p4.png",
+      "sad": "FireBogy.sad",
+      "palette": 4,
+      "plt": "FireBogy.plt",
+      "breeds": [
+        513,
+        764
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 128,
+      "width": 47,
+      "height": 70
+    },
+    {
+      "file": "monster_image/Gangster_01__p0.png",
+      "sad": "Gangster_01.sad",
+      "palette": 0,
+      "plt": "Gangster.plt",
+      "breeds": [
+        889
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 35,
+      "height": 70
+    },
+    {
+      "file": "monster_image/Gangster_01__p2.png",
+      "sad": "Gangster_01.sad",
+      "palette": 2,
+      "plt": "Gangster.plt",
+      "breeds": [
+        891,
+        1476
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 35,
+      "height": 70
+    },
+    {
+      "file": "monster_image/Gangster_01__p3.png",
+      "sad": "Gangster_01.sad",
+      "palette": 3,
+      "plt": "Gangster.plt",
+      "breeds": [
+        1546
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 35,
+      "height": 70
+    },
+    {
+      "file": "monster_image/Gangster__p0.png",
+      "sad": "Gangster.sad",
+      "palette": 0,
+      "plt": "Gangster.plt",
+      "breeds": [
+        884,
+        1275
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 46,
+      "height": 77
+    },
+    {
+      "file": "monster_image/Gangster__p1.png",
+      "sad": "Gangster.sad",
+      "palette": 1,
+      "plt": "Gangster.plt",
+      "breeds": [
+        885
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 46,
+      "height": 77
+    },
+    {
+      "file": "monster_image/Gangster__p3.png",
+      "sad": "Gangster.sad",
+      "palette": 3,
+      "plt": "Gangster.plt",
+      "breeds": [
+        887
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 46,
+      "height": 77
+    },
+    {
+      "file": "monster_image/Gangster__p4.png",
+      "sad": "Gangster.sad",
+      "palette": 4,
+      "plt": "Gangster.plt",
+      "breeds": [
+        888
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 46,
+      "height": 77
+    },
+    {
+      "file": "monster_image/Gargoyle__p0.png",
+      "sad": "Gargoyle.sad",
+      "palette": 0,
+      "plt": "Gargoyle.plt",
+      "breeds": [
+        210,
+        1231
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 40,
+      "width": 95,
+      "height": 93
+    },
+    {
+      "file": "monster_image/Gargoyle__p1.png",
+      "sad": "Gargoyle.sad",
+      "palette": 1,
+      "plt": "Gargoyle.plt",
+      "breeds": [
+        211,
+        520,
+        771,
+        1232
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 40,
+      "width": 95,
+      "height": 93
+    },
+    {
+      "file": "monster_image/Gargoyle__p2.png",
+      "sad": "Gargoyle.sad",
+      "palette": 2,
+      "plt": "Gargoyle.plt",
+      "breeds": [
+        212,
+        521,
+        1233,
+        1238
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 40,
+      "width": 95,
+      "height": 93
+    },
+    {
+      "file": "monster_image/Gargoyle__p3.png",
+      "sad": "Gargoyle.sad",
+      "palette": 3,
+      "plt": "Gargoyle.plt",
+      "breeds": [
+        522,
+        773
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 40,
+      "width": 95,
+      "height": 93
+    },
+    {
+      "file": "monster_image/Gargoyle__p4.png",
+      "sad": "Gargoyle.sad",
+      "palette": 4,
+      "plt": "Gargoyle.plt",
+      "breeds": [
+        774
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 40,
+      "width": 95,
+      "height": 93
+    },
+    {
+      "file": "monster_image/GhostArmor__p0.png",
+      "sad": "GhostArmor.sad",
+      "palette": 0,
+      "plt": "GhostArmor.plt",
+      "breeds": [
+        35,
+        344,
+        1556
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 156,
+      "width": 182,
+      "height": 145
+    },
+    {
+      "file": "monster_image/GhostArmor__p1.png",
+      "sad": "GhostArmor.sad",
+      "palette": 1,
+      "plt": "GhostArmor.plt",
+      "breeds": [
+        36,
+        345,
+        596,
+        1424
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 156,
+      "width": 182,
+      "height": 145
+    },
+    {
+      "file": "monster_image/GhostArmor__p2.png",
+      "sad": "GhostArmor.sad",
+      "palette": 2,
+      "plt": "GhostArmor.plt",
+      "breeds": [
+        37,
+        346,
+        597
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 156,
+      "width": 182,
+      "height": 145
+    },
+    {
+      "file": "monster_image/GhostArmor__p3.png",
+      "sad": "GhostArmor.sad",
+      "palette": 3,
+      "plt": "GhostArmor.plt",
+      "breeds": [
+        38,
+        347,
+        598
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 156,
+      "width": 182,
+      "height": 145
+    },
+    {
+      "file": "monster_image/GhostArmor__p4.png",
+      "sad": "GhostArmor.sad",
+      "palette": 4,
+      "plt": "GhostArmor.plt",
+      "breeds": [
+        348,
+        599
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 156,
+      "width": 182,
+      "height": 145
+    },
+    {
+      "file": "monster_image/Ghost__p0.png",
+      "sad": "Ghost.sad",
+      "palette": 0,
+      "plt": "Ghost.plt",
+      "breeds": [
+        25,
+        585,
+        1116,
+        1121,
+        1557
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 71,
+      "height": 95
+    },
+    {
+      "file": "monster_image/Ghost__p1.png",
+      "sad": "Ghost.sad",
+      "palette": 1,
+      "plt": "Ghost.plt",
+      "breeds": [
+        26,
+        335,
+        586,
+        1117,
+        1122
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 71,
+      "height": 95
+    },
+    {
+      "file": "monster_image/Ghost__p2.png",
+      "sad": "Ghost.sad",
+      "palette": 2,
+      "plt": "Ghost.plt",
+      "breeds": [
+        27,
+        336,
+        587,
+        1118,
+        1123
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 71,
+      "height": 95
+    },
+    {
+      "file": "monster_image/Ghost__p3.png",
+      "sad": "Ghost.sad",
+      "palette": 3,
+      "plt": "Ghost.plt",
+      "breeds": [
+        589
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 71,
+      "height": 95
+    },
+    {
+      "file": "monster_image/Ghost__p4.png",
+      "sad": "Ghost.sad",
+      "palette": 4,
+      "plt": "Ghost.plt",
+      "breeds": [
+        28,
+        588,
+        1124,
+        1422
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 71,
+      "height": 95
+    },
+    {
+      "file": "monster_image/GiantWorm__p0.png",
+      "sad": "GiantWorm.sad",
+      "palette": 0,
+      "plt": "GiantWorm.plt",
+      "breeds": [
+        170,
+        479,
+        730
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 84,
+      "height": 45
+    },
+    {
+      "file": "monster_image/GiantWorm__p1.png",
+      "sad": "GiantWorm.sad",
+      "palette": 1,
+      "plt": "GiantWorm.plt",
+      "breeds": [
+        171,
+        480,
+        731
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 84,
+      "height": 45
+    },
+    {
+      "file": "monster_image/GiantWorm__p2.png",
+      "sad": "GiantWorm.sad",
+      "palette": 2,
+      "plt": "GiantWorm.plt",
+      "breeds": [
+        173,
+        482,
+        733
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 84,
+      "height": 45
+    },
+    {
+      "file": "monster_image/GiantWorm__p3.png",
+      "sad": "GiantWorm.sad",
+      "palette": 3,
+      "plt": "GiantWorm.plt",
+      "breeds": [
+        172,
+        481,
+        732
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 84,
+      "height": 45
+    },
+    {
+      "file": "monster_image/GiantWorm__p4.png",
+      "sad": "GiantWorm.sad",
+      "palette": 4,
+      "plt": "GiantWorm.plt",
+      "breeds": [
+        174,
+        483,
+        734,
+        1461
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 84,
+      "height": 45
+    },
+    {
+      "file": "monster_image/Giant_Frog_01__p0.png",
+      "sad": "Giant_Frog_01.sad",
+      "palette": 0,
+      "plt": "Giant_Frog.plt",
+      "breeds": [
+        1024
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 87,
+      "height": 73
+    },
+    {
+      "file": "monster_image/Giant_Frog_02__p0.png",
+      "sad": "Giant_Frog_02.sad",
+      "palette": 0,
+      "plt": "Giant_Frog.plt",
+      "breeds": [
+        1029
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 102,
+      "height": 66
+    },
+    {
+      "file": "monster_image/Giant_Frog__p0.png",
+      "sad": "Giant_Frog.sad",
+      "palette": 0,
+      "plt": "Giant_Frog.plt",
+      "breeds": [
+        1019,
+        1284
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 94,
+      "height": 53
+    },
+    {
+      "file": "monster_image/Giant_Frog__p1.png",
+      "sad": "Giant_Frog.sad",
+      "palette": 1,
+      "plt": "Giant_Frog.plt",
+      "breeds": [
+        1020,
+        1498
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 94,
+      "height": 53
+    },
+    {
+      "file": "monster_image/Giant_Frog__p4.png",
+      "sad": "Giant_Frog.sad",
+      "palette": 4,
+      "plt": "Giant_Frog.plt",
+      "breeds": [
+        1484
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 94,
+      "height": 53
+    },
+    {
+      "file": "monster_image/Giant_Skull_01__p0.png",
+      "sad": "Giant_Skull_01.sad",
+      "palette": 0,
+      "plt": "Giant_Skull.plt",
+      "breeds": [
+        824
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 40,
+      "width": 72,
+      "height": 113
+    },
+    {
+      "file": "monster_image/Giant_Skull_01__p4.png",
+      "sad": "Giant_Skull_01.sad",
+      "palette": 4,
+      "plt": "Giant_Skull.plt",
+      "breeds": [
+        828
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 40,
+      "width": 72,
+      "height": 113
+    },
+    {
+      "file": "monster_image/Giant_Skull_02__p3.png",
+      "sad": "Giant_Skull_02.sad",
+      "palette": 3,
+      "plt": "Giant_Skull.plt",
+      "breeds": [
+        832
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 40,
+      "width": 61,
+      "height": 117
+    },
+    {
+      "file": "monster_image/Giant_Skull_02__p4.png",
+      "sad": "Giant_Skull_02.sad",
+      "palette": 4,
+      "plt": "Giant_Skull.plt",
+      "breeds": [
+        833
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 40,
+      "width": 61,
+      "height": 117
+    },
+    {
+      "file": "monster_image/Giant_Skull__p0.png",
+      "sad": "Giant_Skull.sad",
+      "palette": 0,
+      "plt": "Giant_Skull.plt",
+      "breeds": [
+        819,
+        1271,
+        1467
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 40,
+      "width": 61,
+      "height": 79
+    },
+    {
+      "file": "monster_image/Giant_Skull__p1.png",
+      "sad": "Giant_Skull.sad",
+      "palette": 1,
+      "plt": "Giant_Skull.plt",
+      "breeds": [
+        820
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 40,
+      "width": 61,
+      "height": 79
+    },
+    {
+      "file": "monster_image/Giant_Skull__p2.png",
+      "sad": "Giant_Skull.sad",
+      "palette": 2,
+      "plt": "Giant_Skull.plt",
+      "breeds": [
+        821,
+        1582
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 40,
+      "width": 61,
+      "height": 79
+    },
+    {
+      "file": "monster_image/Giant_Skull__p3.png",
+      "sad": "Giant_Skull.sad",
+      "palette": 3,
+      "plt": "Giant_Skull.plt",
+      "breeds": [
+        822
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 40,
+      "width": 61,
+      "height": 79
+    },
+    {
+      "file": "monster_image/Giant__p0.png",
+      "sad": "Giant.sad",
+      "palette": 0,
+      "plt": "Giant.plt",
+      "breeds": [
+        396
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 156,
+      "width": 52,
+      "height": 120
+    },
+    {
+      "file": "monster_image/Giant__p1.png",
+      "sad": "Giant.sad",
+      "palette": 1,
+      "plt": "Giant.plt",
+      "breeds": [
+        85,
+        394
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 156,
+      "width": 52,
+      "height": 120
+    },
+    {
+      "file": "monster_image/Giant__p2.png",
+      "sad": "Giant.sad",
+      "palette": 2,
+      "plt": "Giant.plt",
+      "breeds": [
+        88,
+        397,
+        648,
+        1561
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 156,
+      "width": 52,
+      "height": 120
+    },
+    {
+      "file": "monster_image/Giant__p3.png",
+      "sad": "Giant.sad",
+      "palette": 3,
+      "plt": "Giant.plt",
+      "breeds": [
+        86,
+        395
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 156,
+      "width": 52,
+      "height": 120
+    },
+    {
+      "file": "monster_image/Giant__p4.png",
+      "sad": "Giant.sad",
+      "palette": 4,
+      "plt": "Giant.plt",
+      "breeds": [
+        89,
+        398,
+        1431
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 156,
+      "width": 52,
+      "height": 120
+    },
+    {
+      "file": "monster_image/God_of_Death_01__p0.png",
+      "sad": "God_of_Death_01.sad",
+      "palette": 0,
+      "plt": "God_of_Death.plt",
+      "breeds": [
+        949,
+        1279
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 93,
+      "height": 127
+    },
+    {
+      "file": "monster_image/God_of_Death_01__p1.png",
+      "sad": "God_of_Death_01.sad",
+      "palette": 1,
+      "plt": "God_of_Death.plt",
+      "breeds": [
+        1479
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 93,
+      "height": 127
+    },
+    {
+      "file": "monster_image/God_of_Death_01__p4.png",
+      "sad": "God_of_Death_01.sad",
+      "palette": 4,
+      "plt": "God_of_Death.plt",
+      "breeds": [
+        1570
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 93,
+      "height": 127
+    },
+    {
+      "file": "monster_image/God_of_Death_02__p0.png",
+      "sad": "God_of_Death_02.sad",
+      "palette": 0,
+      "plt": "God_of_Death.plt",
+      "breeds": [
+        954
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 100,
+      "height": 125
+    },
+    {
+      "file": "monster_image/God_of_Death_02__p2.png",
+      "sad": "God_of_Death_02.sad",
+      "palette": 2,
+      "plt": "God_of_Death.plt",
+      "breeds": [
+        956
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 100,
+      "height": 125
+    },
+    {
+      "file": "monster_image/God_of_Death_02__p4.png",
+      "sad": "God_of_Death_02.sad",
+      "palette": 4,
+      "plt": "God_of_Death.plt",
+      "breeds": [
+        958,
+        1330
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 100,
+      "height": 125
+    },
+    {
+      "file": "monster_image/God_of_Death__p0.png",
+      "sad": "God_of_Death.sad",
+      "palette": 0,
+      "plt": "God_of_Death.plt",
+      "breeds": [
+        944
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 79,
+      "height": 93
+    },
+    {
+      "file": "monster_image/God_of_Death__p1.png",
+      "sad": "God_of_Death.sad",
+      "palette": 1,
+      "plt": "God_of_Death.plt",
+      "breeds": [
+        945
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 79,
+      "height": 93
+    },
+    {
+      "file": "monster_image/God_of_Death__p2.png",
+      "sad": "God_of_Death.sad",
+      "palette": 2,
+      "plt": "God_of_Death.plt",
+      "breeds": [
+        946
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 79,
+      "height": 93
+    },
+    {
+      "file": "monster_image/High_Elf_01__p2.png",
+      "sad": "High_Elf_01.sad",
+      "palette": 2,
+      "plt": "High_Elf.plt",
+      "breeds": [
+        876
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 58,
+      "height": 73
+    },
+    {
+      "file": "monster_image/High_Elf_01__p3.png",
+      "sad": "High_Elf_01.sad",
+      "palette": 3,
+      "plt": "High_Elf.plt",
+      "breeds": [
+        1333
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 58,
+      "height": 73
+    },
+    {
+      "file": "monster_image/High_Elf_01__p4.png",
+      "sad": "High_Elf_01.sad",
+      "palette": 4,
+      "plt": "High_Elf.plt",
+      "breeds": [
+        878
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 58,
+      "height": 73
+    },
+    {
+      "file": "monster_image/High_Elf_02__p3.png",
+      "sad": "High_Elf_02.sad",
+      "palette": 3,
+      "plt": "High_Elf.plt",
+      "breeds": [
+        882
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 62,
+      "height": 90
+    },
+    {
+      "file": "monster_image/High_Elf__p0.png",
+      "sad": "High_Elf.sad",
+      "palette": 0,
+      "plt": "High_Elf.plt",
+      "breeds": [
+        869,
+        1274
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 66,
+      "height": 82
+    },
+    {
+      "file": "monster_image/High_Elf__p1.png",
+      "sad": "High_Elf.sad",
+      "palette": 1,
+      "plt": "High_Elf.plt",
+      "breeds": [
+        1470
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 66,
+      "height": 82
+    },
+    {
+      "file": "monster_image/High_Elf__p2.png",
+      "sad": "High_Elf.sad",
+      "palette": 2,
+      "plt": "High_Elf.plt",
+      "breeds": [
+        1545
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 66,
+      "height": 82
+    },
+    {
+      "file": "monster_image/InsectSwarm__p0.png",
+      "sad": "InsectSwarm.sad",
+      "palette": 0,
+      "plt": "InsectSwarm.plt",
+      "breeds": [
+        180,
+        489
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 15,
+      "width": 132,
+      "height": 146
+    },
+    {
+      "file": "monster_image/InsectSwarm__p1.png",
+      "sad": "InsectSwarm.sad",
+      "palette": 1,
+      "plt": "InsectSwarm.plt",
+      "breeds": [
+        181,
+        490,
+        1217,
+        1443
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 15,
+      "width": 132,
+      "height": 146
+    },
+    {
+      "file": "monster_image/InsectSwarm__p2.png",
+      "sad": "InsectSwarm.sad",
+      "palette": 2,
+      "plt": "InsectSwarm.plt",
+      "breeds": [
+        182,
+        491,
+        742,
+        1218
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 15,
+      "width": 132,
+      "height": 146
+    },
+    {
+      "file": "monster_image/InsectSwarm__p3.png",
+      "sad": "InsectSwarm.sad",
+      "palette": 3,
+      "plt": "InsectSwarm.plt",
+      "breeds": [
+        183,
+        492,
+        743,
+        1219
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 15,
+      "width": 132,
+      "height": 146
+    },
+    {
+      "file": "monster_image/InsectSwarm__p4.png",
+      "sad": "InsectSwarm.sad",
+      "palette": 4,
+      "plt": "InsectSwarm.plt",
+      "breeds": [
+        184,
+        744
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 15,
+      "width": 132,
+      "height": 146
+    },
+    {
+      "file": "monster_image/JellyFish__p0.png",
+      "sad": "JellyFish.sad",
+      "palette": 0,
+      "plt": "JellyFish.plt",
+      "breeds": [
+        165,
+        725,
+        1203
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 40,
+      "width": 45,
+      "height": 90
+    },
+    {
+      "file": "monster_image/JellyFish__p1.png",
+      "sad": "JellyFish.sad",
+      "palette": 1,
+      "plt": "JellyFish.plt",
+      "breeds": [
+        726,
+        1209,
+        1507
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 40,
+      "width": 45,
+      "height": 90
+    },
+    {
+      "file": "monster_image/JellyFish__p2.png",
+      "sad": "JellyFish.sad",
+      "palette": 2,
+      "plt": "JellyFish.plt",
+      "breeds": [
+        167,
+        476,
+        727,
+        1210
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 40,
+      "width": 45,
+      "height": 90
+    },
+    {
+      "file": "monster_image/JellyFish__p3.png",
+      "sad": "JellyFish.sad",
+      "palette": 3,
+      "plt": "JellyFish.plt",
+      "breeds": [
+        729
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 40,
+      "width": 45,
+      "height": 90
+    },
+    {
+      "file": "monster_image/JellyFish__p4.png",
+      "sad": "JellyFish.sad",
+      "palette": 4,
+      "plt": "JellyFish.plt",
+      "breeds": [
+        168,
+        477,
+        728,
+        1441
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 40,
+      "width": 45,
+      "height": 90
+    },
+    {
+      "file": "monster_image/KingCrab__p0.png",
+      "sad": "KingCrab.sad",
+      "palette": 0,
+      "plt": "KingCrab.plt",
+      "breeds": [
+        175
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 72,
+      "width": 80,
+      "height": 62
+    },
+    {
+      "file": "monster_image/KingCrab__p1.png",
+      "sad": "KingCrab.sad",
+      "palette": 1,
+      "plt": "KingCrab.plt",
+      "breeds": [
+        176,
+        736,
+        1504
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 72,
+      "width": 80,
+      "height": 62
+    },
+    {
+      "file": "monster_image/KingCrab__p2.png",
+      "sad": "KingCrab.sad",
+      "palette": 2,
+      "plt": "KingCrab.plt",
+      "breeds": [
+        178,
+        487
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 72,
+      "width": 80,
+      "height": 62
+    },
+    {
+      "file": "monster_image/KingCrab__p3.png",
+      "sad": "KingCrab.sad",
+      "palette": 3,
+      "plt": "KingCrab.plt",
+      "breeds": [
+        488,
+        739
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 72,
+      "width": 80,
+      "height": 62
+    },
+    {
+      "file": "monster_image/KingCrab__p4.png",
+      "sad": "KingCrab.sad",
+      "palette": 4,
+      "plt": "KingCrab.plt",
+      "breeds": [
+        177,
+        486,
+        1442
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 72,
+      "width": 80,
+      "height": 62
+    },
+    {
+      "file": "monster_image/Lich__p0.png",
+      "sad": "Lich.sad",
+      "palette": 0,
+      "plt": "Lich.plt",
+      "breeds": [
+        609
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 138,
+      "height": 214
+    },
+    {
+      "file": "monster_image/Lich__p1.png",
+      "sad": "Lich.sad",
+      "palette": 1,
+      "plt": "Lich.plt",
+      "breeds": [
+        356
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 138,
+      "height": 214
+    },
+    {
+      "file": "monster_image/Lich__p2.png",
+      "sad": "Lich.sad",
+      "palette": 2,
+      "plt": "Lich.plt",
+      "breeds": [
+        355,
+        606,
+        1426
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 138,
+      "height": 214
+    },
+    {
+      "file": "monster_image/Lich__p3.png",
+      "sad": "Lich.sad",
+      "palette": 3,
+      "plt": "Lich.plt",
+      "breeds": [
+        45,
+        354,
+        605,
+        1550
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 138,
+      "height": 214
+    },
+    {
+      "file": "monster_image/Lich__p4.png",
+      "sad": "Lich.sad",
+      "palette": 4,
+      "plt": "Lich.plt",
+      "breeds": [
+        357,
+        608
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 138,
+      "height": 214
+    },
+    {
+      "file": "monster_image/LivingDead__p0.png",
+      "sad": "LivingDead.sad",
+      "palette": 0,
+      "plt": "LivingDead.plt",
+      "breeds": [
+        21,
+        1421
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 136,
+      "width": 48,
+      "height": 77
+    },
+    {
+      "file": "monster_image/LivingDead__p1.png",
+      "sad": "LivingDead.sad",
+      "palette": 1,
+      "plt": "LivingDead.plt",
+      "breeds": [
+        20,
+        580
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 136,
+      "width": 48,
+      "height": 77
+    },
+    {
+      "file": "monster_image/LivingDead__p2.png",
+      "sad": "LivingDead.sad",
+      "palette": 2,
+      "plt": "LivingDead.plt",
+      "breeds": [
+        22,
+        331,
+        582
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 136,
+      "width": 48,
+      "height": 77
+    },
+    {
+      "file": "monster_image/LivingDead__p3.png",
+      "sad": "LivingDead.sad",
+      "palette": 3,
+      "plt": "LivingDead.plt",
+      "breeds": [
+        24,
+        333,
+        584
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 136,
+      "width": 48,
+      "height": 77
+    },
+    {
+      "file": "monster_image/LivingDead__p4.png",
+      "sad": "LivingDead.sad",
+      "palette": 4,
+      "plt": "LivingDead.plt",
+      "breeds": [
+        23,
+        583
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 136,
+      "width": 48,
+      "height": 77
+    },
+    {
+      "file": "monster_image/LizardRider__p0.png",
+      "sad": "LizardRider.sad",
+      "palette": 0,
+      "plt": "LizardRider.plt",
+      "breeds": [
+        122,
+        431,
+        682,
+        1457
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 101,
+      "height": 111
+    },
+    {
+      "file": "monster_image/LizardRider__p1.png",
+      "sad": "LizardRider.sad",
+      "palette": 1,
+      "plt": "LizardRider.plt",
+      "breeds": [
+        121,
+        430
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 101,
+      "height": 111
+    },
+    {
+      "file": "monster_image/LizardRider__p2.png",
+      "sad": "LizardRider.sad",
+      "palette": 2,
+      "plt": "LizardRider.plt",
+      "breeds": [
+        120,
+        429
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 101,
+      "height": 111
+    },
+    {
+      "file": "monster_image/LizardRider__p3.png",
+      "sad": "LizardRider.sad",
+      "palette": 3,
+      "plt": "LizardRider.plt",
+      "breeds": [
+        123,
+        432,
+        683
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 101,
+      "height": 111
+    },
+    {
+      "file": "monster_image/LizardRider__p4.png",
+      "sad": "LizardRider.sad",
+      "palette": 4,
+      "plt": "LizardRider.plt",
+      "breeds": [
+        433,
+        684
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 101,
+      "height": 111
+    },
+    {
+      "file": "monster_image/LizardWarrior__p0.png",
+      "sad": "LizardWarrior.sad",
+      "palette": 0,
+      "plt": "LizardWarrior.plt",
+      "breeds": [
+        118,
+        427
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 59,
+      "height": 69
+    },
+    {
+      "file": "monster_image/LizardWarrior__p1.png",
+      "sad": "LizardWarrior.sad",
+      "palette": 1,
+      "plt": "LizardWarrior.plt",
+      "breeds": [
+        116,
+        425,
+        676,
+        1435
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 59,
+      "height": 69
+    },
+    {
+      "file": "monster_image/LizardWarrior__p2.png",
+      "sad": "LizardWarrior.sad",
+      "palette": 2,
+      "plt": "LizardWarrior.plt",
+      "breeds": [
+        117,
+        426,
+        677
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 59,
+      "height": 69
+    },
+    {
+      "file": "monster_image/LizardWarrior__p3.png",
+      "sad": "LizardWarrior.sad",
+      "palette": 3,
+      "plt": "LizardWarrior.plt",
+      "breeds": [
+        115,
+        424
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 59,
+      "height": 69
+    },
+    {
+      "file": "monster_image/LizardWarrior__p4.png",
+      "sad": "LizardWarrior.sad",
+      "palette": 4,
+      "plt": "LizardWarrior.plt",
+      "breeds": [
+        119,
+        679
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 59,
+      "height": 69
+    },
+    {
+      "file": "monster_image/MadBear__p0.png",
+      "sad": "MadBear.sad",
+      "palette": 0,
+      "plt": "MadBear.plt",
+      "breeds": [
+        195,
+        504
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 109,
+      "height": 100
+    },
+    {
+      "file": "monster_image/MadBear__p1.png",
+      "sad": "MadBear.sad",
+      "palette": 1,
+      "plt": "MadBear.plt",
+      "breeds": [
+        196,
+        505,
+        756
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 109,
+      "height": 100
+    },
+    {
+      "file": "monster_image/MadBear__p2.png",
+      "sad": "MadBear.sad",
+      "palette": 2,
+      "plt": "MadBear.plt",
+      "breeds": [
+        506,
+        757
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 109,
+      "height": 100
+    },
+    {
+      "file": "monster_image/MadBear__p3.png",
+      "sad": "MadBear.sad",
+      "palette": 3,
+      "plt": "MadBear.plt",
+      "breeds": [
+        507,
+        758,
+        1299
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 109,
+      "height": 100
+    },
+    {
+      "file": "monster_image/MadBear__p4.png",
+      "sad": "MadBear.sad",
+      "palette": 4,
+      "plt": "MadBear.plt",
+      "breeds": [
+        759
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 109,
+      "height": 100
+    },
+    {
+      "file": "monster_image/Mad_Demon_01__p3.png",
+      "sad": "Mad_Demon_01.sad",
+      "palette": 3,
+      "plt": "Mad_Demon.plt",
+      "breeds": [
+        937
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 57,
+      "height": 106
+    },
+    {
+      "file": "monster_image/Mad_Demon_02__p1.png",
+      "sad": "Mad_Demon_02.sad",
+      "palette": 1,
+      "plt": "Mad_Demon.plt",
+      "breeds": [
+        940
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 63,
+      "height": 97
+    },
+    {
+      "file": "monster_image/Mad_Demon_02__p4.png",
+      "sad": "Mad_Demon_02.sad",
+      "palette": 4,
+      "plt": "Mad_Demon.plt",
+      "breeds": [
+        1328
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 63,
+      "height": 97
+    },
+    {
+      "file": "monster_image/Mad_Demon__p0.png",
+      "sad": "Mad_Demon.sad",
+      "palette": 0,
+      "plt": "Mad_Demon.plt",
+      "breeds": [
+        929,
+        1278
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 42,
+      "height": 100
+    },
+    {
+      "file": "monster_image/Mantis_Warrior_02__p0.png",
+      "sad": "Mantis_Warrior_02.sad",
+      "palette": 0,
+      "plt": "Mantis_Warrior.plt",
+      "breeds": [
+        984
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 28,
+      "height": 30
+    },
+    {
+      "file": "monster_image/Mantis_Warrior_02__p1.png",
+      "sad": "Mantis_Warrior_02.sad",
+      "palette": 1,
+      "plt": "Mantis_Warrior.plt",
+      "breeds": [
+        985
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 28,
+      "height": 30
+    },
+    {
+      "file": "monster_image/Mantis_Warrior__p0.png",
+      "sad": "Mantis_Warrior.sad",
+      "palette": 0,
+      "plt": "Mantis_Warrior.plt",
+      "breeds": [
+        974,
+        1281
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 63,
+      "height": 88
+    },
+    {
+      "file": "monster_image/Mantis_Warrior__p4.png",
+      "sad": "Mantis_Warrior.sad",
+      "palette": 4,
+      "plt": "Mantis_Warrior.plt",
+      "breeds": [
+        1481
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 63,
+      "height": 88
+    },
+    {
+      "file": "monster_image/MermanKnight__p0.png",
+      "sad": "MermanKnight.sad",
+      "palette": 0,
+      "plt": "MermanKnight.plt",
+      "breeds": [
+        225,
+        534,
+        785
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 136,
+      "width": 189,
+      "height": 127
+    },
+    {
+      "file": "monster_image/MermanKnight__p1.png",
+      "sad": "MermanKnight.sad",
+      "palette": 1,
+      "plt": "MermanKnight.plt",
+      "breeds": [
+        226,
+        535,
+        1252,
+        1257,
+        1508
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 136,
+      "width": 189,
+      "height": 127
+    },
+    {
+      "file": "monster_image/MermanKnight__p2.png",
+      "sad": "MermanKnight.sad",
+      "palette": 2,
+      "plt": "MermanKnight.plt",
+      "breeds": [
+        227,
+        536,
+        787
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 136,
+      "width": 189,
+      "height": 127
+    },
+    {
+      "file": "monster_image/MermanKnight__p3.png",
+      "sad": "MermanKnight.sad",
+      "palette": 3,
+      "plt": "MermanKnight.plt",
+      "breeds": [
+        228,
+        537
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 136,
+      "width": 189,
+      "height": 127
+    },
+    {
+      "file": "monster_image/MermanKnight__p4.png",
+      "sad": "MermanKnight.sad",
+      "palette": 4,
+      "plt": "MermanKnight.plt",
+      "breeds": [
+        789
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 136,
+      "width": 189,
+      "height": 127
+    },
+    {
+      "file": "monster_image/MetalGolem__p0.png",
+      "sad": "MetalGolem.sad",
+      "palette": 0,
+      "plt": "MetalGolem.plt",
+      "breeds": [
+        215,
+        1241
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 156,
+      "width": 97,
+      "height": 130
+    },
+    {
+      "file": "monster_image/MetalGolem__p1.png",
+      "sad": "MetalGolem.sad",
+      "palette": 1,
+      "plt": "MetalGolem.plt",
+      "breeds": [
+        216,
+        776,
+        1242,
+        1247
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 156,
+      "width": 97,
+      "height": 130
+    },
+    {
+      "file": "monster_image/MetalGolem__p2.png",
+      "sad": "MetalGolem.sad",
+      "palette": 2,
+      "plt": "MetalGolem.plt",
+      "breeds": [
+        217,
+        526,
+        777,
+        1243,
+        1248,
+        1448
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 156,
+      "width": 97,
+      "height": 130
+    },
+    {
+      "file": "monster_image/MetalGolem__p3.png",
+      "sad": "MetalGolem.sad",
+      "palette": 3,
+      "plt": "MetalGolem.plt",
+      "breeds": [
+        218,
+        527,
+        778,
+        1244
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 156,
+      "width": 97,
+      "height": 130
+    },
+    {
+      "file": "monster_image/MetalGolem__p4.png",
+      "sad": "MetalGolem.sad",
+      "palette": 4,
+      "plt": "MetalGolem.plt",
+      "breeds": [
+        219,
+        779,
+        1302,
+        1573
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 156,
+      "width": 97,
+      "height": 130
+    },
+    {
+      "file": "monster_image/Monkey_King_01__p0.png",
+      "sad": "Monkey_King_01.sad",
+      "palette": 0,
+      "plt": "Monkey_King.plt",
+      "breeds": [
+        1009
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 88,
+      "width": 109,
+      "height": 92
+    },
+    {
+      "file": "monster_image/Monkey_King_02__p0.png",
+      "sad": "Monkey_King_02.sad",
+      "palette": 0,
+      "plt": "Monkey_King.plt",
+      "breeds": [
+        1014
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 88,
+      "width": 116,
+      "height": 77
+    },
+    {
+      "file": "monster_image/Monkey_King_02__p2.png",
+      "sad": "Monkey_King_02.sad",
+      "palette": 2,
+      "plt": "Monkey_King.plt",
+      "breeds": [
+        1016
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 88,
+      "width": 116,
+      "height": 77
+    },
+    {
+      "file": "monster_image/Monkey_King_02__p4.png",
+      "sad": "Monkey_King_02.sad",
+      "palette": 4,
+      "plt": "Monkey_King.plt",
+      "breeds": [
+        1334,
+        1483
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 88,
+      "width": 116,
+      "height": 77
+    },
+    {
+      "file": "monster_image/Monkey_King__p0.png",
+      "sad": "Monkey_King.sad",
+      "palette": 0,
+      "plt": "Monkey_King.plt",
+      "breeds": [
+        1283
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 88,
+      "width": 97,
+      "height": 84
+    },
+    {
+      "file": "monster_image/Monkey_King__p1.png",
+      "sad": "Monkey_King.sad",
+      "palette": 1,
+      "plt": "Monkey_King.plt",
+      "breeds": [
+        1005
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 88,
+      "width": 97,
+      "height": 84
+    },
+    {
+      "file": "monster_image/Mummy__p0.png",
+      "sad": "Mummy.sad",
+      "palette": 0,
+      "plt": "Mummy.plt",
+      "breeds": [
+        31,
+        340,
+        591
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 132,
+      "width": 67,
+      "height": 98
+    },
+    {
+      "file": "monster_image/Mummy__p1.png",
+      "sad": "Mummy.sad",
+      "palette": 1,
+      "plt": "Mummy.plt",
+      "breeds": [
+        30,
+        339
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 132,
+      "width": 67,
+      "height": 98
+    },
+    {
+      "file": "monster_image/Mummy__p2.png",
+      "sad": "Mummy.sad",
+      "palette": 2,
+      "plt": "Mummy.plt",
+      "breeds": [
+        32,
+        341,
+        592
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 132,
+      "width": 67,
+      "height": 98
+    },
+    {
+      "file": "monster_image/Mummy__p3.png",
+      "sad": "Mummy.sad",
+      "palette": 3,
+      "plt": "Mummy.plt",
+      "breeds": [
+        594
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 132,
+      "width": 67,
+      "height": 98
+    },
+    {
+      "file": "monster_image/Mummy__p4.png",
+      "sad": "Mummy.sad",
+      "palette": 4,
+      "plt": "Mummy.plt",
+      "breeds": [
+        33,
+        342,
+        593,
+        1423,
+        1559
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 132,
+      "width": 67,
+      "height": 98
+    },
+    {
+      "file": "monster_image/Ogre__p0.png",
+      "sad": "Ogre.sad",
+      "palette": 0,
+      "plt": "Ogre.plt",
+      "breeds": [
+        135,
+        444,
+        695
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 59,
+      "height": 113
+    },
+    {
+      "file": "monster_image/Ogre__p1.png",
+      "sad": "Ogre.sad",
+      "palette": 1,
+      "plt": "Ogre.plt",
+      "breeds": [
+        447
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 59,
+      "height": 113
+    },
+    {
+      "file": "monster_image/Ogre__p2.png",
+      "sad": "Ogre.sad",
+      "palette": 2,
+      "plt": "Ogre.plt",
+      "breeds": [
+        137,
+        446,
+        697
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 59,
+      "height": 113
+    },
+    {
+      "file": "monster_image/Ogre__p3.png",
+      "sad": "Ogre.sad",
+      "palette": 3,
+      "plt": "Ogre.plt",
+      "breeds": [
+        136,
+        445,
+        696
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 59,
+      "height": 113
+    },
+    {
+      "file": "monster_image/Ogre__p4.png",
+      "sad": "Ogre.sad",
+      "palette": 4,
+      "plt": "Ogre.plt",
+      "breeds": [
+        699
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 59,
+      "height": 113
+    },
+    {
+      "file": "monster_image/Pumpkin_Head_01__p0.png",
+      "sad": "Pumpkin_Head_01.sad",
+      "palette": 0,
+      "plt": "Pumpkin_Head.plt",
+      "breeds": [
+        994
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 109,
+      "width": 59,
+      "height": 102
+    },
+    {
+      "file": "monster_image/Pumpkin_Head__p0.png",
+      "sad": "Pumpkin_Head.sad",
+      "palette": 0,
+      "plt": "Pumpkin_Head.plt",
+      "breeds": [
+        989,
+        1282
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 109,
+      "width": 40,
+      "height": 99
+    },
+    {
+      "file": "monster_image/Pumpkin_Head__p1.png",
+      "sad": "Pumpkin_Head.sad",
+      "palette": 1,
+      "plt": "Pumpkin_Head.plt",
+      "breeds": [
+        990
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 109,
+      "width": 40,
+      "height": 99
+    },
+    {
+      "file": "monster_image/Pumpkin_Head__p4.png",
+      "sad": "Pumpkin_Head.sad",
+      "palette": 4,
+      "plt": "Pumpkin_Head.plt",
+      "breeds": [
+        1482
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 109,
+      "width": 40,
+      "height": 99
+    },
+    {
+      "file": "monster_image/RatFighter__p0.png",
+      "sad": "RatFighter.sad",
+      "palette": 0,
+      "plt": "RatFighter.plt",
+      "breeds": [
+        129,
+        689
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 50,
+      "height": 46
+    },
+    {
+      "file": "monster_image/RatFighter__p1.png",
+      "sad": "RatFighter.sad",
+      "palette": 1,
+      "plt": "RatFighter.plt",
+      "breeds": [
+        126,
+        435,
+        686
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 50,
+      "height": 46
+    },
+    {
+      "file": "monster_image/RatFighter__p2.png",
+      "sad": "RatFighter.sad",
+      "palette": 2,
+      "plt": "RatFighter.plt",
+      "breeds": [
+        127,
+        436,
+        687
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 50,
+      "height": 46
+    },
+    {
+      "file": "monster_image/RatFighter__p3.png",
+      "sad": "RatFighter.sad",
+      "palette": 3,
+      "plt": "RatFighter.plt",
+      "breeds": [
+        128,
+        437,
+        688,
+        1436
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 50,
+      "height": 46
+    },
+    {
+      "file": "monster_image/RatFighter__p4.png",
+      "sad": "RatFighter.sad",
+      "palette": 4,
+      "plt": "RatFighter.plt",
+      "breeds": [
+        125,
+        434
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 50,
+      "height": 46
+    },
+    {
+      "file": "monster_image/RedDemon__p0.png",
+      "sad": "RedDemon.sad",
+      "palette": 0,
+      "plt": "RedDemon.plt",
+      "breeds": [
+        705
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 240,
+      "height": 200
+    },
+    {
+      "file": "monster_image/RedDemon__p4.png",
+      "sad": "RedDemon.sad",
+      "palette": 4,
+      "plt": "RedDemon.plt",
+      "breeds": [
+        706,
+        707,
+        1571
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 240,
+      "height": 200
+    },
+    {
+      "file": "monster_image/Reptile__p0.png",
+      "sad": "Reptile.sad",
+      "palette": 0,
+      "plt": "Reptile.plt",
+      "breeds": [
+        109,
+        418,
+        669
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 87,
+      "height": 57
+    },
+    {
+      "file": "monster_image/Reptile__p1.png",
+      "sad": "Reptile.sad",
+      "palette": 1,
+      "plt": "Reptile.plt",
+      "breeds": [
+        108,
+        417,
+        668,
+        1456
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 87,
+      "height": 57
+    },
+    {
+      "file": "monster_image/Reptile__p2.png",
+      "sad": "Reptile.sad",
+      "palette": 2,
+      "plt": "Reptile.plt",
+      "breeds": [
+        107,
+        416,
+        667
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 87,
+      "height": 57
+    },
+    {
+      "file": "monster_image/Reptile__p3.png",
+      "sad": "Reptile.sad",
+      "palette": 3,
+      "plt": "Reptile.plt",
+      "breeds": [
+        106,
+        415,
+        666
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 87,
+      "height": 57
+    },
+    {
+      "file": "monster_image/Reptile__p4.png",
+      "sad": "Reptile.sad",
+      "palette": 4,
+      "plt": "Reptile.plt",
+      "breeds": [
+        105,
+        414,
+        665,
+        1553
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 87,
+      "height": 57
+    },
+    {
+      "file": "monster_image/Salamander__p0.png",
+      "sad": "Salamander.sad",
+      "palette": 0,
+      "plt": "Salamander.plt",
+      "breeds": [
+        235,
+        1466,
+        1560
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 108,
+      "height": 103
+    },
+    {
+      "file": "monster_image/Salamander__p1.png",
+      "sad": "Salamander.sad",
+      "palette": 1,
+      "plt": "Salamander.plt",
+      "breeds": [
+        545,
+        796
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 108,
+      "height": 103
+    },
+    {
+      "file": "monster_image/Salamander__p2.png",
+      "sad": "Salamander.sad",
+      "palette": 2,
+      "plt": "Salamander.plt",
+      "breeds": [
+        237,
+        546,
+        797
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 108,
+      "height": 103
+    },
+    {
+      "file": "monster_image/Salamander__p3.png",
+      "sad": "Salamander.sad",
+      "palette": 3,
+      "plt": "Salamander.plt",
+      "breeds": [
+        238,
+        547
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 108,
+      "height": 103
+    },
+    {
+      "file": "monster_image/Salamander__p4.png",
+      "sad": "Salamander.sad",
+      "palette": 4,
+      "plt": "Salamander.plt",
+      "breeds": [
+        799
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 108,
+      "height": 103
+    },
+    {
+      "file": "monster_image/Scorpion__p0.png",
+      "sad": "Scorpion.sad",
+      "palette": 0,
+      "plt": "Scorpion.plt",
+      "breeds": [
+        160,
+        1193
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 127,
+      "height": 117
+    },
+    {
+      "file": "monster_image/Scorpion__p1.png",
+      "sad": "Scorpion.sad",
+      "palette": 1,
+      "plt": "Scorpion.plt",
+      "breeds": [
+        161,
+        470,
+        1194,
+        1199,
+        1460
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 127,
+      "height": 117
+    },
+    {
+      "file": "monster_image/Scorpion__p2.png",
+      "sad": "Scorpion.sad",
+      "palette": 2,
+      "plt": "Scorpion.plt",
+      "breeds": [
+        163,
+        472,
+        723,
+        1196,
+        1201
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 127,
+      "height": 117
+    },
+    {
+      "file": "monster_image/Scorpion__p3.png",
+      "sad": "Scorpion.sad",
+      "palette": 3,
+      "plt": "Scorpion.plt",
+      "breeds": [
+        162,
+        471,
+        722,
+        1195,
+        1200
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 127,
+      "height": 117
+    },
+    {
+      "file": "monster_image/Scorpion__p4.png",
+      "sad": "Scorpion.sad",
+      "palette": 4,
+      "plt": "Scorpion.plt",
+      "breeds": [
+        724,
+        1300
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 127,
+      "height": 117
+    },
+    {
+      "file": "monster_image/Sikhs_01__p0.png",
+      "sad": "Sikhs_01.sad",
+      "palette": 0,
+      "plt": "Sikhs.plt",
+      "breeds": [
+        904
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 118,
+      "height": 79
+    },
+    {
+      "file": "monster_image/Sikhs_01__p1.png",
+      "sad": "Sikhs_01.sad",
+      "palette": 1,
+      "plt": "Sikhs.plt",
+      "breeds": [
+        905
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 118,
+      "height": 79
+    },
+    {
+      "file": "monster_image/Sikhs_01__p2.png",
+      "sad": "Sikhs_01.sad",
+      "palette": 2,
+      "plt": "Sikhs.plt",
+      "breeds": [
+        906
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 118,
+      "height": 79
+    },
+    {
+      "file": "monster_image/Sikhs_01__p3.png",
+      "sad": "Sikhs_01.sad",
+      "palette": 3,
+      "plt": "Sikhs.plt",
+      "breeds": [
+        1547
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 118,
+      "height": 79
+    },
+    {
+      "file": "monster_image/Sikhs_01__p4.png",
+      "sad": "Sikhs_01.sad",
+      "palette": 4,
+      "plt": "Sikhs.plt",
+      "breeds": [
+        1331
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 118,
+      "height": 79
+    },
+    {
+      "file": "monster_image/Sikhs__p0.png",
+      "sad": "Sikhs.sad",
+      "palette": 0,
+      "plt": "Sikhs.plt",
+      "breeds": [
+        1276
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 47,
+      "height": 91
+    },
+    {
+      "file": "monster_image/SkeletonAxe__p0.png",
+      "sad": "SkeletonAxe.sad",
+      "palette": 0,
+      "plt": "SkeletonAxe.plt",
+      "breeds": [
+        0,
+        309
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 56,
+      "height": 85
+    },
+    {
+      "file": "monster_image/SkeletonAxe__p1.png",
+      "sad": "SkeletonAxe.sad",
+      "palette": 1,
+      "plt": "SkeletonAxe.plt",
+      "breeds": [
+        1,
+        310
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 56,
+      "height": 85
+    },
+    {
+      "file": "monster_image/SkeletonAxe__p2.png",
+      "sad": "SkeletonAxe.sad",
+      "palette": 2,
+      "plt": "SkeletonAxe.plt",
+      "breeds": [
+        2,
+        311,
+        562
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 56,
+      "height": 85
+    },
+    {
+      "file": "monster_image/SkeletonAxe__p3.png",
+      "sad": "SkeletonAxe.sad",
+      "palette": 3,
+      "plt": "SkeletonAxe.plt",
+      "breeds": [
+        3,
+        312
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 56,
+      "height": 85
+    },
+    {
+      "file": "monster_image/SkeletonAxe__p4.png",
+      "sad": "SkeletonAxe.sad",
+      "palette": 4,
+      "plt": "SkeletonAxe.plt",
+      "breeds": [
+        564
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 56,
+      "height": 85
+    },
+    {
+      "file": "monster_image/SkeletonKnight__p0.png",
+      "sad": "SkeletonKnight.sad",
+      "palette": 0,
+      "plt": "SkeletonKnight.plt",
+      "breeds": [
+        12,
+        321,
+        572,
+        1419
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 77,
+      "height": 134
+    },
+    {
+      "file": "monster_image/SkeletonKnight__p1.png",
+      "sad": "SkeletonKnight.sad",
+      "palette": 1,
+      "plt": "SkeletonKnight.plt",
+      "breeds": [
+        14,
+        323,
+        574
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 77,
+      "height": 134
+    },
+    {
+      "file": "monster_image/SkeletonKnight__p2.png",
+      "sad": "SkeletonKnight.sad",
+      "palette": 2,
+      "plt": "SkeletonKnight.plt",
+      "breeds": [
+        13,
+        322,
+        573
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 77,
+      "height": 134
+    },
+    {
+      "file": "monster_image/SkeletonKnight__p3.png",
+      "sad": "SkeletonKnight.sad",
+      "palette": 3,
+      "plt": "SkeletonKnight.plt",
+      "breeds": [
+        11,
+        320,
+        571,
+        1551
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 77,
+      "height": 134
+    },
+    {
+      "file": "monster_image/SkeletonKnight__p4.png",
+      "sad": "SkeletonKnight.sad",
+      "palette": 4,
+      "plt": "SkeletonKnight.plt",
+      "breeds": [
+        10,
+        319
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 77,
+      "height": 134
+    },
+    {
+      "file": "monster_image/SkeletonSanta__p0.png",
+      "sad": "SkeletonSanta.sad",
+      "palette": 0,
+      "plt": "SkeletonSanta.plt",
+      "breeds": [
+        1290
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 46,
+      "height": 93
+    },
+    {
+      "file": "monster_image/SkeletonSword__p0.png",
+      "sad": "SkeletonSword.sad",
+      "palette": 0,
+      "plt": "SkeletonSword.plt",
+      "breeds": [
+        569
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 46,
+      "height": 88
+    },
+    {
+      "file": "monster_image/SkeletonSword__p1.png",
+      "sad": "SkeletonSword.sad",
+      "palette": 1,
+      "plt": "SkeletonSword.plt",
+      "breeds": [
+        7,
+        316,
+        567
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 46,
+      "height": 88
+    },
+    {
+      "file": "monster_image/SkeletonSword__p3.png",
+      "sad": "SkeletonSword.sad",
+      "palette": 3,
+      "plt": "SkeletonSword.plt",
+      "breeds": [
+        317,
+        568
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 46,
+      "height": 88
+    },
+    {
+      "file": "monster_image/SkeletonSword__p4.png",
+      "sad": "SkeletonSword.sad",
+      "palette": 4,
+      "plt": "SkeletonSword.plt",
+      "breeds": [
+        6,
+        315
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 46,
+      "height": 88
+    },
+    {
+      "file": "monster_image/Spider__p0.png",
+      "sad": "Spider.sad",
+      "palette": 0,
+      "plt": "Spider.plt",
+      "breeds": [
+        155,
+        715,
+        1440
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 73,
+      "height": 67
+    },
+    {
+      "file": "monster_image/Spider__p1.png",
+      "sad": "Spider.sad",
+      "palette": 1,
+      "plt": "Spider.plt",
+      "breeds": [
+        156,
+        465,
+        716,
+        1185,
+        1189
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 73,
+      "height": 67
+    },
+    {
+      "file": "monster_image/Spider__p2.png",
+      "sad": "Spider.sad",
+      "palette": 2,
+      "plt": "Spider.plt",
+      "breeds": [
+        157,
+        466,
+        717,
+        1186,
+        1190
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 73,
+      "height": 67
+    },
+    {
+      "file": "monster_image/Spider__p3.png",
+      "sad": "Spider.sad",
+      "palette": 3,
+      "plt": "Spider.plt",
+      "breeds": [
+        158,
+        467,
+        718,
+        1187,
+        1191
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 73,
+      "height": 67
+    },
+    {
+      "file": "monster_image/Spider__p4.png",
+      "sad": "Spider.sad",
+      "palette": 4,
+      "plt": "Spider.plt",
+      "breeds": [
+        159,
+        468,
+        719
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 73,
+      "height": 67
+    },
+    {
+      "file": "monster_image/Succubus_01__p0.png",
+      "sad": "Succubus_01.sad",
+      "palette": 0,
+      "plt": "Succubus.plt",
+      "breeds": [
+        964,
+        1280
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 87,
+      "height": 99
+    },
+    {
+      "file": "monster_image/Succubus_01__p1.png",
+      "sad": "Succubus_01.sad",
+      "palette": 1,
+      "plt": "Succubus.plt",
+      "breeds": [
+        965
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 87,
+      "height": 99
+    },
+    {
+      "file": "monster_image/Succubus_02__p0.png",
+      "sad": "Succubus_02.sad",
+      "palette": 0,
+      "plt": "Succubus.plt",
+      "breeds": [
+        969
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 105,
+      "height": 134
+    },
+    {
+      "file": "monster_image/Succubus_02__p4.png",
+      "sad": "Succubus_02.sad",
+      "palette": 4,
+      "plt": "Succubus.plt",
+      "breeds": [
+        1416,
+        1569
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 105,
+      "height": 134
+    },
+    {
+      "file": "monster_image/Succubus__p0.png",
+      "sad": "Succubus.sad",
+      "palette": 0,
+      "plt": "Succubus.plt",
+      "breeds": [
+        959
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 43,
+      "height": 79
+    },
+    {
+      "file": "monster_image/Succubus__p1.png",
+      "sad": "Succubus.sad",
+      "palette": 1,
+      "plt": "Succubus.plt",
+      "breeds": [
+        960
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 43,
+      "height": 79
+    },
+    {
+      "file": "monster_image/Succubus__p4.png",
+      "sad": "Succubus.sad",
+      "palette": 4,
+      "plt": "Succubus.plt",
+      "breeds": [
+        963
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 43,
+      "height": 79
+    },
+    {
+      "file": "monster_image/TempleKnight__p0.png",
+      "sad": "TempleKnight.sad",
+      "palette": 0,
+      "plt": "TempleKnight.plt",
+      "breeds": [
+        70,
+        379
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 94,
+      "width": 86,
+      "height": 87
+    },
+    {
+      "file": "monster_image/TempleKnight__p1.png",
+      "sad": "TempleKnight.sad",
+      "palette": 1,
+      "plt": "TempleKnight.plt",
+      "breeds": [
+        73,
+        382,
+        633
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 94,
+      "width": 86,
+      "height": 87
+    },
+    {
+      "file": "monster_image/TempleKnight__p2.png",
+      "sad": "TempleKnight.sad",
+      "palette": 2,
+      "plt": "TempleKnight.plt",
+      "breeds": [
+        72,
+        381,
+        632,
+        1453
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 94,
+      "width": 86,
+      "height": 87
+    },
+    {
+      "file": "monster_image/TempleKnight__p3.png",
+      "sad": "TempleKnight.sad",
+      "palette": 3,
+      "plt": "TempleKnight.plt",
+      "breeds": [
+        71,
+        380,
+        631,
+        1580,
+        1585,
+        1586
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 94,
+      "width": 86,
+      "height": 87
+    },
+    {
+      "file": "monster_image/TempleKnight__p4.png",
+      "sad": "TempleKnight.sad",
+      "palette": 4,
+      "plt": "TempleKnight.plt",
+      "breeds": [
+        74,
+        634
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 94,
+      "width": 86,
+      "height": 87
+    },
+    {
+      "file": "monster_image/TimberMan__p0.png",
+      "sad": "TimberMan.sad",
+      "palette": 0,
+      "plt": "TimberMan.plt",
+      "breeds": [
+        230,
+        539,
+        790
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 120,
+      "width": 165,
+      "height": 157
+    },
+    {
+      "file": "monster_image/TimberMan__p1.png",
+      "sad": "TimberMan.sad",
+      "palette": 1,
+      "plt": "TimberMan.plt",
+      "breeds": [
+        231,
+        540,
+        791,
+        1296
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 120,
+      "width": 165,
+      "height": 157
+    },
+    {
+      "file": "monster_image/TimberMan__p2.png",
+      "sad": "TimberMan.sad",
+      "palette": 2,
+      "plt": "TimberMan.plt",
+      "breeds": [
+        232,
+        541,
+        792,
+        1297,
+        1449
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 120,
+      "width": 165,
+      "height": 157
+    },
+    {
+      "file": "monster_image/TimberMan__p3.png",
+      "sad": "TimberMan.sad",
+      "palette": 3,
+      "plt": "TimberMan.plt",
+      "breeds": [
+        233,
+        542,
+        793,
+        1298,
+        1566
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 120,
+      "width": 165,
+      "height": 157
+    },
+    {
+      "file": "monster_image/TimberMan__p4.png",
+      "sad": "TimberMan.sad",
+      "palette": 4,
+      "plt": "TimberMan.plt",
+      "breeds": [
+        543,
+        794,
+        1588
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 120,
+      "width": 165,
+      "height": 157
+    },
+    {
+      "file": "monster_image/TongueEye__p0.png",
+      "sad": "TongueEye.sad",
+      "palette": 0,
+      "plt": "TongueEye.plt",
+      "breeds": [
+        1221,
+        1447
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 96,
+      "height": 134
+    },
+    {
+      "file": "monster_image/TongueEye__p1.png",
+      "sad": "TongueEye.sad",
+      "palette": 1,
+      "plt": "TongueEye.plt",
+      "breeds": [
+        206,
+        1509
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 96,
+      "height": 134
+    },
+    {
+      "file": "monster_image/TongueEye__p2.png",
+      "sad": "TongueEye.sad",
+      "palette": 2,
+      "plt": "TongueEye.plt",
+      "breeds": [
+        207,
+        767
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 96,
+      "height": 134
+    },
+    {
+      "file": "monster_image/TongueEye__p3.png",
+      "sad": "TongueEye.sad",
+      "palette": 3,
+      "plt": "TongueEye.plt",
+      "breeds": [
+        208,
+        517,
+        768
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 96,
+      "height": 134
+    },
+    {
+      "file": "monster_image/TongueEye__p4.png",
+      "sad": "TongueEye.sad",
+      "palette": 4,
+      "plt": "TongueEye.plt",
+      "breeds": [
+        769
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 96,
+      "height": 134
+    },
+    {
+      "file": "monster_image/Tongue_Monster_01__p0.png",
+      "sad": "Tongue_Monster_01.sad",
+      "palette": 0,
+      "plt": "Tongue_Monster.plt",
+      "breeds": [
+        1039
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 111,
+      "height": 78
+    },
+    {
+      "file": "monster_image/Tongue_Monster_02__p0.png",
+      "sad": "Tongue_Monster_02.sad",
+      "palette": 0,
+      "plt": "Tongue_Monster.plt",
+      "breeds": [
+        1044
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 120,
+      "height": 85
+    },
+    {
+      "file": "monster_image/Tongue_Monster__p0.png",
+      "sad": "Tongue_Monster.sad",
+      "palette": 0,
+      "plt": "Tongue_Monster.plt",
+      "breeds": [
+        1285
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 109,
+      "height": 85
+    },
+    {
+      "file": "monster_image/Tongue_Monster__p1.png",
+      "sad": "Tongue_Monster.sad",
+      "palette": 1,
+      "plt": "Tongue_Monster.plt",
+      "breeds": [
+        1035
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 109,
+      "height": 85
+    },
+    {
+      "file": "monster_image/Tongue_Monster__p4.png",
+      "sad": "Tongue_Monster.sad",
+      "palette": 4,
+      "plt": "Tongue_Monster.plt",
+      "breeds": [
+        1485
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 109,
+      "height": 85
+    },
+    {
+      "file": "monster_image/TurtleDragon__p0.png",
+      "sad": "TurtleDragon.sad",
+      "palette": 0,
+      "plt": "TurtleDragon.plt",
+      "breeds": [
+        150,
+        1165
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 156,
+      "width": 114,
+      "height": 114
+    },
+    {
+      "file": "monster_image/TurtleDragon__p1.png",
+      "sad": "TurtleDragon.sad",
+      "palette": 1,
+      "plt": "TurtleDragon.plt",
+      "breeds": [
+        151,
+        711,
+        1505
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 156,
+      "width": 114,
+      "height": 114
+    },
+    {
+      "file": "monster_image/TurtleDragon__p2.png",
+      "sad": "TurtleDragon.sad",
+      "palette": 2,
+      "plt": "TurtleDragon.plt",
+      "breeds": [
+        152,
+        461,
+        712,
+        1167,
+        1439
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 156,
+      "width": 114,
+      "height": 114
+    },
+    {
+      "file": "monster_image/TurtleDragon__p3.png",
+      "sad": "TurtleDragon.sad",
+      "palette": 3,
+      "plt": "TurtleDragon.plt",
+      "breeds": [
+        153,
+        462,
+        713,
+        1168
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 156,
+      "width": 114,
+      "height": 114
+    },
+    {
+      "file": "monster_image/TurtleDragon__p4.png",
+      "sad": "TurtleDragon.sad",
+      "palette": 4,
+      "plt": "TurtleDragon.plt",
+      "breeds": [
+        463,
+        714,
+        1502
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 156,
+      "width": 114,
+      "height": 114
+    },
+    {
+      "file": "monster_image/Undead_Magician_02__p0.png",
+      "sad": "Undead_Magician_02.sad",
+      "palette": 0,
+      "plt": "Undead_Magician.plt",
+      "breeds": [
+        844
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 116,
+      "height": 86
+    },
+    {
+      "file": "monster_image/Undead_Magician_02__p2.png",
+      "sad": "Undead_Magician_02.sad",
+      "palette": 2,
+      "plt": "Undead_Magician.plt",
+      "breeds": [
+        846
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 116,
+      "height": 86
+    },
+    {
+      "file": "monster_image/Undead_Magician_03__p1.png",
+      "sad": "Undead_Magician_03.sad",
+      "palette": 1,
+      "plt": "Undead_Magician.plt",
+      "breeds": [
+        850
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 99,
+      "height": 91
+    },
+    {
+      "file": "monster_image/Undead_Magician_03__p2.png",
+      "sad": "Undead_Magician_03.sad",
+      "palette": 2,
+      "plt": "Undead_Magician.plt",
+      "breeds": [
+        851,
+        1468
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 99,
+      "height": 91
+    },
+    {
+      "file": "monster_image/Undead_Magician_03__p4.png",
+      "sad": "Undead_Magician_03.sad",
+      "palette": 4,
+      "plt": "Undead_Magician.plt",
+      "breeds": [
+        1332,
+        1575
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 99,
+      "height": 91
+    },
+    {
+      "file": "monster_image/Undead_Magician__p0.png",
+      "sad": "Undead_Magician.sad",
+      "palette": 0,
+      "plt": "Undead_Magician.plt",
+      "breeds": [
+        834,
+        1272
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 60,
+      "height": 91
+    },
+    {
+      "file": "monster_image/Undead_Magician__p2.png",
+      "sad": "Undead_Magician.sad",
+      "palette": 2,
+      "plt": "Undead_Magician.plt",
+      "breeds": [
+        836
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 60,
+      "height": 91
+    },
+    {
+      "file": "monster_image/Undead_Magician__p3.png",
+      "sad": "Undead_Magician.sad",
+      "palette": 3,
+      "plt": "Undead_Magician.plt",
+      "breeds": [
+        837
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 60,
+      "height": 91
+    },
+    {
+      "file": "monster_image/Unicorn_01__p0.png",
+      "sad": "Unicorn_01.sad",
+      "palette": 0,
+      "plt": "Unicorn.plt",
+      "breeds": [
+        1069
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 122,
+      "height": 92
+    },
+    {
+      "file": "monster_image/Unicorn_01__p1.png",
+      "sad": "Unicorn_01.sad",
+      "palette": 1,
+      "plt": "Unicorn.plt",
+      "breeds": [
+        1070
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 122,
+      "height": 92
+    },
+    {
+      "file": "monster_image/Unicorn_01__p4.png",
+      "sad": "Unicorn_01.sad",
+      "palette": 4,
+      "plt": "Unicorn.plt",
+      "breeds": [
+        1337,
+        1487
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 122,
+      "height": 92
+    },
+    {
+      "file": "monster_image/Unicorn_02__p0.png",
+      "sad": "Unicorn_02.sad",
+      "palette": 0,
+      "plt": "Unicorn.plt",
+      "breeds": [
+        1074
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 170,
+      "height": 195
+    },
+    {
+      "file": "monster_image/Unicorn__p0.png",
+      "sad": "Unicorn.sad",
+      "palette": 0,
+      "plt": "Unicorn.plt",
+      "breeds": [
+        1287
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 94,
+      "height": 95
+    },
+    {
+      "file": "monster_image/Vampire__p0.png",
+      "sad": "Vampire.sad",
+      "palette": 0,
+      "plt": "Vampire.plt",
+      "breeds": [
+        40,
+        349,
+        600,
+        1175
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 109,
+      "width": 61,
+      "height": 91
+    },
+    {
+      "file": "monster_image/Vampire__p1.png",
+      "sad": "Vampire.sad",
+      "palette": 1,
+      "plt": "Vampire.plt",
+      "breeds": [
+        41,
+        350,
+        601
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 109,
+      "width": 61,
+      "height": 91
+    },
+    {
+      "file": "monster_image/Vampire__p2.png",
+      "sad": "Vampire.sad",
+      "palette": 2,
+      "plt": "Vampire.plt",
+      "breeds": [
+        351,
+        602,
+        1405
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 109,
+      "width": 61,
+      "height": 91
+    },
+    {
+      "file": "monster_image/Vampire__p4.png",
+      "sad": "Vampire.sad",
+      "palette": 4,
+      "plt": "Vampire.plt",
+      "breeds": [
+        1425
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 109,
+      "width": 61,
+      "height": 91
+    },
+    {
+      "file": "monster_image/WhiteShadow__p0.png",
+      "sad": "WhiteShadow.sad",
+      "palette": 0,
+      "plt": "WhiteShadow.plt",
+      "breeds": [
+        245,
+        805
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 109,
+      "width": 59,
+      "height": 77
+    },
+    {
+      "file": "monster_image/WhiteShadow__p1.png",
+      "sad": "WhiteShadow.sad",
+      "palette": 1,
+      "plt": "WhiteShadow.plt",
+      "breeds": [
+        555,
+        806,
+        1451,
+        1510
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 109,
+      "width": 59,
+      "height": 77
+    },
+    {
+      "file": "monster_image/WhiteShadow__p2.png",
+      "sad": "WhiteShadow.sad",
+      "palette": 2,
+      "plt": "WhiteShadow.plt",
+      "breeds": [
+        807
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 109,
+      "width": 59,
+      "height": 77
+    },
+    {
+      "file": "monster_image/WhiteShadow__p3.png",
+      "sad": "WhiteShadow.sad",
+      "palette": 3,
+      "plt": "WhiteShadow.plt",
+      "breeds": [
+        248,
+        557,
+        808
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 109,
+      "width": 59,
+      "height": 77
+    },
+    {
+      "file": "monster_image/Wolf__p0.png",
+      "sad": "Wolf.sad",
+      "palette": 0,
+      "plt": "Wolf.plt",
+      "breeds": [
+        185,
+        494,
+        1462,
+        1555
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 71,
+      "height": 62
+    },
+    {
+      "file": "monster_image/Wolf__p1.png",
+      "sad": "Wolf.sad",
+      "palette": 1,
+      "plt": "Wolf.plt",
+      "breeds": [
+        186,
+        495,
+        746
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 71,
+      "height": 62
+    },
+    {
+      "file": "monster_image/Wolf__p2.png",
+      "sad": "Wolf.sad",
+      "palette": 2,
+      "plt": "Wolf.plt",
+      "breeds": [
+        187,
+        496,
+        747,
+        1305
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 71,
+      "height": 62
+    },
+    {
+      "file": "monster_image/Wolf__p3.png",
+      "sad": "Wolf.sad",
+      "palette": 3,
+      "plt": "Wolf.plt",
+      "breeds": [
+        188,
+        497,
+        748
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 71,
+      "height": 62
+    },
+    {
+      "file": "monster_image/Wolf__p4.png",
+      "sad": "Wolf.sad",
+      "palette": 4,
+      "plt": "Wolf.plt",
+      "breeds": [
+        749
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 71,
+      "height": 62
+    },
+    {
+      "file": "monster_image/Zombie__p0.png",
+      "sad": "Zombie.sad",
+      "palette": 0,
+      "plt": "Zombie.plt",
+      "breeds": [
+        15
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 34,
+      "height": 80
+    },
+    {
+      "file": "monster_image/Zombie__p1.png",
+      "sad": "Zombie.sad",
+      "palette": 1,
+      "plt": "Zombie.plt",
+      "breeds": [
+        328,
+        579
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 34,
+      "height": 80
+    },
+    {
+      "file": "monster_image/Zombie__p2.png",
+      "sad": "Zombie.sad",
+      "palette": 2,
+      "plt": "Zombie.plt",
+      "breeds": [
+        16,
+        325
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 34,
+      "height": 80
+    },
+    {
+      "file": "monster_image/Zombie__p3.png",
+      "sad": "Zombie.sad",
+      "palette": 3,
+      "plt": "Zombie.plt",
+      "breeds": [
+        18,
+        327,
+        578,
+        1420
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 34,
+      "height": 80
+    },
+    {
+      "file": "monster_image/Zombie__p4.png",
+      "sad": "Zombie.sad",
+      "palette": 4,
+      "plt": "Zombie.plt",
+      "breeds": [
+        17,
+        326,
+        577
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 34,
+      "height": 80
+    },
+    {
+      "file": "monster_image/elemantal_post__p0.png",
+      "sad": "elemantal_post.sad",
+      "palette": 0,
+      "plt": null,
+      "breeds": [
+        1111
+      ],
+      "animation": 2,
+      "direct": 0,
+      "sprite_index": 0,
+      "width": 122,
+      "height": 62
+    },
+    {
+      "file": "monster_image/ether_shell__p0.png",
+      "sad": "ether_shell.sad",
+      "palette": 0,
+      "plt": null,
+      "breeds": [
+        1112
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 20,
+      "width": 55,
+      "height": 64
+    },
+    {
+      "file": "monster_image/guild_crest__p0.png",
+      "sad": "guild_crest.sad",
+      "palette": 0,
+      "plt": null,
+      "breeds": [
+        1109,
+        1490,
+        1540,
+        1541,
+        1542,
+        1543
+      ],
+      "animation": 2,
+      "direct": 0,
+      "sprite_index": 0,
+      "width": 110,
+      "height": 183
+    },
+    {
+      "file": "monster_image/guild_flag__p0.png",
+      "sad": "guild_flag.sad",
+      "palette": 0,
+      "plt": null,
+      "breeds": [
+        1114
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 0,
+      "width": 164,
+      "height": 319
+    },
+    {
+      "file": "monster_image/hollow_knight__p0.png",
+      "sad": "hollow_knight.sad",
+      "palette": 0,
+      "plt": null,
+      "breeds": [
+        1113
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 30,
+      "width": 122,
+      "height": 104
+    },
+    {
+      "file": "monster_image/sage__p0.png",
+      "sad": "sage.sad",
+      "palette": 0,
+      "plt": null,
+      "breeds": [
+        1589
+      ],
+      "animation": 2,
+      "direct": 0,
+      "sprite_index": 0,
+      "width": 163,
+      "height": 323
+    },
+    {
+      "file": "monster_image/shield_craft__p0.png",
+      "sad": "shield_craft.sad",
+      "palette": 0,
+      "plt": null,
+      "breeds": [
+        1110
+      ],
+      "animation": 2,
+      "direct": 0,
+      "sprite_index": 0,
+      "width": 100,
+      "height": 95
+    }
+  ]
+}
