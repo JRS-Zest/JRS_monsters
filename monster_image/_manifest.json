@@ -2,10 +2,10 @@
   "job2": "C:\\JRS\\RED STONE\\Data\\Scenario\\Red Stone\\job2.dat",
   "sad_dir": "C:\\JRS\\RED STONE\\Data\\monsters",
   "body_names": 85,
-  "used_breeds": 837,
-  "image_jobs": 361,
-  "generated_images": 361,
-  "mapped_breeds": 836,
+  "used_breeds": 841,
+  "image_jobs": 363,
+  "generated_images": 363,
+  "mapped_breeds": 840,
   "missing": [
     {
       "id": 1590,
@@ -146,7 +146,8 @@
       "palette": 0,
       "plt": "Apostles.plt",
       "breeds": [
-        1079
+        1079,
+        1593
       ],
       "animation": 2,
       "direct": 5,
@@ -3257,6 +3258,20 @@
       "height": 88
     },
     {
+      "file": "monster_image/Mantis_Warrior__p2.png",
+      "sad": "Mantis_Warrior.sad",
+      "palette": 2,
+      "plt": "Mantis_Warrior.plt",
+      "breeds": [
+        1592
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 63,
+      "height": 88
+    },
+    {
       "file": "monster_image/Mantis_Warrior__p4.png",
       "sad": "Mantis_Warrior.sad",
       "palette": 4,
@@ -5120,6 +5135,20 @@
       "height": 92
     },
     {
+      "file": "monster_image/Unicorn_01__p2.png",
+      "sad": "Unicorn_01.sad",
+      "palette": 2,
+      "plt": "Unicorn.plt",
+      "breeds": [
+        1591
+      ],
+      "animation": 2,
+      "direct": 5,
+      "sprite_index": 104,
+      "width": 122,
+      "height": 92
+    },
+    {
       "file": "monster_image/Unicorn_01__p4.png",
       "sad": "Unicorn_01.sad",
       "palette": 4,
@@ -5203,7 +5232,8 @@
       "breeds": [
         351,
         602,
-        1405
+        1405,
+        1594
       ],
       "animation": 2,
       "direct": 5,

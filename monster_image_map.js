@@ -836,4 +836,8 @@ const MONSTER_IMAGES = {
   "1587": "monster_image/FireBogy__p2.png",
   "1588": "monster_image/TimberMan__p4.png",
   "1589": "monster_image/sage__p0.png",
+  "1591": "monster_image/Unicorn_01__p2.png",
+  "1592": "monster_image/Mantis_Warrior__p2.png",
+  "1593": "monster_image/Apostles__p0.png",
+  "1594": "monster_image/Vampire__p2.png",
 };
