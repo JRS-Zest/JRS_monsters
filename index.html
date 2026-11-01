@@ -753,15 +753,6 @@ html, body { height: 100%; overflow: hidden; font-family: 'Segoe UI', 'Meiryo UI
 }
 .map-more { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
 .pop-note { font-size: 9px; color: var(--text-muted); margin-left: 2px; }
-.map-item-badge {
-  font-size: 9px;
-  background: #3a2a00;
-  color: #ffd54f;
-  border: 1px solid #7a5c00;
-  border-radius: 6px;
-  padding: 0 4px;
-  margin-right: 4px;
-}
 .fp-details { margin-top: 6px; }
 .fp-details summary { cursor: pointer; font-size: 11px; color: var(--text-muted); }
 .fp-intro {
@@ -1092,7 +1083,6 @@ html, body { height: 100%; overflow: hidden; font-family: 'Segoe UI', 'Meiryo UI
       <div class="fp-section">
         <div class="fp-title">リポップ速度（再出現周期）</div>
         <div class="fp-row">
-          <div class="fp-note">マップデータに「再出現までの秒数」が入っており、その値を表示しています。サーバ設定で短縮・延長される場合や、秘密の部屋などテスト用マップに特殊な値が入っている場合があります。</div>
           <div class="fp-formula">表示例: 🔄 10秒（MAPデータ値）</div>
           <details class="fp-details"><summary>調査メモ（技術的な内容）</summary><div class="fp-note">RMD MapActorSingle offset 0x0C = m_iRegenerationCycle（秒）。参考サーバ cNPC::isRegenerationTime は m_iLastTime + m_iRegenerationCycle <= 現在秒 で判定。マップエディタは 時/分/秒 に分解して表示。</div></details>
         </div>
@@ -1225,12 +1215,6 @@ const ITEM_TYPE_NAMES = {
   54:'鎌', 55:'闘士武器', 56:'本',
 };
 const EXCLUDED_MAP_NAME_PARTS = ['ギルドホール', 'ギルド攻城戦'];
-// リポップ値がテスト用・特殊なマップ（通常フィールドのボスと混同しない）
-const SPECIAL_MAP_PARTS = ['秘密の部屋', 'SecretRoom', 'テスト', 'Test', 'Duel', '決戦場'];
-function isSpecialMapName(name) {
-  const s = String(name || '').toLowerCase();
-  return SPECIAL_MAP_PARTS.some(part => s.includes(part.toLowerCase()));
-}
 function itemName(t) {
   if (t === 65535) return null;
   return ITEM_TYPE_NAMES[t] || `アイテム種別#${t}`;
@@ -1467,10 +1451,9 @@ function buildMapList(filter = '') {
 
     const item = document.createElement('div');
     item.className = 'map-item' + (m.id === currentMapId ? ' active' : '');
-    const special = isSpecialMapName(m.name) || /secret|test|duel/i.test(m.file || '');
     item.innerHTML =
       `<span class="map-item-name">${escHtml(m.name)}</span>` +
-      `<span class="map-item-count">${special ? '<span class="map-item-badge">特殊</span> ' : ''}${m.bids.length}種</span>`;
+      `<span class="map-item-count">${m.bids.length}種</span>`;
     item.addEventListener('click', () => selectMap(m.id));
     el.appendChild(item);
   });
@@ -1656,10 +1639,9 @@ function renderMapMonsters(mid) {
   selectedGroupNo = null;
   currentMapView = buildMapGroups(map, mid);
 
-  const special = isSpecialMapName(map.name) || /secret|test|duel/i.test(map.file || '');
   const imgNote = map.img ? '' : '  [画像なし]';
   title.textContent = `📍 ${map.name}  (${currentMapView.monsterGroups.length}グループ / ` +
-    `${currentMapView.npcGroups.length}NPC)${special ? '  [特殊マップ]' : ''}${imgNote}`;
+    `${currentMapView.npcGroups.length}NPC)${imgNote}`;
   lastViewTitle = title.textContent;
 
   renderMapPanel(currentMapView);
@@ -1713,7 +1695,6 @@ function renderMapPanel(view) {
   const main = document.getElementById('main');
   const meta = document.getElementById('map-panel-meta');
   const nameEl = document.getElementById('map-panel-name');
-  const special = isSpecialMapName(map.name) || /secret|test|duel/i.test(map.file || '');
   const hasImage = Boolean(map.img && map.w > 0 && map.h > 0);
 
   const markerParts = [];
@@ -1724,7 +1705,7 @@ function renderMapPanel(view) {
   nameEl.textContent = map.name || '';
   nameEl.title = map.name || '';
   meta.textContent = `${view.monsterGroups.length}グループ / ${view.npcGroups.length}NPC` +
-    `${special ? ' ・ 特殊' : ''}${hasImage ? '' : ' ・ 画像なし'}` +
+    `${hasImage ? '' : ' ・ 画像なし'}` +
     (markerParts.length ? ` ・ ${markerParts.join(' / ')}` : '');
   main.classList.toggle('map-no-image', !hasImage);
   panel.classList.toggle('no-image', !hasImage);
