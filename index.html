@@ -1232,6 +1232,19 @@ function pickRepresentativeMap(a, b) {
   return a.id <= b.id ? a : b;
 }
 
+function getMapMaxLevels() {
+  const maxLv = new Map();
+  MONSTER_DATA.breeds.forEach(b => {
+    (b.maps || []).forEach(sp => {
+      const lo = sp.min || 0;
+      const hi = sp.max || lo;
+      if (lo === 0 && hi === 0) return;
+      maxLv.set(sp.mid, Math.max(maxLv.get(sp.mid) || 0, hi));
+    });
+  });
+  return maxLv;
+}
+
 function getDedupedMaps() {
   const byKey = new Map();
   MONSTER_DATA.maps.forEach(map => {
@@ -1246,7 +1259,11 @@ function getDedupedMaps() {
     }
     byKey.set(key, pickRepresentativeMap(current, map));
   });
-  return Array.from(byKey.values()).sort((a, b) => b.id - a.id);
+  // 各マップに出現するモンスターの最高Lvで降順。同Lvは従来どおりID降順。
+  const maxLv = getMapMaxLevels();
+  return Array.from(byKey.values()).sort((a, b) =>
+    (maxLv.get(b.id) || 0) - (maxLv.get(a.id) || 0) || b.id - a.id
+  );
 }
 
 /* ══════════════════════════════════════════════════
