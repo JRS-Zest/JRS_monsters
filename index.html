@@ -321,14 +321,6 @@ html, body { height: 100%; overflow: hidden; font-family: 'Segoe UI', 'Meiryo UI
   white-space: nowrap;
   flex-shrink: 0;
 }
-#map-legend { display: flex; align-items: center; gap: 9px; font-size: 10px; color: var(--text-muted); white-space: nowrap; }
-.map-legend-item { display: inline-flex; align-items: center; gap: 3px; }
-.map-legend-dot {
-  width: 9px; height: 9px; border-radius: 50%;
-  background: #2a3a5a; border: 1px solid #8fa8c8;
-}
-.map-legend-dot.npc { border-radius: 2px; background: #173a3a; border-color: #4b8f82; }
-.map-legend-dot.active { background: var(--accent); border-color: #fff; }
 #map-zoom-controls { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
 .map-zoom-btn {
   width: 27px; height: 27px;
@@ -409,6 +401,57 @@ html, body { height: 100%; overflow: hidden; font-family: 'Segoe UI', 'Meiryo UI
   border-color: #fff;
   color: #fff;
 }
+/* 移動ポータル・秘密ダンジョン入口の画像マーカー */
+.map-icon-marker {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  line-height: 0;
+  text-decoration: none;
+  cursor: pointer;
+  pointer-events: auto;
+  z-index: 5;
+}
+.map-icon-marker img {
+  display: block;
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 1px 3px rgba(0,0,0,.9));
+  transition: transform .12s, filter .12s;
+}
+.map-icon-marker.secret {
+  cursor: default;
+  z-index: 4;
+}
+.map-icon-marker.secret img { width: 12px; height: 12px; }
+.map-icon-marker.portal img { width: 13px; height: 13px; }
+.map-icon-marker.portal.unlinked { cursor: default; }
+.map-icon-marker.portal:hover img,
+.map-icon-marker.portal:focus-visible img {
+  transform: scale(1.18);
+  filter: drop-shadow(0 0 5px rgba(255, 220, 120, .95));
+}
+/* 名前付きエリア（画像なしの × マーカー） */
+.map-area-x {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  color: #9fe7b8;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: bold;
+  line-height: 1;
+  text-shadow: 0 1px 3px #000, 0 0 3px #000;
+  cursor: default;
+  pointer-events: auto;
+  z-index: 3;
+}
+.map-area-x:hover { color: #fff; }
 #map-status {
   padding: 4px 12px;
   border-top: 1px solid var(--border);
@@ -548,7 +591,6 @@ html, body { height: 100%; overflow: hidden; font-family: 'Segoe UI', 'Meiryo UI
   #main.map-mode #map-content { display: block; }
   #entity-panel { position: static; max-height: 300px; margin-bottom: 12px; }
   #map-viewport { max-height: 36vh; }
-  #map-legend { display: none; }
 }
 
 /* ══════════════════════════════════════════════════
@@ -904,11 +946,6 @@ html, body { height: 100%; overflow: hidden; font-family: 'Segoe UI', 'Meiryo UI
               <span class="map-eyebrow">MAP</span>
               <span id="map-panel-name"></span>
               <span id="map-panel-meta"></span>
-              <span id="map-legend">
-                <span class="map-legend-item"><span class="map-legend-dot"></span>モンスター</span>
-                <span class="map-legend-item"><span class="map-legend-dot npc"></span>NPC</span>
-                <span class="map-legend-item"><span class="map-legend-dot active"></span>選択中</span>
-              </span>
             </div>
             <div id="map-zoom-controls">
               <button type="button" class="map-zoom-btn" id="map-zoom-out" title="縮小">−</button>
@@ -1267,6 +1304,65 @@ function getDedupedMaps() {
 }
 
 /* ══════════════════════════════════════════════════
+   ポータル移動先の解決
+   ══════════════════════════════════════════════════ */
+let mapFileIndexCache = null;
+let dedupedMapIndexCache = null;
+
+function normalizeMapFileName(value) {
+  return String(value || '')
+    .replace(/\\/g, '/')
+    .split('/')
+    .pop()
+    .trim()
+    .toLowerCase();
+}
+
+function getMapFileIndex() {
+  if (mapFileIndexCache) return mapFileIndexCache;
+  mapFileIndexCache = new Map();
+  MONSTER_DATA.maps.forEach(map => {
+    const key = normalizeMapFileName(map.file);
+    if (!key) return;
+    const current = mapFileIndexCache.get(key);
+    if (!current || (!current.img && map.img)) mapFileIndexCache.set(key, map);
+  });
+  return mapFileIndexCache;
+}
+
+function getDedupedMapIndex() {
+  if (dedupedMapIndexCache) return dedupedMapIndexCache;
+  dedupedMapIndexCache = new Map();
+  getDedupedMaps().forEach(map => {
+    const key = mapDataKey(map);
+    if (!dedupedMapIndexCache.has(key)) dedupedMapIndexCache.set(key, map);
+  });
+  return dedupedMapIndexCache;
+}
+
+/**
+ * ポータルの移動先ファイルから、同じ内容の代表マップを引く。
+ * 画像のないマップはリンク先にしない。
+ */
+function portalTargetInfo(targetFile) {
+  const displayFile = String(targetFile || '')
+    .replace(/\\/g, '/')
+    .split('/')
+    .pop()
+    .trim();
+  const file = normalizeMapFileName(displayFile);
+  if (!file) return { file: '', label: '移動先不明', map: null };
+
+  const source = getMapFileIndex().get(file);
+  const linked = source ? getDedupedMapIndex().get(mapDataKey(source)) : null;
+  return {
+    file: displayFile,
+    label: (linked && linked.name) || (source && source.name) || displayFile,
+    map: linked || null,
+  };
+}
+
+/* ══════════════════════════════════════════════════
    状態管理
 ══════════════════════════════════════════════════ */
 let currentLv       = 100;
@@ -1295,15 +1391,19 @@ function mapIdFromUrl() {
   return MONSTER_DATA.maps.some(m => m.id === mid) ? mid : null;
 }
 
+function buildMapUrl(mid) {
+  const url = new URL(window.location.href);
+  if (mid === null || mid === undefined) {
+    url.searchParams.delete('map');
+  } else {
+    url.searchParams.set('map', String(mid));
+  }
+  return url.href;
+}
+
 function updateMapUrl(mid) {
   try {
-    const url = new URL(window.location.href);
-    if (mid === null || mid === undefined) {
-      url.searchParams.delete('map');
-    } else {
-      url.searchParams.set('map', String(mid));
-    }
-    history.replaceState(null, '', url.href);
+    history.replaceState(null, '', buildMapUrl(mid));
   } catch (e) {
     // file:// などでHistory APIが使えない場合も表示は継続する
   }
@@ -1531,7 +1631,13 @@ function buildMapGroups(map, mid) {
 
   const allGroups = [...npcGroups, ...monsterGroups];
   const byNo = new Map(allGroups.map(g => [g.no, g]));
-  return { map, npcGroups, monsterGroups, allGroups, byNo };
+  const portals = Array.isArray(map.portals) ? map.portals : [];
+  const secretEntrances = Array.isArray(map.secret_entrances) ? map.secret_entrances : [];
+  const namedAreas = Array.isArray(map.areas) ? map.areas : [];
+  return {
+    map, npcGroups, monsterGroups, allGroups, byNo,
+    portals, secretEntrances, namedAreas,
+  };
 }
 
 function renderMapMonsters(mid) {
@@ -1610,10 +1716,16 @@ function renderMapPanel(view) {
   const special = isSpecialMapName(map.name) || /secret|test|duel/i.test(map.file || '');
   const hasImage = Boolean(map.img && map.w > 0 && map.h > 0);
 
+  const markerParts = [];
+  if (view.portals.length) markerParts.push(`ポータル${view.portals.length}`);
+  if (view.secretEntrances.length) markerParts.push(`秘密入口${view.secretEntrances.length}`);
+  if (view.namedAreas.length) markerParts.push(`エリア${view.namedAreas.length}`);
+
   nameEl.textContent = map.name || '';
   nameEl.title = map.name || '';
   meta.textContent = `${view.monsterGroups.length}グループ / ${view.npcGroups.length}NPC` +
-    `${special ? ' ・ 特殊' : ''}${hasImage ? '' : ' ・ 画像なし'}`;
+    `${special ? ' ・ 特殊' : ''}${hasImage ? '' : ' ・ 画像なし'}` +
+    (markerParts.length ? ` ・ ${markerParts.join(' / ')}` : '');
   main.classList.toggle('map-no-image', !hasImage);
   panel.classList.toggle('no-image', !hasImage);
   if (!hasImage) {
@@ -1648,7 +1760,8 @@ function renderMapPanel(view) {
     ? '縦長マップのため、全体が収まる倍率に自動調整しています'
     : '';
   renderMapMarkers(view, markerRoot);
-  status.textContent = '左のNPC／モンスター一覧から選ぶと、その地点を強調します。';
+  status.textContent = '左のNPC／モンスター一覧から選ぶと、その地点を強調します。' +
+    ' ポータルは移動先へ、✕はエリア名を表示します。';
 }
 
 function initialMapZoom(map) {
@@ -1675,6 +1788,70 @@ function renderMapMarkers(view, markerRoot) {
   const frag = document.createDocumentFragment();
   const xMax = map.w * 64;
   const yMax = map.h * 32;
+
+  const placeMarker = (el, x, y) => {
+    const px = Number(x);
+    const py = Number(y);
+    if (!Number.isFinite(px) || !Number.isFinite(py)) return false;
+    el.style.left = markerPercent(px, xMax) + '%';
+    el.style.top = markerPercent(py, yMax) + '%';
+    return true;
+  };
+
+  // 名前付きエリア（画像なしの ×）
+  view.namedAreas.forEach(area => {
+    const name = String(area.name || '').trim();
+    if (!name) return;
+    const marker = document.createElement('span');
+    marker.className = 'map-area-x';
+    marker.textContent = '✕';
+    marker.title = name;
+    marker.setAttribute('aria-label', `エリア: ${name}`);
+    if (placeMarker(marker, area.x, area.y)) frag.appendChild(marker);
+  });
+
+  // 秘密ダンジョン入口
+  view.secretEntrances.forEach(entry => {
+    const marker = document.createElement('span');
+    marker.className = 'map-icon-marker secret';
+    marker.title = '秘密ダンジョン入口';
+    marker.setAttribute('aria-label', '秘密ダンジョン入口');
+    const icon = document.createElement('img');
+    icon.src = 'marker_image/secret_dungeon_entrance.png';
+    icon.alt = '';
+    marker.appendChild(icon);
+    if (placeMarker(marker, entry.x, entry.y)) frag.appendChild(marker);
+  });
+
+  // 移動ポータル
+  view.portals.forEach(portal => {
+    const info = portalTargetInfo(portal.to);
+    const marker = document.createElement(info.map ? 'a' : 'span');
+    marker.className = 'map-icon-marker portal' + (info.map ? '' : ' unlinked');
+
+    if (info.map) {
+      marker.href = buildMapUrl(info.map.id);
+      marker.title = `移動ポータル: ${info.label}\nクリックで移動`;
+      marker.addEventListener('click', event => {
+        // Ctrl/Shift/中クリックなどは、通常のリンク動作（別タブ等）を優先する。
+        if (event.button !== 0 || event.ctrlKey || event.metaKey ||
+            event.shiftKey || event.altKey) return;
+        event.preventDefault();
+        selectMap(info.map.id);
+      });
+    } else {
+      marker.title = `移動ポータル: ${info.label}` +
+        (info.file ? '（このサイトに画像なし）' : '');
+      marker.setAttribute('aria-disabled', 'true');
+    }
+
+    marker.setAttribute('aria-label', marker.title);
+    const icon = document.createElement('img');
+    icon.src = 'marker_image/portal.png';
+    icon.alt = '';
+    marker.appendChild(icon);
+    if (placeMarker(marker, portal.x, portal.y)) frag.appendChild(marker);
+  });
 
   view.allGroups.forEach(g => {
     g.points.forEach(([x, y]) => {
