@@ -1,0 +1,2113 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JRS モンスター図鑑</title>
+<style>
+/* ══════════════════════════════════════════════════
+   リセット & ベース
+══════════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg:         #1a1a2e;
+  --surface:    #16213e;
+  --card:       #0f3460;
+  --accent:     #e94560;
+  --accent2:    #f5a623;
+  --text:       #e0e0e0;
+  --text-muted: #8a8fa8;
+  --border:     #2a3a5a;
+  --green:      #4caf50;
+  --blue:       #42a5f5;
+  --yellow:     #ffca28;
+  --red:        #ef5350;
+  --sidebar-w:  260px;
+  --header-h:   110px;
+}
+html, body { height: 100%; overflow: hidden; font-family: 'Segoe UI', 'Meiryo UI', Meiryo, sans-serif; font-size: 13px; background: var(--bg); color: var(--text); }
+
+/* ══════════════════════════════════════════════════
+   3カラムレイアウト
+══════════════════════════════════════════════════ */
+#layout {
+  display: grid;
+  grid-template-rows: var(--header-h) 1fr;
+  grid-template-columns: var(--sidebar-w) 1fr;
+  height: 100vh;
+}
+#header {
+  grid-column: 1 / 3;
+  background: linear-gradient(135deg, #0f3460 0%, #1a1a2e 100%);
+  border-bottom: 2px solid var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 12px 20px;
+  z-index: 10;
+}
+#sidebar {
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+#main {
+  background: var(--bg);
+  overflow-y: auto;
+  padding: 16px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+/* ══════════════════════════════════════════════════
+   ヘッダー
+══════════════════════════════════════════════════ */
+#header h1 {
+  font-size: 22px;
+  font-weight: bold;
+  color: var(--accent);
+  letter-spacing: 2px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+#header h1 span { color: var(--accent2); }
+#search-wrap {
+  flex: 1;
+  max-width: 520px;
+}
+#search-wrap label { display: block; font-size: 11px; color: var(--text-muted); margin-bottom: 4px; }
+#search-row { display: flex; gap: 8px; }
+#search-input {
+  flex: 1;
+  padding: 8px 12px;
+  background: #0f3460;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  font-size: 14px;
+  outline: none;
+  transition: border-color .2s;
+}
+#search-input:focus { border-color: var(--accent); }
+#search-results {
+  position: absolute;
+  top: calc(var(--header-h) - 8px);
+  left: calc(var(--sidebar-w) + 20px);
+  background: #0f3460;
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  width: 360px;
+  z-index: 100;
+  box-shadow: 0 8px 24px rgba(0,0,0,.5);
+  display: none;
+}
+#search-results.show { display: block; }
+.search-item {
+  padding: 10px 14px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.search-item:last-child { border-bottom: none; }
+.search-item:hover { background: var(--card); }
+.search-item-name { font-weight: bold; }
+.search-item-meta { font-size: 11px; color: var(--text-muted); }
+
+#lv-wrap { display: flex; flex-direction: column; gap: 6px; flex-shrink: 0; }
+#lv-wrap label { font-size: 11px; color: var(--text-muted); }
+#lv-wrap .lv-row { display: flex; align-items: center; gap: 8px; }
+#lv-input {
+  width: 72px;
+  padding: 6px 10px;
+  background: #0f3460;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  font-size: 14px;
+  text-align: center;
+  outline: none;
+}
+#lv-input:focus { border-color: var(--accent2); }
+.btn {
+  padding: 6px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: bold;
+  transition: background .15s;
+}
+.btn-accent  { background: var(--accent);  color: #fff; }
+.btn-accent:hover  { background: #c73652; }
+.btn-accent2 { background: var(--accent2); color: #1a1a2e; }
+.btn-accent2:hover { background: #d48e1a; }
+.btn-formula { background: #2a3a6a; color: var(--text); border: 1px solid var(--border); }
+.btn-formula:hover { background: var(--card); border-color: var(--accent2); }
+.btn-formula.active { border-color: var(--accent2); color: var(--accent2); }
+
+/* ══════════════════════════════════════════════════
+   計算式ビュー（#main内）
+══════════════════════════════════════════════════ */
+#formula-view { display: none; }
+#formula-view.show { display: block; }
+.fp-section { margin-bottom: 18px; }
+.fp-title {
+  font-size: 11px;
+  font-weight: bold;
+  color: var(--accent2);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+  padding-bottom: 3px;
+  border-bottom: 1px solid var(--border);
+}
+.fp-row { display: flex; flex-direction: column; gap: 4px; }
+.fp-formula {
+  background: #0a2040;
+  border-radius: 5px;
+  padding: 6px 10px;
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 12px;
+  color: #c8e6ff;
+  word-break: break-all;
+}
+.fp-note {
+  font-size: 11px;
+  color: var(--text-muted);
+  padding-left: 4px;
+}
+
+/* ══════════════════════════════════════════════════
+   サイドバー（マップ一覧）
+══════════════════════════════════════════════════ */
+#sidebar-header {
+  padding: 12px 14px 8px;
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  background: var(--surface);
+  z-index: 1;
+}
+#map-filter {
+  width: 100%;
+  padding: 6px 10px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text);
+  font-size: 12px;
+  margin-top: 8px;
+  outline: none;
+}
+#map-filter:focus { border-color: var(--accent); }
+.map-item {
+  padding: 9px 14px;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(42,58,90,.5);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background .12s;
+}
+.map-item:hover   { background: var(--card); }
+.map-item.active  { background: var(--card); border-left: 3px solid var(--accent); }
+.map-item-name    { font-size: 12px; line-height: 1.4; }
+.map-item-count   { font-size: 11px; color: var(--text-muted); white-space: nowrap; margin-left: 6px; }
+
+/* ══════════════════════════════════════════════════
+   メインエリア
+══════════════════════════════════════════════════ */
+#main-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--accent2);
+  margin-bottom: 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+#monster-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 14px;
+}
+.placeholder {
+  color: var(--text-muted);
+  text-align: center;
+  margin-top: 60px;
+  font-size: 15px;
+  line-height: 2;
+}
+
+/* ══════════════════════════════════════════════════
+   マップビュー（上部画像＋左一覧＋右カード）
+══════════════════════════════════════════════════ */
+#map-panel { display: none; margin-bottom: 16px; }
+#main.map-mode #map-panel { display: block; }
+#main.map-mode #entity-panel { display: flex; }
+#main.map-mode #map-content {
+  display: grid;
+  grid-template-columns: 300px minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+#main.map-mode #monster-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+#main.formula-mode #map-panel,
+#main.formula-mode #entity-panel,
+#main.formula-mode #monster-grid { display: none !important; }
+
+#map-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+#map-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(90deg, #0a2744 0%, #16213e 100%);
+}
+.map-toolbar-main { display: flex; align-items: center; gap: 9px; min-width: 0; flex-wrap: wrap; }
+.map-eyebrow {
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  color: var(--accent2);
+  border: 1px solid #6d5520;
+  background: #2d240b;
+  border-radius: 4px;
+  padding: 1px 5px;
+  flex-shrink: 0;
+}
+#map-panel-name {
+  font-size: 14px;
+  font-weight: bold;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+#map-legend { display: flex; align-items: center; gap: 9px; font-size: 10px; color: var(--text-muted); white-space: nowrap; }
+.map-legend-item { display: inline-flex; align-items: center; gap: 3px; }
+.map-legend-dot {
+  width: 9px; height: 9px; border-radius: 50%;
+  background: #2a3a5a; border: 1px solid #8fa8c8;
+}
+.map-legend-dot.npc { border-radius: 2px; background: #173a3a; border-color: #4b8f82; }
+.map-legend-dot.active { background: var(--accent); border-color: #fff; }
+#map-zoom-controls { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+.map-zoom-btn {
+  width: 27px; height: 27px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background: #0f3460;
+  color: var(--text);
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+}
+.map-zoom-btn:hover { border-color: var(--accent2); color: var(--accent2); }
+#map-zoom-label {
+  min-width: 42px;
+  text-align: center;
+  font-size: 10px;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+#map-viewport {
+  position: relative;
+  max-height: 44vh;
+  overflow: auto;
+  background:
+    linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px),
+    #0a1224;
+  background-size: 24px 24px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+#map-plane {
+  position: relative;
+  width: 100%;
+  min-width: 280px;
+  transition: width .12s ease-out;
+}
+#map-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+#map-markers { position: absolute; inset: 0; pointer-events: none; }
+.map-marker {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  min-width: 19px;
+  height: 19px;
+  padding: 0 4px;
+  border-radius: 50%;
+  border: 1px solid rgba(150, 180, 215, .8);
+  background: rgba(8, 27, 52, .88);
+  color: #dce9fb;
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: bold;
+  line-height: 17px;
+  text-align: center;
+  cursor: pointer;
+  pointer-events: auto;
+  box-shadow: 0 1px 3px rgba(0,0,0,.6);
+  transition: opacity .12s, transform .12s, background .12s, border-color .12s;
+  z-index: 1;
+}
+.map-marker.npc {
+  border-radius: 4px;
+  background: rgba(13, 51, 49, .9);
+  border-color: rgba(94, 170, 154, .85);
+  color: #b8efe3;
+}
+.map-marker:hover { z-index: 8; transform: translate(-50%, -50%) scale(1.2); border-color: #fff; }
+.map-markers.has-selection .map-marker:not(.active) { opacity: .24; }
+.map-marker.active {
+  z-index: 12;
+  background: var(--accent);
+  border-color: #fff;
+  color: #fff;
+  transform: translate(-50%, -50%) scale(1.38);
+  box-shadow: 0 0 0 2px rgba(255,255,255,.85), 0 0 12px rgba(233,69,96,.9);
+  opacity: 1;
+}
+#map-status {
+  padding: 6px 12px;
+  border-top: 1px solid var(--border);
+  font-size: 10px;
+  color: var(--text-muted);
+  min-height: 26px;
+  line-height: 1.5;
+}
+#map-status b { color: var(--text); font-weight: bold; }
+#map-panel.no-image { display: none !important; }
+
+/* ── 左：NPC / モンスター一覧 ── */
+#entity-panel {
+  display: none;
+  flex-direction: column;
+  min-height: 0;
+  max-height: calc(100vh - var(--header-h) - 36px);
+  position: sticky;
+  top: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+#entity-head {
+  padding: 9px 11px 7px;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(90deg, #0a2744 0%, #0f3460 100%);
+}
+#entity-head .entity-head-title { font-size: 12px; font-weight: bold; color: #fff; }
+#entity-head .entity-head-sub { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
+#entity-list {
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+  padding-bottom: 5px;
+}
+.entity-section-title {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding: 6px 10px 4px;
+  background: rgba(22,33,62,.97);
+  border-bottom: 1px solid rgba(42,58,90,.7);
+  font-size: 9px;
+  font-weight: bold;
+  color: var(--accent2);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.entity-row {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 25px minmax(0, 1fr) auto;
+  gap: 6px;
+  align-items: center;
+  padding: 6px 8px;
+  border: none;
+  border-bottom: 1px solid rgba(42,58,90,.45);
+  border-left: 2px solid transparent;
+  background: transparent;
+  color: var(--text);
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.entity-row:hover { background: rgba(15,52,96,.6); }
+.entity-row.active {
+  background: rgba(233,69,96,.12);
+  border-left-color: var(--accent);
+}
+.entity-row.active .entity-no { background: var(--accent); border-color: #fff; color: #fff; }
+.entity-no {
+  width: 22px; height: 18px;
+  border: 1px solid #4d6280;
+  border-radius: 9px;
+  background: #0b1d35;
+  color: #c7d7ee;
+  font-size: 10px;
+  font-weight: bold;
+  line-height: 16px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+.entity-row.npc .entity-no { border-radius: 3px; border-color: #4b8f82; color: #b8efe3; }
+.entity-main { min-width: 0; }
+.entity-name {
+  display: block;
+  font-size: 11px;
+  font-weight: bold;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.entity-sub {
+  display: block;
+  margin-top: 1px;
+  font-size: 9px;
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.entity-meta { font-size: 9px; color: var(--text-muted); text-align: right; line-height: 1.35; white-space: nowrap; }
+
+/* ── 右：折りたたみカード ── */
+.card.entity-card { overflow: hidden; }
+.card.entity-card summary { cursor: pointer; list-style: none; }
+.card.entity-card summary::-webkit-details-marker { display: none; }
+.card.entity-card summary::after {
+  content: '▾';
+  color: var(--text-muted);
+  font-size: 11px;
+  margin-left: 6px;
+  flex-shrink: 0;
+}
+.card.entity-card:not([open]) summary::after { content: '▸'; }
+.card.entity-card[open] { border-color: rgba(233,69,96,.55); }
+.card.entity-card[open] summary { border-bottom-color: var(--accent); }
+.card.entity-card.active { box-shadow: 0 0 0 1px rgba(233,69,96,.5); }
+.card-no {
+  display: inline-block;
+  min-width: 20px;
+  height: 18px;
+  margin-right: 5px;
+  padding: 0 5px;
+  border: 1px solid #7187a4;
+  border-radius: 9px;
+  background: #0b1d35;
+  color: #dce9fb;
+  font-size: 10px;
+  line-height: 16px;
+  text-align: center;
+  vertical-align: 1px;
+  font-variant-numeric: tabular-nums;
+}
+.card.entity-card.active .card-no { background: var(--accent); border-color: #fff; color: #fff; }
+
+@media (max-width: 1050px) {
+  #main.map-mode #map-content { grid-template-columns: 250px minmax(0, 1fr); }
+}
+@media (max-width: 820px) {
+  #main.map-mode #map-content { display: block; }
+  #entity-panel { position: static; max-height: 300px; margin-bottom: 12px; }
+  #map-viewport { max-height: 36vh; }
+}
+
+/* ══════════════════════════════════════════════════
+   モンスターカード
+══════════════════════════════════════════════════ */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: transform .15s, box-shadow .15s;
+}
+.card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,.4); }
+.card-header {
+  background: linear-gradient(90deg, #0a2744 0%, #0f3460 100%);
+  padding: 10px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-bottom: 1px solid var(--border);
+}
+.card-name  { font-size: 15px; font-weight: bold; color: #fff; }
+.card-sub   { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+.card-lv-badge {
+  background: var(--accent);
+  color: #fff;
+  border-radius: 12px;
+  padding: 2px 10px;
+  font-size: 12px;
+  font-weight: bold;
+  white-space: nowrap;
+  margin-left: 8px;
+}
+.card-body { padding: 10px 14px; }
+
+/* ── セクション見出し ── */
+.sec-title {
+  font-size: 10px;
+  font-weight: bold;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 8px 0 4px;
+}
+.sec-title:first-child { margin-top: 0; }
+
+/* ── ステータスグリッド（2×4）── */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  margin-bottom: 4px;
+}
+.stat-cell {
+  background: rgba(0,0,0,.25);
+  border-radius: 5px;
+  padding: 4px 6px;
+  text-align: center;
+}
+.stat-cell .sc-label { font-size: 9px; color: var(--text-muted); display: block; }
+.stat-cell .sc-val   { font-size: 13px; font-weight: bold; color: var(--blue); }
+
+/* ── HP/CP/ATK/DEF バー ── */
+.combat-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+.combat-cell {
+  background: rgba(0,0,0,.25);
+  border-radius: 5px;
+  padding: 5px 8px;
+}
+.combat-cell .cc-label { font-size: 10px; color: var(--text-muted); }
+.combat-cell .cc-val   { font-size: 14px; font-weight: bold; margin-top: 1px; }
+.cc-val.hp  { color: var(--green); }
+.cc-val.cp  { color: var(--blue); }
+.cc-val.atk { color: var(--accent); }
+.cc-val.def { color: var(--yellow); }
+.cc-val.exp { color: #9ccc65; }
+.cc-val.corr { color: #ffb74d; }
+
+/* ── 補正・フラグバッジ ── */
+.corr-badge, .cnt-badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: normal;
+  border-radius: 8px;
+  padding: 1px 6px;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+.corr-badge { background: #3a2a00; color: #ffd54f; border: 1px solid #7a5c00; }
+.cnt-badge  { background: #1e2a3a; color: #9fb3c8; border: 1px solid #33475e; }
+.base-row {
+  font-size: 10px;
+  color: var(--text-muted);
+  margin: 2px 0 6px;
+}
+.map-more { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
+.pop-note { font-size: 9px; color: var(--text-muted); margin-left: 2px; }
+.map-item-badge {
+  font-size: 9px;
+  background: #3a2a00;
+  color: #ffd54f;
+  border: 1px solid #7a5c00;
+  border-radius: 6px;
+  padding: 0 4px;
+  margin-right: 4px;
+}
+.fp-details { margin-top: 6px; }
+.fp-details summary { cursor: pointer; font-size: 11px; color: var(--text-muted); }
+.fp-intro {
+  background: rgba(255,255,255,.03);
+  border-left: 3px solid var(--accent2);
+  padding: 8px 12px;
+  border-radius: 4px;
+  margin-bottom: 12px;
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+.state-row { margin: 2px 0 4px; }
+.state-badge {
+  display: inline-block;
+  font-size: 10px;
+  border-radius: 8px;
+  padding: 1px 6px;
+  margin: 0 4px 2px 0;
+  background: #2a0f0f;
+  color: #ffab91;
+  border: 1px solid #5e2a2a;
+}
+
+/* ── 魔法抵抗バー ── */
+.mag-row {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 3px;
+  margin-bottom: 4px;
+}
+.mag-cell {
+  background: rgba(0,0,0,.25);
+  border-radius: 4px;
+  padding: 3px 4px;
+  text-align: center;
+}
+.mag-cell .mg-icon  { font-size: 11px; }
+.mag-cell .mg-val   { font-size: 12px; font-weight: bold; display: block; }
+.mag-neg  { color: #ef9a9a; }
+.mag-pos  { color: #a5d6a7; }
+.mag-zero { color: var(--text-muted); }
+
+/* ── 状態異常 ── */
+.abn-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  margin-bottom: 4px;
+}
+.abn-pill {
+  background: rgba(0,0,0,.3);
+  border-radius: 3px;
+  padding: 2px 6px;
+  font-size: 10px;
+}
+.abn-pill .ap-lbl { color: var(--text-muted); }
+.abn-pill .ap-val { font-weight: bold; }
+.abn-neg { color: #ef9a9a; }
+.abn-pos { color: #a5d6a7; }
+
+/* ── ドロップ・スキル ── */
+.tag-row { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 2px; }
+.tag {
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-size: 11px;
+}
+.tag-drop  { background: #2d2d00; border: 1px solid #666600; color: #ffff99; }
+.tag-skill { background: #002040; border: 1px solid #004080; color: #80c0ff; }
+.tag-skill.has-sad { border-color: #3a7a8a; }
+.tag-skill.no-sad { opacity: .6; }
+.tag-map-link {
+  background: #002040; border: 1px solid #004080; color: #80c0ff;
+  cursor: pointer; font-family: inherit; font-size: 11px;
+  padding: 2px 8px; border-radius: 3px; line-height: 1.6;
+  transition: background 0.15s;
+}
+.tag-map-link:hover { background: #003060; border-color: #0060c0; color: #b0d8ff; }
+
+/* ══════════════════════════════════════════════════
+   ローディング
+══════════════════════════════════════════════════ */
+#loading {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.8);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  font-size: 18px;
+  color: var(--text);
+  gap: 16px;
+}
+#loading.hidden { display: none; }
+.spinner {
+  width: 48px; height: 48px;
+  border: 4px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin .8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ══════════════════════════════════════════════════
+   スクロールバー
+══════════════════════════════════════════════════ */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<div id="loading">
+  <div class="spinner"></div>
+  <div>データ読み込み中...</div>
+</div>
+
+<div id="layout">
+
+  <!-- ── ヘッダー ── -->
+  <header id="header">
+    <h1>🐉 JRS<br><span>モンスター図鑑</span></h1>
+
+    <div id="search-wrap">
+      <label>🔍 モンスター名検索（部分一致）</label>
+      <div id="search-row">
+        <input type="text" id="search-input" placeholder="例：コロッサス、スケルトン…"
+               autocomplete="off" spellcheck="false">
+      </div>
+      <div id="search-results"></div>
+    </div>
+
+    <div id="lv-wrap">
+      <label>⚔ 計算レベル <span id="lv-auto-hint" style="font-size:10px;color:var(--accent2);margin-left:4px;"></span></label>
+      <div class="lv-row">
+        <input type="number" id="lv-input" value="100" min="1" max="9999">
+        <button class="btn btn-accent2" id="btn-apply-lv">再計算</button>
+        <button class="btn btn-formula" id="btn-formula">計算式</button>
+        <p>※魔法抵抗のWIS補正 = WIS×5/100（WIS/20）／純モンスターは上限なし</p>
+        <p>※リポップ速度はMAPデータ上の値（サーバ設定で変動）</p>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── サイドバー ── -->
+  <aside id="sidebar">
+    <div id="sidebar-header">
+      マップ一覧
+      <input type="text" id="map-filter" placeholder="マップ名で絞り込み…">
+      <div style="margin-top:6px;">
+        <div style="font-size:10px;color:var(--text-muted);margin-bottom:3px;">レベルで絞り込み（±50）</div>
+        <div style="display:flex;gap:4px;align-items:center;">
+          <input type="number" id="lv-filter" placeholder="例: 150" min="1" max="9999"
+                 style="flex:1;padding:5px 8px;background:var(--bg);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:12px;outline:none;">
+          <button id="btn-lv-filter-clear" style="padding:4px 9px;border:none;border-radius:4px;cursor:pointer;font-size:11px;background:#2a3a6a;color:var(--text-muted);" title="クリア">✕</button>
+        </div>
+      </div>
+    </div>
+    <div id="map-list"></div>
+  </aside>
+
+  <!-- ── メイン ── -->
+  <main id="main">
+    <div id="main-title">← マップを選択してください</div>
+
+    <!-- ── 上部：共有マップ画像 ── -->
+    <section id="map-panel" aria-label="マップ画像">
+      <div id="map-toolbar">
+        <div class="map-toolbar-main">
+          <span class="map-eyebrow">MAP</span>
+          <span id="map-panel-name"></span>
+          <span id="map-legend">
+            <span class="map-legend-item"><span class="map-legend-dot"></span>モンスター</span>
+            <span class="map-legend-item"><span class="map-legend-dot npc"></span>NPC</span>
+            <span class="map-legend-item"><span class="map-legend-dot active"></span>選択中</span>
+          </span>
+        </div>
+        <div id="map-zoom-controls">
+          <button type="button" class="map-zoom-btn" id="map-zoom-out" title="縮小">−</button>
+          <span id="map-zoom-label">100%</span>
+          <button type="button" class="map-zoom-btn" id="map-zoom-in" title="拡大">＋</button>
+          <button type="button" class="map-zoom-btn" id="map-zoom-reset" title="100%に戻す">⟲</button>
+        </div>
+      </div>
+      <div id="map-viewport">
+        <div id="map-plane">
+          <img id="map-image" alt="">
+          <div id="map-markers"></div>
+        </div>
+      </div>
+      <div id="map-status">マップ上の番号をクリックすると、その出現グループを選択します。</div>
+    </section>
+
+    <!-- ── 左：NPC / モンスター一覧／右：折りたたみカード ── -->
+    <div id="map-content">
+      <aside id="entity-panel" aria-label="NPC・モンスター一覧">
+        <div id="entity-head">
+          <div class="entity-head-title">NPC / モンスター</div>
+          <div class="entity-head-sub">番号をクリックで地点を強調</div>
+        </div>
+        <div id="entity-list"></div>
+      </aside>
+
+      <div id="monster-grid">
+        <div class="placeholder">
+          左のマップ一覧からマップを選ぶか、<br>
+          上の検索ボックスでモンスター名を検索してください。
+        </div>
+      </div>
+    </div>
+
+    <div id="formula-view">
+
+      <div class="fp-intro">
+        ここでは図鑑の数値がどのように決まるかを説明します。
+        「floor」は小数点以下を切り捨てる意味です。
+        難しい調査内容は、各項目の「調査メモ（技術的な内容）」に折りたたんでいます。
+      </div>
+
+      <div class="fp-section">
+        <div class="fp-title">ステータス（STR / AGI / CON / WIS / INT / CHA / LCK）</div>
+        <div class="fp-row">
+          <div class="fp-formula">stat = floor( 基礎値 × ((Lv−1) × SF + 100000) / 100000 )</div>
+          <div class="fp-note">レベルが1上がるごとに、モンスターの種類ごとに決まった割合でステータスが上がります。</div>
+          <details class="fp-details"><summary>調査メモ（技術的な内容）</summary><div class="fp-note">SF = job2.dat offset 0x34 (ushort) / BasicPowerLevelFactor。JRS job2 の 328 バイトレコードで確認。</div></details>
+        </div>
+      </div>
+
+      <div class="fp-section">
+        <div class="fp-title">「INT⇔WIS入替」とは？</div>
+        <div class="fp-row">
+          <div class="fp-note" style="line-height:1.8">
+            モンスターの種類によっては、ゲーム内部のデータで
+            「知恵（WIS）」と「知識（INT）」が通常と逆に入っています。
+            ゲーム側の計算に合わせるため、この図鑑ではそのモンスターだけ
+            WIS と INT を入れ替えて表示しています。
+            カードの数値は、この入れ替え後の値です。
+          </div>
+          <div class="fp-formula">例：シーフ（データ上 WIS6 / INT5）→ 表示 WIS5 / INT6（レベル10なら WIS9 / INT11）</div>
+          <div class="fp-formula">例：The_End（データ上 WIS151 / INT37）→ 表示 WIS37 / INT151（レベル2550なら WIS6,287 / INT25,658）</div>
+          <div class="fp-note">
+            魔法抵抗は WIS を使って計算するため、入れ替えの影響を受けます。<br>
+            入れ替えるかどうかはモンスターごとに固定で、ランダムに変わることはありません。
+          </div>
+          <details class="fp-details">
+            <summary>調査メモ（技術的な内容）</summary>
+            <div class="fp-note">
+              job2.dat offset 0x2E bit6（IsReviseIntCalc）と
+              RMD グループ flags1 bit5（IsReviseIntelligence）の OR が 0 のとき入れ替え。
+              参考サーバ CActor.cpp / cACTOR::setStatus() の分岐。
+            </div>
+          </details>
+        </div>
+      </div>
+
+      <div class="fp-section">
+        <div class="fp-title">MaxHP</div>
+        <div class="fp-row">
+          <div class="fp-formula">MaxHP = floor( (DefaultHP + CON×StateBonus×10 + Lv×LevelUpBonus×10) / 100 × correct_hp/100 )</div>
+          <div class="fp-note">HPはレベル・CON・種類ごとの成長値で決まり、マップごとの「HP補正」が掛かります。</div>
+          <details class="fp-details"><summary>調査メモ（技術的な内容）</summary><div class="fp-note">DefaultHP = offset 0xFC / LevelUpBonus = 0x108 / StateBonus = 0x10A。correct_hp は RMD グループ補正。</div></details>
+        </div>
+      </div>
+
+      <div class="fp-section">
+        <div class="fp-title">MaxCP</div>
+        <div class="fp-row">
+          <div class="fp-formula">MaxCP = floor( (DefaultCP + CHA×100 + Lv×100) / 100 )</div>
+          <div class="fp-note">CPはレベルとCHAで決まります。HPのようなレベルアップ成長値やマップ補正は使われません。</div>
+          <details class="fp-details"><summary>調査メモ（技術的な内容）</summary><div class="fp-note">DefaultCP = offset 0x100。旧サイトの「LevelUpBonus/StateBonus を HP と共有」する式は誤りのため修正。</div></details>
+        </div>
+      </div>
+
+      <div class="fp-section">
+        <div class="fp-title">攻撃力</div>
+        <div class="fp-row">
+          <div class="fp-formula">Min = ( AtkMin + (Lv−1) × AtkMinG/100 ) × ( 1 + STR/200 )</div>
+          <div class="fp-formula">Max = ( AtkMax + (Lv−1) × AtkMaxG/100 ) × ( 1 + STR/200 )</div>
+          <div class="fp-note">攻撃力はレベル・STR・種類ごとの成長値で決まります。マップの「与ダメ補正」は攻撃力表示とは別に、実際のダメージへ掛かります。</div>
+          <details class="fp-details"><summary>調査メモ（技術的な内容）</summary><div class="fp-note">AtkMin = 0x11C / AtkMax = 0x11E / AtkMinG = 0x36 / AtkMaxG = 0x38。旧データの Max/Min ラベルは逆だったため整理。</div></details>
+        </div>
+      </div>
+
+      <div class="fp-section">
+        <div class="fp-title">防御力</div>
+        <div class="fp-row">
+          <div class="fp-formula">Def = ( DefenceValue + (Lv−1) × DefenceBonus/100 ) × ( 1 + CON/100 )</div>
+          <div class="fp-note">防御力はレベル・CON・種類ごとの成長値で決まります。</div>
+          <details class="fp-details"><summary>調査メモ（技術的な内容）</summary><div class="fp-note">DefenceValue = 0x120 / DefenceBonus = 0x3A。</div></details>
+        </div>
+      </div>
+
+      <div class="fp-section">
+        <div class="fp-title">魔法抵抗（火/水/風/土/光/闇）</div>
+        <div class="fp-row">
+          <div class="fp-formula">MagRes[i] = 基礎値[i] + floor( WIS × 5 / 100 )</div>
+          <div class="fp-note">WISが高いほど、全属性の魔法抵抗が上がります。モンスターは上限なしで計算しています。</div>
+          <details class="fp-details"><summary>調査メモ（技術的な内容）</summary><div class="fp-note">WIS×5/100 = WIS/20。参考サーバの getFireResistance() 等。純モンスターは上限なし（旧サイトの WIS/30 は誤り）。</div></details>
+        </div>
+      </div>
+
+      <div class="fp-section">
+        <div class="fp-title">状態異常抵抗</div>
+        <div class="fp-row">
+          <div class="fp-formula">AbnRes[i] = 固定値（レベル・ステータス依存なし）</div>
+          <div class="fp-note">状態異常への耐性は、モンスターごとに決まった固定値です。レベルでは変わりません。</div>
+          <details class="fp-details"><summary>調査メモ（技術的な内容）</summary><div class="fp-note">全状態異常共通耐性・全呪文耐性・全衰退耐性も同様。</div></details>
+        </div>
+      </div>
+
+      <div class="fp-section">
+        <div class="fp-title">取得EXP</div>
+        <div class="fp-row">
+          <div class="fp-formula">EXP = floor( DefaultEXP × (Lv+4) × 10 × correct_exp/100 / 100 )</div>
+          <div class="fp-note">倒したときに得られるEXPは、モンスターのレベルとマップ補正で変わります。</div>
+          <details class="fp-details"><summary>調査メモ（技術的な内容）</summary><div class="fp-note">DefaultEXP = offset 0x54。correct_exp は RMD グループ補正（既定100%）。</div></details>
+        </div>
+      </div>
+
+      <div class="fp-section">
+        <div class="fp-title">マップ側の補正値（cCHARACTER / RMD 6.1）</div>
+        <div class="fp-row">
+          <div class="fp-formula">correct_hp / correct_exp / correct_ap / correct_final_damage / scale_x / scale_y / max_level</div>
+          <div class="fp-note">同じモンスターでも、マップによってHP・EXP・与ダメが変わる場合があります。カードのバッジはその補正です。</div>
+          <details class="fp-details"><summary>調査メモ（技術的な内容）</summary><div class="fp-note">MapActorGroup の 0x1A〜0x26。HP・EXP・与ダメ補正としてカードに表示（非100%のみバッジ）。</div></details>
+        </div>
+      </div>
+
+      <div class="fp-section">
+        <div class="fp-title">リポップ速度（再出現周期）</div>
+        <div class="fp-row">
+          <div class="fp-note">マップデータに「再出現までの秒数」が入っており、その値を表示しています。サーバ設定で短縮・延長される場合や、秘密の部屋などテスト用マップに特殊な値が入っている場合があります。</div>
+          <div class="fp-formula">表示例: 🔄 10秒（MAPデータ値）</div>
+          <details class="fp-details"><summary>調査メモ（技術的な内容）</summary><div class="fp-note">RMD MapActorSingle offset 0x0C = m_iRegenerationCycle（秒）。参考サーバ cNPC::isRegenerationTime は m_iLastTime + m_iRegenerationCycle <= 現在秒 で判定。マップエディタは 時/分/秒 に分解して表示。</div></details>
+        </div>
+      </div>
+
+
+      <div class="fp-section">
+        <div class="fp-title">参照元（JRS 実データ / Ghidra 解析）</div>
+        <div class="fp-row">
+          <div class="fp-formula">C:\JRS\RED STONE\Red Stone.exe : job2.dat ローダ / RMD 6.1 / monsterDiscerner.sd</div>
+          <div class="fp-formula">C:\JRS\RED STONE\Data\Scenario\Red Stone\job2.dat : 先頭 0x12345678 + 件数 + 328バイトレコード</div>
+          <div class="fp-formula">C:\JRS\RED STONE\Data\Scenario\Red Stone\Map\*.rmd : ver 6.1 / MapActorGroup 0x48バイト</div>
+          <div class="fp-note">クライアント exe 自体はモンスターのレベル補正計算を持たず、サーバ側計算式を参考にしています。数値の最終確認はゲーム内でお願いします。</div>
+          <details class="fp-details"><summary>調査メモ（技術的な内容）</summary><div class="fp-note">C:\JRS\RED STONE\Red Stone.exe : job2.dat ローダ / RMD 6.1 / monsterDiscerner.sd<br>
+            job2.dat : 先頭 0x12345678 + 件数 + 328バイトレコード<br>
+            Map/*.rmd : ver 6.1 / MapActorGroup 0x48バイト</div></details>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+</div><!-- #layout -->
+
+<!-- 生成された各データJSを読み込む -->
+<script src="monster_data.js"></script>
+<script src="skill_data.js"></script>
+<script>
+'use strict';
+
+/* ══════════════════════════════════════════════════
+   計算ロジック (monster_stat_calc.py の JS 版)
+══════════════════════════════════════════════════ */
+function calcStat(base, sf, lv) {
+  // 参考: cACTOR::setStatus()
+  // stat = (int)(base * ((lv-1)*BasicPowerLevelFactor + 100000) / 100000)
+  return Math.floor(base * ((lv - 1) * sf + 100000) / 100000);
+}
+
+function calcStats(b, lv, spawn) {
+  lv = Math.max(1, lv | 0);
+  const sf = b.sf | 0;
+
+  // job2 offset 0x2E bit6 = IsReviseIntCalc
+  // マップグループ側の IsReviseIntelligence も OR で有効（CActor.cpp の上書き）
+  const jobRev = (b.rev === undefined) ? true : b.rev;
+  const spawnRev = spawn && spawn.rev === true;
+  const effectiveRev = jobRev || spawnRev;
+  const swapIntWis = (effectiveRev === false);
+  const baseWis = swapIntWis ? b.int : b.wis;
+  const baseInt = swapIntWis ? b.wis : b.int;
+
+  const str = calcStat(b.str, sf, lv);
+  const agi = calcStat(b.agi, sf, lv);
+  const con = calcStat(b.con, sf, lv);
+  const wis = calcStat(baseWis, sf, lv);
+  const int_ = calcStat(baseInt, sf, lv);
+  const cha = calcStat(b.cha, sf, lv);
+  const lck = calcStat(b.lck, sf, lv);
+
+  // マップ側の補正値（cCHARACTER）
+  const chp    = spawn && Number.isFinite(spawn.chp)    ? spawn.chp    : 100;
+  const cexp   = spawn && Number.isFinite(spawn.cexp)   ? spawn.cexp   : 100;
+  const cap    = spawn && Number.isFinite(spawn.cap)    ? spawn.cap    : 100;
+  const cfinal = spawn && Number.isFinite(spawn.cfinal) ? spawn.cfinal : 10000;
+
+  // MaxHP = (DefaultHP + CON*StateBonus*10 + Lv*LevelUpBonus*10) / 100 * correct_hp/100
+  const maxHpBase = b.lb / 10 * lv + b.dhp / 100 + b.sb / 10 * con;
+  const maxHp = Math.max(1, Math.floor(maxHpBase * chp / 100));
+
+  // MaxCP = (DefaultCP + CHA*100 + Lv*100) / 100
+  const maxCp = Math.floor((b.dcp + cha * 100 + lv * 100) / 100);
+
+  // 攻撃力: (MinDamage + (Lv-1)*MinDamageLevelFactor/100) * (1 + STR/200)
+  const atkMinBase = (b.atk_min !== undefined)
+    ? b.atk_min
+    : Math.min(b.atk_hi ?? 0, b.atk_lo ?? 0);
+  const atkMaxBase = (b.atk_max !== undefined)
+    ? b.atk_max
+    : Math.max(b.atk_hi ?? 0, b.atk_lo ?? 0);
+  const atkMinG = (b.atk_min_g !== undefined)
+    ? b.atk_min_g
+    : Math.min(b.bhi ?? 0, b.blo ?? 0);
+  const atkMaxG = (b.atk_max_g !== undefined)
+    ? b.atk_max_g
+    : Math.max(b.bhi ?? 0, b.blo ?? 0);
+
+  const atkA = (atkMinBase + (lv - 1) * atkMinG / 100) * (1 + str / 200);
+  const atkB = (atkMaxBase + (lv - 1) * atkMaxG / 100) * (1 + str / 200);
+  const atkLo = Math.min(atkA, atkB);
+  const atkHi = Math.max(atkA, atkB);
+
+  // 防御力: (DefenceValue + (Lv-1)*DefenceBonus/100) * (1 + CON/100)
+  const def = Math.floor((b.def + (lv - 1) * b.db / 100) * (1 + con / 100));
+
+  // 魔法抵抗: 基礎値 + floor(WIS*5/100)  (= WIS/20)
+  const wisBonus = Math.floor(wis * 5 / 100);
+  const mag = b.mag.map(v => v + wisBonus);
+
+  // 取得EXP: DefaultEXP * (Lv+4) * 10 * correct_exp/100 / 100
+  let exp = Math.floor(b.exp * (lv + 4) * cexp / 1000);
+  if (spawn && spawn.no_exp) exp = 0;
+
+  return { lv, str, agi, con, wis, int: int_, cha, lck,
+           maxHp, maxCp, atkHi, atkLo, def, mag,
+           wisBonus, exp, chp, cexp, cap, cfinal, swapIntWis };
+}
+
+
+/* ══════════════════════════════════════════════════
+   定数
+══════════════════════════════════════════════════ */
+const MAG_LABELS  = ['🔥火', '💧水', '🌀風', '🌍土', '✨光', '🌑闇'];
+const ABN_LABELS  = ['暗闇','毒','睡眠','冷気','氷結','気絶','石化','混乱','魅了'];
+// ItemBase.ItemType enum より (RedStoneLib/Model/Base/ItemBase.cs)
+const ITEM_TYPE_NAMES = {
+  0:'帽子', 1:'冠', 2:'グローブ', 3:'槍投', 4:'クロー', 5:'手首',
+  6:'ベルト', 7:'靴', 8:'首飾り', 9:'指輪', 10:'耳飾り', 11:'背中',
+  12:'ブローチ', 13:'腕刺青', 14:'肩刺青', 15:'十字架',
+  16:'鎧', 17:'職業鎧',
+  18:'片手剣', 19:'盾', 20:'両手剣', 21:'杖', 22:'牙', 23:'棍棒',
+  24:'翼', 25:'短剣', 26:'弓', 27:'矢', 28:'槍', 29:'笛',
+  30:'スリング', 31:'ボトル', 32:'棒', 33:'鞭',
+  34:'原石', 35:'赤POT', 36:'青POT', 37:'水薬',
+  38:'能力アップ', 39:'異常回復', 40:'復活系', 41:'鍵', 42:'帰還',
+  43:'必殺技の巻物', 44:'お菓子', 45:'霊薬', 46:'魔法液',
+  47:'セッティング原石', 48:'その他特殊', 49:'クエストアイテム',
+  50:'課金アイテム', 51:'エンチャント', 52:'ロト',
+  54:'鎌', 55:'闘士武器', 56:'本',
+};
+const EXCLUDED_MAP_NAME_PARTS = ['ギルドホール', 'ギルド攻城戦'];
+// リポップ値がテスト用・特殊なマップ（通常フィールドのボスと混同しない）
+const SPECIAL_MAP_PARTS = ['秘密の部屋', 'SecretRoom', 'テスト', 'Test', 'Duel', '決戦場'];
+function isSpecialMapName(name) {
+  const s = String(name || '').toLowerCase();
+  return SPECIAL_MAP_PARTS.some(part => s.includes(part.toLowerCase()));
+}
+function itemName(t) {
+  if (t === 65535) return null;
+  return ITEM_TYPE_NAMES[t] || `アイテム種別#${t}`;
+}
+
+function isExcludedMapName(name) {
+  return EXCLUDED_MAP_NAME_PARTS.some(part => name.includes(part));
+}
+
+function mapDataKey(map) {
+  if (map.sig) return map.sig;
+  const bids = Array.isArray(map.bids) ? [...new Set(map.bids)].sort((a, b) => a - b) : [];
+  return bids.join(',');
+}
+
+function mapFileScore(fileName) {
+  const base = (fileName || '').toLowerCase().replace(/\.rmd$/i, '');
+  let score = base.length;
+  if (/_m\d+$/.test(base) || /_m\d+/.test(base)) score += 1000;
+  if (/_gh\d+$/.test(base) || /_gh\d+/.test(base)) score += 1000;
+  if (/m\d+$/.test(base)) score += 500;
+  if (/gh\d+$/.test(base)) score += 500;
+  if (/mirror|mira/.test(base)) score += 1000;
+  return score;
+}
+
+function pickRepresentativeMap(a, b) {
+  // 画像（TGA）があるマップを優先する。同じ内容ならファイル名の短い方を代表にする。
+  if (!!a.img !== !!b.img) return a.img ? a : b;
+  const sa = mapFileScore(a.file);
+  const sb = mapFileScore(b.file);
+  if (sa !== sb) return sa < sb ? a : b;
+  const fa = (a.file || '').toLowerCase();
+  const fb = (b.file || '').toLowerCase();
+  if (fa !== fb) return fa < fb ? a : b;
+  return a.id <= b.id ? a : b;
+}
+
+function getDedupedMaps() {
+  const byKey = new Map();
+  MONSTER_DATA.maps.forEach(map => {
+    if (isExcludedMapName(map.name)) return;
+    if (!map.bids || map.bids.length === 0) return;
+    if (!map.img) return; // 画像の無いマップは一覧・マップ表示から除外
+    const key = mapDataKey(map);
+    const current = byKey.get(key);
+    if (!current) {
+      byKey.set(key, map);
+      return;
+    }
+    byKey.set(key, pickRepresentativeMap(current, map));
+  });
+  return Array.from(byKey.values()).sort((a, b) => b.id - a.id);
+}
+
+/* ══════════════════════════════════════════════════
+   状態管理
+══════════════════════════════════════════════════ */
+let currentLv       = 100;
+let currentMapId    = null;
+let currentSearchBid = null;
+let currentLvFilter = 0;
+let searchTimer     = null;
+
+// マップビューの状態（番号→グループ、現在の選択）
+let currentMapView  = null;
+let selectedGroupNo = null;
+let mapZoom         = 1;
+let lastViewTitle   = '← マップを選択してください';
+
+/* ══════════════════════════════════════════════════
+   初期化（scriptがbody末尾のためDOMContentLoaded不要・直接実行）
+══════════════════════════════════════════════════ */
+function init() {
+  try {
+    // monster_data.js が読み込まれていなければエラー
+    if (typeof MONSTER_DATA === 'undefined') {
+      document.getElementById('loading').innerHTML =
+        '<div style="color:#ef5350;font-size:16px;text-align:center;padding:20px;">' +
+        'monster_data.js が見つかりません。<br>' +
+        'まず generate_monster_data.py を実行してください。</div>';
+      return;
+    }
+
+    buildMapList();
+    setupSearch();
+    setupLvControl();
+    setupFormulaPanel();
+    setupMapControls();
+    document.getElementById('loading').classList.add('hidden');
+  } catch(e) {
+    document.getElementById('loading').innerHTML =
+      '<div style="color:#ef5350;font-size:14px;text-align:center;padding:20px;max-width:600px;">' +
+      '<b>初期化エラー:</b><br><pre style="text-align:left;background:#111;padding:10px;margin-top:8px;border-radius:4px;overflow:auto;">' +
+      (e.stack || e.message) + '</pre></div>';
+  }
+}
+init();
+
+/* ══════════════════════════════════════════════════
+   サイドバー：マップ一覧
+══════════════════════════════════════════════════ */
+function buildMapList(filter = '') {
+  const el   = document.getElementById('map-list');
+  const maps = getDedupedMaps();
+  el.innerHTML = '';
+
+  const lf = filter.toLowerCase();
+  maps.forEach(m => {
+    if (lf && !m.name.toLowerCase().includes(lf)) return;
+
+    if (currentLvFilter > 0) {
+      const lo = currentLvFilter - 50, hi = currentLvFilter + 50;
+      const hasBreed = MONSTER_DATA.breeds.some(b =>
+        b.maps.some(sp => sp.mid === m.id && sp.max >= lo && sp.min <= hi)
+      );
+      if (!hasBreed) return;
+    }
+
+    const item = document.createElement('div');
+    item.className = 'map-item' + (m.id === currentMapId ? ' active' : '');
+    const special = isSpecialMapName(m.name) || /secret|test|duel/i.test(m.file || '');
+    item.innerHTML =
+      `<span class="map-item-name">${escHtml(m.name)}</span>` +
+      `<span class="map-item-count">${special ? '<span class="map-item-badge">特殊</span> ' : ''}${m.bids.length}種</span>`;
+    item.addEventListener('click', () => selectMap(m.id));
+    el.appendChild(item);
+  });
+}
+
+document.getElementById('map-filter').addEventListener('input', e => {
+  buildMapList(e.target.value);
+});
+
+document.getElementById('lv-filter').addEventListener('input', e => {
+  const v = parseInt(e.target.value, 10);
+  currentLvFilter = isNaN(v) || v < 1 ? 0 : v;
+  buildMapList(document.getElementById('map-filter').value);
+  if (currentMapId !== null) renderMapMonsters(currentMapId);
+});
+
+document.getElementById('btn-lv-filter-clear').addEventListener('click', () => {
+  document.getElementById('lv-filter').value = '';
+  currentLvFilter = 0;
+  buildMapList(document.getElementById('map-filter').value);
+  if (currentMapId !== null) renderMapMonsters(currentMapId);
+});
+
+/* ══════════════════════════════════════════════════
+   マップ代表レベル自動計算
+══════════════════════════════════════════════════ */
+function calcMapLv(mid) {
+  const entries = [];
+  MONSTER_DATA.breeds.forEach(b => {
+    b.maps.forEach(sp => {
+      if (sp.mid !== mid) return;
+      const lo = sp.min || 0, hi = sp.max || lo;
+      if (lo === 0 && hi === 0) return;
+      const midLv = (lo + hi) / 2;
+      entries.push({ midLv, cnt: sp.cnt || 1 });
+    });
+  });
+  if (entries.length === 0) return currentLv;
+
+  // cnt加重でビン幅5のヒストグラムを作成し最頻ビンを選択
+  const freq = {};
+  entries.forEach(({ midLv, cnt }) => {
+    const bin = Math.max(1, Math.round(midLv / 5) * 5);
+    freq[bin] = (freq[bin] || 0) + cnt;
+  });
+  let bestBin = 0, bestCnt = 0;
+  Object.entries(freq).forEach(([bin, cnt]) => {
+    if (cnt > bestCnt) { bestCnt = cnt; bestBin = parseInt(bin); }
+  });
+
+  // 最頻ビン内エントリのcnt加重平均レベルを返す
+  const inBin = entries.filter(({ midLv }) => Math.max(1, Math.round(midLv / 5) * 5) === bestBin);
+  const wSum  = inBin.reduce((s, e) => s + e.midLv * e.cnt, 0);
+  const cSum  = inBin.reduce((s, e) => s + e.cnt, 0);
+  return Math.max(1, Math.round(wSum / cSum));
+}
+
+function selectMap(mid) {
+  currentMapId = mid;
+  currentSearchBid = null;
+  document.getElementById('main').classList.add('map-mode');
+
+  // マップの代表レベルを自動設定
+  const autoLv = calcMapLv(mid);
+  currentLv = autoLv;
+  const inp = document.getElementById('lv-input');
+  inp.value = autoLv;
+  document.getElementById('lv-auto-hint').textContent = `(自動: Lv ${autoLv})`;
+
+  buildMapList(document.getElementById('map-filter').value);
+  renderMapMonsters(mid);
+  document.getElementById('main').scrollTop = 0;
+  hideFormulaView();
+  closeSearch();
+}
+
+/* ══════════════════════════════════════════════════
+   モンスター描画
+══════════════════════════════════════════════════ */
+function mapSpawns(mid) {
+  const out = [];
+  MONSTER_DATA.breeds.forEach(b => {
+    (b.maps || []).forEach(sp => {
+      if (sp.mid === mid) out.push({ b, sp });
+    });
+  });
+  return out;
+}
+
+function mapLevelText(min, max) {
+  const lo = Number.isFinite(min) ? min : 0;
+  const hi = Number.isFinite(max) ? max : lo;
+  return lo === hi ? `Lv ${lo}` : `Lv ${lo}–${hi}`;
+}
+
+function buildMapGroups(map, mid) {
+  let spawns = mapSpawns(mid);
+
+  if (currentLvFilter > 0) {
+    const lo = currentLvFilter - 50, hi = currentLvFilter + 50;
+    spawns = spawns.filter(({ sp }) => sp.max >= lo && sp.min <= hi);
+  }
+
+  // 1つの MapActorGroup（spawn）を1カード・1番号として扱う。
+  // 同じ種族でも iid / レベル帯が違えば別グループのまま残す。
+  const monsterGroups = spawns.map(({ b, sp }) => ({
+    kind: 'monster',
+    b,
+    sp,
+    name: sp.npc || sp.group || b.name,
+    min: Number(sp.min) || 0,
+    max: Number(sp.max) || 0,
+    cnt: Number(sp.cnt) || (Array.isArray(sp.points) ? sp.points.length : 0),
+    points: Array.isArray(sp.points) ? sp.points : [],
+  })).sort((x, y) =>
+    (x.min - y.min) || (x.max - y.max) ||
+    String(x.name).localeCompare(String(y.name), 'ja') ||
+    (x.sp.iid - y.sp.iid)
+  );
+
+  const npcGroups = (map.npcs || []).map(n => ({
+    kind: 'npc',
+    name: n.name,
+    type: n.type,
+    cnt: Number(n.cnt) || (Array.isArray(n.points) ? n.points.length : 0),
+    points: Array.isArray(n.points) ? n.points : [],
+  })).sort((x, y) =>
+    String(x.name).localeCompare(String(y.name), 'ja') || (x.type - y.type)
+  );
+
+  let no = 1;
+  npcGroups.forEach(g => { g.no = no++; });
+  monsterGroups.forEach(g => { g.no = no++; });
+
+  const allGroups = [...npcGroups, ...monsterGroups];
+  const byNo = new Map(allGroups.map(g => [g.no, g]));
+  return { map, npcGroups, monsterGroups, allGroups, byNo };
+}
+
+function renderMapMonsters(mid) {
+  const map = MONSTER_DATA.maps.find(m => m.id === mid);
+  const grid = document.getElementById('monster-grid');
+  const title = document.getElementById('main-title');
+  const main = document.getElementById('main');
+
+  if (!map) {
+    title.textContent = 'マップが見つかりません';
+    grid.innerHTML = '';
+    return;
+  }
+
+  main.classList.add('map-mode');
+  selectedGroupNo = null;
+  currentMapView = buildMapGroups(map, mid);
+
+  const special = isSpecialMapName(map.name) || /secret|test|duel/i.test(map.file || '');
+  const imgNote = map.img ? '' : '  [画像なし]';
+  title.textContent = `📍 ${map.name}  (${currentMapView.monsterGroups.length}グループ / ` +
+    `${currentMapView.npcGroups.length}NPC)${special ? '  [特殊マップ]' : ''}${imgNote}`;
+  lastViewTitle = title.textContent;
+
+  renderMapPanel(currentMapView);
+  renderEntityList(currentMapView);
+  renderMonsterCards(currentMapView);
+}
+
+function renderSingleBreed(bid) {
+  const breed  = MONSTER_DATA.breeds.find(b => b.id === bid);
+  const grid   = document.getElementById('monster-grid');
+  const title  = document.getElementById('main-title');
+  if (!breed) return;
+
+  currentSearchBid = bid;
+  currentMapId = null;
+  currentMapView = null;
+  selectedGroupNo = null;
+  const main = document.getElementById('main');
+  main.classList.remove('map-mode');
+  document.getElementById('entity-panel').style.display = '';
+  title.textContent = `🔍 「${breed.name}」の検索結果`;
+  lastViewTitle = title.textContent;
+  grid.innerHTML = '';
+  grid.appendChild(buildCard(breed, currentLv, null, true));
+}
+
+/* ══════════════════════════════════════════════════
+   マップ画像・マーカー
+══════════════════════════════════════════════════ */
+function markerPercent(value, max) {
+  if (!max) return 0;
+  return Math.max(0, Math.min(100, value / max * 100));
+}
+
+function groupTooltip(g) {
+  if (g.kind === 'npc') {
+    return `${g.name} / NPC / ${g.cnt}地点`;
+  }
+  return `${g.name} / ${mapLevelText(g.min, g.max)} / ${g.cnt}地点`;
+}
+
+function renderMapPanel(view) {
+  const map = view.map;
+  const panel = document.getElementById('map-panel');
+  const img = document.getElementById('map-image');
+  const markerRoot = document.getElementById('map-markers');
+  const status = document.getElementById('map-status');
+  document.getElementById('map-panel-name').textContent = map.name || '';
+
+  const hasImage = Boolean(map.img && map.w > 0 && map.h > 0);
+  panel.classList.toggle('no-image', !hasImage);
+  if (!hasImage) {
+    img.removeAttribute('src');
+    img.alt = '';
+    markerRoot.innerHTML = '';
+    status.textContent = 'このマップには表示用画像がありません。左の一覧から対象を選択できます。';
+    currentMapView = view;
+    return;
+  }
+
+  img.onerror = () => {
+    panel.classList.add('no-image');
+    status.textContent = 'マップ画像を読み込めませんでした。';
+  };
+  img.onload = () => panel.classList.remove('no-image');
+  img.src = encodeURI(map.img);
+  img.alt = `${map.name} のマップ画像`;
+
+  // マップ切り替え時はズームをリセット
+  mapZoom = 1;
+  applyMapZoom(1, false);
+  renderMapMarkers(view, markerRoot);
+  status.textContent = '番号をクリックすると、その出現グループの地点を強調します。';
+}
+
+function renderMapMarkers(view, markerRoot) {
+  const map = view.map;
+  const frag = document.createDocumentFragment();
+  const xMax = map.w * 64;
+  const yMax = map.h * 32;
+
+  view.allGroups.forEach(g => {
+    g.points.forEach(([x, y]) => {
+      const marker = document.createElement('button');
+      marker.type = 'button';
+      marker.className = `map-marker ${g.kind}`;
+      marker.dataset.no = String(g.no);
+      marker.dataset.kind = g.kind;
+      marker.style.left = markerPercent(Number(x), xMax) + '%';
+      marker.style.top = markerPercent(Number(y), yMax) + '%';
+      marker.textContent = String(g.no);
+      marker.title = groupTooltip(g) + `\n(${x}, ${y})`;
+      marker.setAttribute('aria-label', `${g.no} ${groupTooltip(g)}`);
+      marker.addEventListener('click', () => activateGroup(g.no, { openCard: g.kind === 'monster' }));
+      frag.appendChild(marker);
+    });
+  });
+
+  markerRoot.innerHTML = '';
+  markerRoot.classList.remove('has-selection');
+  markerRoot.appendChild(frag);
+}
+
+/* ══════════════════════════════════════════════════
+   左：NPC / モンスター一覧
+══════════════════════════════════════════════════ */
+function entityRowHtml(g) {
+  const isNpc = g.kind === 'npc';
+  const name = escHtml(g.name);
+  let sub;
+  let meta;
+  if (isNpc) {
+    sub = 'NPC';
+    meta = `${g.cnt}地点`;
+  } else {
+    const breedName = g.b && g.b.name && g.b.name !== g.name ? `${g.b.name} / ` : '';
+    sub = `${breedName}${g.b ? g.b.race : ''}`;
+    meta = `${mapLevelText(g.min, g.max)}<br>${g.cnt}体`;
+  }
+  return `<button type="button" class="entity-row ${isNpc ? 'npc' : 'monster'}"` +
+    ` data-no="${g.no}" data-kind="${g.kind}">` +
+    `<span class="entity-no">${g.no}</span>` +
+    `<span class="entity-main"><span class="entity-name">${name}</span>` +
+    `<span class="entity-sub">${escHtml(sub)}</span></span>` +
+    `<span class="entity-meta">${meta}</span></button>`;
+}
+
+function renderEntityList(view) {
+  const list = document.getElementById('entity-list');
+  const sub = document.querySelector('#entity-head .entity-head-sub');
+  if (sub) {
+    sub.textContent = `NPC ${view.npcGroups.length} / モンスター ${view.monsterGroups.length}`;
+  }
+
+  let html = '';
+  if (view.npcGroups.length) {
+    html += '<div class="entity-section-title">NPC</div>';
+    html += view.npcGroups.map(entityRowHtml).join('');
+  }
+  if (view.monsterGroups.length) {
+    html += '<div class="entity-section-title">モンスター</div>';
+    html += view.monsterGroups.map(entityRowHtml).join('');
+  }
+  if (!html) {
+    html = '<div class="placeholder" style="margin:30px 10px;font-size:12px;">表示できる地点がありません。</div>';
+  }
+
+  list.innerHTML = html;
+  list.querySelectorAll('.entity-row').forEach(row => {
+    row.addEventListener('click', () => {
+      const no = parseInt(row.dataset.no, 10);
+      activateGroup(no, { openCard: row.dataset.kind === 'monster' });
+    });
+  });
+}
+
+/* ══════════════════════════════════════════════════
+   右：折りたたみカード
+══════════════════════════════════════════════════ */
+function renderMonsterCards(view) {
+  const grid = document.getElementById('monster-grid');
+  grid.innerHTML = '';
+
+  if (!view.monsterGroups.length) {
+    grid.innerHTML = '<div class="placeholder">このマップには表示対象のモンスターがいません。</div>';
+    return;
+  }
+
+  view.monsterGroups.forEach(g => {
+    const card = buildCard(g.b, currentLv, g.sp, false, { no: g.no });
+    card.dataset.gno = String(g.no);
+    card.addEventListener('toggle', () => {
+      if (!currentMapView || currentMapView !== view) return;
+      if (card.open) {
+        if (selectedGroupNo !== g.no) activateGroup(g.no, { openCard: false });
+      } else if (selectedGroupNo === g.no) {
+        clearGroupSelection({ closeCards: false });
+      }
+    });
+    grid.appendChild(card);
+  });
+}
+
+/* ══════════════════════════════════════════════════
+   選択・強調
+══════════════════════════════════════════════════ */
+function activateGroup(no, options = {}) {
+  if (!currentMapView) return;
+  const group = currentMapView.byNo.get(no);
+  if (!group) return;
+
+  selectedGroupNo = no;
+
+  if (group.kind === 'monster') {
+    if (options.openCard) {
+      openEntityCard(no, options.scrollCard !== false);
+    } else {
+      // カードの summary を直接開いた場合も、他のカードは閉じる。
+      closeOtherEntityCards(no);
+    }
+  } else if (group.kind === 'npc') {
+    closeAllEntityCards();
+  }
+
+  updateGroupSelectionUI();
+}
+
+function closeOtherEntityCards(exceptNo) {
+  document.querySelectorAll('#monster-grid .entity-card').forEach(card => {
+    if (Number(card.dataset.gno) !== exceptNo && card.open) card.open = false;
+  });
+}
+
+function openEntityCard(no, scroll = true) {
+  const grid = document.getElementById('monster-grid');
+  const card = grid.querySelector(`.entity-card[data-gno="${no}"]`);
+  if (!card) return;
+
+  grid.querySelectorAll('.entity-card').forEach(other => {
+    if (other !== card && other.open) other.open = false;
+  });
+  if (!card.open) card.open = true;
+  if (scroll) {
+    requestAnimationFrame(() => card.scrollIntoView({ block: 'nearest', behavior: 'smooth' }));
+  }
+}
+
+function closeAllEntityCards() {
+  document.querySelectorAll('#monster-grid .entity-card').forEach(card => {
+    if (card.open) card.open = false;
+  });
+}
+
+function clearGroupSelection(options = {}) {
+  if (selectedGroupNo === null) return;
+  selectedGroupNo = null;
+  if (options.closeCards !== false) closeAllEntityCards();
+  updateGroupSelectionUI();
+}
+
+function updateGroupSelectionUI() {
+  const view = currentMapView;
+  if (!view) return;
+
+  document.querySelectorAll('#entity-list .entity-row').forEach(row => {
+    row.classList.toggle('active', selectedGroupNo !== null && Number(row.dataset.no) === selectedGroupNo);
+  });
+  document.querySelectorAll('#map-markers .map-marker').forEach(marker => {
+    const active = selectedGroupNo !== null && Number(marker.dataset.no) === selectedGroupNo;
+    marker.classList.toggle('active', active);
+    marker.classList.toggle('dim', selectedGroupNo !== null && !active);
+  });
+  const markerRoot = document.getElementById('map-markers');
+  markerRoot.classList.toggle('has-selection', selectedGroupNo !== null);
+  document.querySelectorAll('#monster-grid .entity-card').forEach(card => {
+    card.classList.toggle('active', selectedGroupNo !== null && Number(card.dataset.gno) === selectedGroupNo);
+  });
+
+  const status = document.getElementById('map-status');
+  if (selectedGroupNo === null) {
+    status.textContent = '番号をクリックすると、その出現グループの地点を強調します。';
+    return;
+  }
+  const g = view.byNo.get(selectedGroupNo);
+  if (!g) return;
+  if (g.kind === 'npc') {
+    status.innerHTML = `<b>[${g.no}] ${escHtml(g.name)}</b> の ${g.cnt}地点を強調中（NPC）`;
+  } else {
+    status.innerHTML = `<b>[${g.no}] ${escHtml(g.name)}</b> / ${escHtml(mapLevelText(g.min, g.max))} / ` +
+      `${g.cnt}地点を強調中`;
+  }
+}
+
+/* ══════════════════════════════════════════════════
+   マップのズーム
+══════════════════════════════════════════════════ */
+function setupMapControls() {
+  const viewport = document.getElementById('map-viewport');
+  const apply = (next) => applyMapZoom(next, true);
+  document.getElementById('map-zoom-in').addEventListener('click', () => apply(mapZoom + 0.2));
+  document.getElementById('map-zoom-out').addEventListener('click', () => apply(mapZoom - 0.2));
+  document.getElementById('map-zoom-reset').addEventListener('click', () => apply(1));
+  viewport.addEventListener('dblclick', e => {
+    if (e.target.closest('.map-marker')) return;
+    apply(mapZoom >= 1.6 ? 1 : mapZoom + 0.4);
+  });
+}
+
+function applyMapZoom(nextZoom, preserveCenter = true) {
+  mapZoom = Math.max(0.6, Math.min(2.6, nextZoom));
+  const viewport = document.getElementById('map-viewport');
+  const plane = document.getElementById('map-plane');
+  if (!viewport || !plane) return;
+
+  const oldWidth = plane.scrollWidth || viewport.clientWidth;
+  const centerX = oldWidth ? (viewport.scrollLeft + viewport.clientWidth / 2) / oldWidth : 0.5;
+  const centerY = plane.scrollHeight ? (viewport.scrollTop + viewport.clientHeight / 2) / plane.scrollHeight : 0.5;
+
+  plane.style.width = `${mapZoom * 100}%`;
+  document.getElementById('map-zoom-label').textContent = `${Math.round(mapZoom * 100)}%`;
+
+  if (!preserveCenter) {
+    viewport.scrollLeft = 0;
+    viewport.scrollTop = 0;
+    return;
+  }
+
+  requestAnimationFrame(() => {
+    const newWidth = plane.scrollWidth;
+    const newHeight = plane.scrollHeight;
+    viewport.scrollLeft = Math.max(0, centerX * newWidth - viewport.clientWidth / 2);
+    viewport.scrollTop = Math.max(0, centerY * newHeight - viewport.clientHeight / 2);
+  });
+}
+
+/* ══════════════════════════════════════════════════
+   カード生成
+══════════════════════════════════════════════════ */
+function buildCard(b, lv, mapInfo, showAllMaps = false, groupInfo = null) {
+  // マップ表示では、そのスポーンのレベル範囲内にクランプして計算する
+  const calcLv = mapInfo
+    ? Math.max(1, Math.min(Math.max(lv, mapInfo.min), mapInfo.max))
+    : lv;
+  const c   = calcStats(b, calcLv, mapInfo);
+  const baseW = c.swapIntWis ? b.int : b.wis;
+  const baseI = c.swapIntWis ? b.wis : b.int;
+
+  // レベル帯文字列
+  let lvStr = `Lv ${calcLv}`;
+  if (mapInfo) {
+    const mn = mapInfo.min, mx = mapInfo.max;
+    lvStr = mn === mx ? `Lv ${mn}` : `Lv ${mn}–${mx}`;
+  }
+
+  // マップ補正バッジ
+  const corr = [];
+  if (c.chp !== 100)    corr.push(`HP×${(c.chp / 100).toFixed(2)}`);
+  if (c.cexp !== 100)   corr.push(`EXP×${(c.cexp / 100).toFixed(2)}`);
+  if (c.cap !== 100)    corr.push(`与ダメ×${(c.cap / 100).toFixed(2)}`);
+  if (c.cfinal !== 10000) corr.push(`最終×${(c.cfinal / 10000).toFixed(2)}`);
+  if (mapInfo && mapInfo.sx && mapInfo.sx !== 100) corr.push(`表示×${(mapInfo.sx / 100).toFixed(2)}`);
+  const corrHtml = corr.length
+    ? `<span class="corr-badge" title="マップ側の補正値（cCHARACTER）">${escHtml(corr.join(' / '))}</span>`
+    : '';
+
+  // マップグループの無効・特殊フラグ
+  const stateBadges = [];
+  if (mapInfo) {
+    if (mapInfo.invincible) stateBadges.push('無敵');
+    if (mapInfo.boss) stateBadges.push('ボス');
+    if (mapInfo.key_monster) stateBadges.push('キーモンスター');
+    if (mapInfo.no_exp) stateBadges.push('EXPなし');
+    if (mapInfo.no_drop_item) stateBadges.push('ドロップなし');
+    if (mapInfo.no_drop_gold) stateBadges.push('Goldなし');
+    const im = mapInfo.immune || {};
+    const imLabels = {
+      physical: '物理無効', magic: '魔法無効', stun: '気絶無効', stone: '石化無効',
+      charm: '魅了無効', freeze: '氷結無効', knockback: 'ノックバック無効', confuse: '混乱無効',
+    };
+    Object.keys(imLabels).forEach(k => { if (im[k]) stateBadges.push(imLabels[k]); });
+  }
+  const stateHtml = stateBadges.length
+    ? `<div class="state-row">${stateBadges.map(s => `<span class="state-badge">${escHtml(s)}</span>`).join('')}</div>`
+    : '';
+
+  // 状態異常（全表示）
+  const abnPills = b.abn.map((v, i) => {
+    const cls = v > 0 ? 'abn-pos' : v < 0 ? 'abn-neg' : '';
+    return `<span class="abn-pill"><span class="ap-lbl">${ABN_LABELS[i]}:</span><span class="ap-val ${cls}">${v > 0 ? '+' : ''}${v}</span></span>`;
+  }).join('');
+
+  const allAbn = [
+    `<span class="abn-pill"><span class="ap-lbl">異常:</span><span class="ap-val ${b.all_abn>0?'abn-pos':b.all_abn<0?'abn-neg':''}">${b.all_abn>0?'+':''}${b.all_abn}</span></span>`,
+    `<span class="abn-pill"><span class="ap-lbl">低下:</span><span class="ap-val ${b.all_dec>0?'abn-pos':b.all_dec<0?'abn-neg':''}">${b.all_dec>0?'+':''}${b.all_dec}</span></span>`,
+    `<span class="abn-pill"><span class="ap-lbl">呪い:</span><span class="ap-val ${b.all_sp>0?'abn-pos':b.all_sp<0?'abn-neg':''}">${b.all_sp>0?'+':''}${b.all_sp}</span></span>`,
+    `<span class="abn-pill"><span class="ap-lbl">致命打抵抗:</span><span class="ap-val">${b.fatal}</span></span>`,
+    `<span class="abn-pill"><span class="ap-lbl">決定打抵抗:</span><span class="ap-val">${b.dec}</span></span>`,
+  ].join('');
+
+  // ドロップアイテム（job2 の m_aDroppingItem）
+  const drops = (typeof b.drops === 'string' ? JSON.parse(b.drops) : b.drops) || [];
+  const dropHeading = (mapInfo && mapInfo.no_drop_item)
+    ? '💰 ドロップ（このマップでは無効）'
+    : '💰 ドロップ';
+  const dropTags = drops
+    .map(d => {
+      const n = itemName(d.item_type);
+      if (!n) return '';
+      const cnt = (d.count && d.count !== 1) ? ` ×${d.count}` : '';
+      const fl = d.flags ? ` flags:${d.flags}` : '';
+      return `<span class="tag tag-drop" title="種別ID:${d.item_type}${fl}">${escHtml(n)}${cnt} <small>(${(d.prob/100).toFixed(1)}%)</small></span>`;
+    })
+    .filter(Boolean)
+    .join('');
+
+  // スキル（JRS 生成データは {id,lv}、旧データは数値）
+  const skillTags = (b.skills || []).map(s => {
+    const id  = (s && typeof s === 'object') ? s.id : s;
+    const slv = (s && typeof s === 'object') ? s.lv : null;
+    const sname = (typeof SKILL_NAMES !== 'undefined' && SKILL_NAMES[id])
+      ? SKILL_NAMES[id]
+      : `スキル #${id}`;
+    const sadInfo = (typeof SKILL_SAD !== 'undefined') ? SKILL_SAD[id] : null;
+    let sadLines = [];
+    if (Array.isArray(sadInfo)) {
+      sadLines = sadInfo.map(x => `${x.slot}: ${x.sad}`);
+    } else if (typeof sadInfo === 'string' && sadInfo) {
+      sadLines = [`SAD: ${sadInfo}`];
+    }
+    const hasSad = sadLines.length > 0;
+    let tip = `#${id} ${sname}`;
+    tip += hasSad ? '\n' + sadLines.join('\n') : '\nSAD: 情報なし（専用エフェクト未設定）';
+    const tipAttr = escHtml(tip).replace(/\n/g, '&#10;');
+    const lvTxt = (slv !== null && slv !== undefined) ? ` Lv${slv}` : '';
+    return `<span class="tag tag-skill ${hasSad ? 'has-sad' : 'no-sad'}" title="${tipAttr}">${escHtml(sname)}${lvTxt}</span>`;
+  }).join('');
+
+  // 出現マップ（検索結果表示時）: 同一マップ・NPC・レベル・補正をまとめる
+  let mapSection = '';
+  if (showAllMaps && b.maps.length > 0) {
+    const grouped = new Map();
+    b.maps.forEach(bm => {
+      const key = [bm.mid, bm.npc || '', bm.min, bm.max, bm.chp, bm.cexp, bm.cap, bm.cfinal].join('|');
+      if (!grouped.has(key)) grouped.set(key, { ...bm, cnt: 0 });
+      grouped.get(key).cnt += bm.cnt || 1;
+    });
+    const list = Array.from(grouped.values()).sort((x, y) =>
+      (x.min - y.min) || (x.max - y.max) || (x.mid - y.mid));
+    const maxShow = 120;
+    const mapLines = list.slice(0, maxShow).map(bm => {
+      const mp = MONSTER_DATA.maps.find(m => m.id === bm.mid);
+      if (!mp || !mp.img) return '';
+      const lvTxt = bm.min === bm.max ? `Lv ${bm.min}` : `Lv ${bm.min}–${bm.max}`;
+      const popTxt = bm.pop > 0 ? ` / 🔄${bm.pop}秒` : '';
+      const npcLabel = bm.npc ? `${escHtml(bm.npc)} (${escHtml(mp.name)})` : escHtml(mp.name);
+      const corr = [];
+      if (bm.chp !== 100) corr.push(`HP×${(bm.chp/100).toFixed(2)}`);
+      if (bm.cexp !== 100) corr.push(`EXP×${(bm.cexp/100).toFixed(2)}`);
+      if (bm.cap !== 100) corr.push(`与ダメ×${(bm.cap/100).toFixed(2)}`);
+      const corrTxt = corr.length ? ` [${corr.join(' ')}]` : '';
+      return `<button class="tag tag-map-link" data-mid="${bm.mid}">${npcLabel} / ${lvTxt} / ${bm.cnt}体${popTxt}${escHtml(corrTxt)}</button>`;
+    }).join('');
+    const moreTxt = list.length > maxShow ? `<div class="map-more">…他 ${list.length - maxShow} 件</div>` : '';
+    mapSection = `<div class="sec-title">🗺 出現マップ<small style="color:var(--text-muted);margin-left:6px;font-weight:normal">(クリックで移動)</small></div><div class="tag-row">${mapLines}</div>${moreTxt}`;
+  }
+
+  const spawnNpc = mapInfo && mapInfo.npc ? mapInfo.npc : b.name;
+  const breedLine = mapInfo && mapInfo.npc
+    ? `${b.name} (${b.race})`
+    : `${b.race} / ${b.lineage}`;
+  const cardNo = groupInfo && groupInfo.no ? groupInfo.no : null;
+  const cardNoHtml = cardNo ? `<span class="card-no">${cardNo}</span>` : '';
+
+  const card = document.createElement(groupInfo ? 'details' : 'div');
+  card.className = 'card' + (groupInfo ? ' entity-card' : '');
+  if (groupInfo) card.dataset.gno = String(cardNo);
+  card.innerHTML = `
+    <div class="card-header">
+      <div>
+        <div class="card-name">${cardNoHtml}${escHtml(spawnNpc)} ${corrHtml}</div>
+        <div class="card-sub">
+          ${escHtml(breedLine)} &nbsp;|&nbsp; 移動速度:${b.move_spd} &nbsp;攻撃速度:${b.atk_spd}
+          ${mapInfo && mapInfo.pop > 0 ? ` &nbsp;|&nbsp; <span title="マップデータ上の再出現周期（秒）。サーバ設定で短縮・延長される場合があります">🔄 ${mapInfo.pop}秒<span class="pop-note">（MAPデータ値）</span></span>` : ''}
+          ${mapInfo && mapInfo.cnt ? `<span class="cnt-badge">${mapInfo.cnt}体</span>` : ''}
+        </div>
+      </div>
+      <div class="card-lv-badge">${escHtml(lvStr)}</div>
+    </div>
+    <div class="card-body">
+
+      ${stateHtml}
+
+      <div class="sec-title">📊 ステータス（計算Lv=${calcLv}）</div>
+      <div class="stat-grid">
+        ${statCell('STR', c.str, b.str)}
+        ${statCell('AGI', c.agi, b.agi)}
+        ${statCell('CON', c.con, b.con)}
+        ${statCell('WIS', c.wis, baseW)}
+        ${statCell('INT', c.int, baseI)}
+        ${statCell('CHA', c.cha, b.cha)}
+        ${statCell('LCK', c.lck, b.lck)}
+      </div>
+      <div class="base-row" title="レベル補正前の基礎値">
+        基礎値: STR ${b.str} / AGI ${b.agi} / CON ${b.con} / WIS ${baseW} / INT ${baseI} / CHA ${b.cha} / LCK ${b.lck}
+      </div>
+
+      <div class="sec-title">⚔ 戦闘</div>
+      <div class="combat-row">
+        <div class="combat-cell" title="レベル・CON・マップ補正から計算した最大HP">
+          <div class="cc-label">MaxHP</div>
+          <div class="cc-val hp">${c.maxHp.toLocaleString()}</div>
+        </div>
+        <div class="combat-cell" title="レベルとCHAから計算した最大CP">
+          <div class="cc-label">MaxCP</div>
+          <div class="cc-val cp">${c.maxCp.toLocaleString()}</div>
+        </div>
+        <div class="combat-cell" title="レベル・STRから計算した攻撃力">
+          <div class="cc-label">攻撃力</div>
+          <div class="cc-val atk">${Math.round(c.atkLo)} 〜 ${Math.round(c.atkHi)}</div>
+        </div>
+        <div class="combat-cell" title="レベル・CONから計算した防御力">
+          <div class="cc-label">防御力</div>
+          <div class="cc-val def">${Math.round(c.def)}</div>
+        </div>
+        <div class="combat-cell" title="このレベルで倒したときの基本EXP（マップ補正込み）">
+          <div class="cc-label">取得EXP</div>
+          <div class="cc-val exp">${c.exp.toLocaleString()}</div>
+        </div>
+        <div class="combat-cell" title="このマップでの与ダメージ補正（攻撃力表示とは別）">
+          <div class="cc-label">与ダメ補正</div>
+          <div class="cc-val corr">×${(c.cap / 100).toFixed(2)}</div>
+        </div>
+      </div>
+
+      <div class="sec-title">🛡 魔法抵抗</div>
+      <div class="mag-row">
+        ${MAG_LABELS.map((lbl, i) => magCell(lbl, c.mag[i])).join('')}
+      </div>
+
+      ${abnPills || allAbn ? `<div class="sec-title">🎲 状態異常抵抗（固定値）</div><div class="abn-wrap">${abnPills}${allAbn}</div>` : ''}
+
+      ${dropTags ? `<div class="sec-title">${dropHeading}</div><div class="tag-row">${dropTags}</div>` : ''}
+      ${skillTags ? `<div class="sec-title">✨ スキル</div><div class="tag-row">${skillTags}</div>` : ''}
+      ${mapSection}
+    </div>`;
+
+  // <details> の場合はヘッダー div を summary に置き換える。
+  // これでヘッダー全体が折りたたみの開閉トリガーになる。
+  if (groupInfo) {
+    const header = card.querySelector('.card-header');
+    if (header) {
+      const summary = document.createElement('summary');
+      summary.className = 'card-header';
+      while (header.firstChild) summary.appendChild(header.firstChild);
+      header.replaceWith(summary);
+    }
+  }
+
+  card.querySelectorAll('.tag-map-link[data-mid]').forEach(btn => {
+    btn.addEventListener('click', () => selectMap(parseInt(btn.dataset.mid, 10)));
+  });
+  return card;
+}
+
+function statCell(label, val, base) {
+  const tip = `基礎値: ${base}`;
+  return `<div class="stat-cell" title="${tip}">
+    <span class="sc-label">${label}</span>
+    <span class="sc-val">${val}</span>
+  </div>`;
+}
+
+function magCell(label, val) {
+  const cls = val < 0 ? 'mag-neg' : val > 0 ? 'mag-pos' : 'mag-zero';
+  return `<div class="mag-cell">
+    <span class="mg-icon">${label}</span>
+    <span class="mg-val ${cls}">${val > 0 ? '+' : ''}${val}</span>
+  </div>`;
+}
+
+/* ══════════════════════════════════════════════════
+   検索
+══════════════════════════════════════════════════ */
+function setupSearch() {
+  const inp  = document.getElementById('search-input');
+  const res  = document.getElementById('search-results');
+
+  inp.addEventListener('input', () => {
+    clearTimeout(searchTimer);
+    const q = inp.value.trim();
+    if (q.length < 1) { closeSearch(); return; }
+    searchTimer = setTimeout(() => doSearch(q), 150);
+  });
+
+  inp.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeSearch();
+  });
+
+  document.addEventListener('click', e => {
+    if (!res.contains(e.target) && e.target !== inp) closeSearch();
+  });
+}
+
+function doSearch(q) {
+  const res  = document.getElementById('search-results');
+  const hits = MONSTER_DATA.breeds
+    .filter(b =>
+      b.name.includes(q) ||
+      b.maps.some(sp => (sp.npc || '').includes(q) || (sp.group || '').includes(q))
+    )
+    .slice(0, 10);
+
+  if (hits.length === 0) {
+    res.innerHTML = '<div class="search-item" style="color:var(--text-muted)">見つかりませんでした</div>';
+    res.classList.add('show');
+    return;
+  }
+
+  res.innerHTML = hits.map(b => {
+    const mapIds = [...new Set(b.maps.map(bm => bm.mid))].filter(mid => {
+      const mp = MONSTER_DATA.maps.find(m => m.id === mid);
+      return mp && mp.img;
+    });
+    const mapNames = mapIds.slice(0, 2).map(mid => {
+      const mp = MONSTER_DATA.maps.find(m => m.id === mid);
+      return mp ? mp.name : '';
+    }).filter(Boolean).join(', ');
+    const lvs = b.maps.map(bm => [bm.min, bm.max]).flat().filter(v => v > 0);
+    const lvRange = lvs.length ? `Lv ${Math.min(...lvs)}–${Math.max(...lvs)}` : '';
+    const npcMatches = [...new Set(b.maps
+      .filter(sp => (sp.npc || '').includes(q) || (sp.group || '').includes(q))
+      .map(sp => sp.npc || sp.group)
+      .filter(Boolean))];
+    const aliasTxt = (npcMatches.length && !npcMatches.every(n => n === b.name))
+      ? `<div class="search-item-meta">別名: ${escHtml(npcMatches.slice(0, 4).join(', '))}${npcMatches.length > 4 ? ' …' : ''}</div>`
+      : '';
+    return `<div class="search-item" data-bid="${b.id}">
+      <div>
+        <div class="search-item-name">${escHtml(b.name)}</div>
+        <div class="search-item-meta">${escHtml(b.race)} / ${escHtml(b.lineage)} &nbsp;${escHtml(lvRange)}</div>
+        ${aliasTxt}
+        <div class="search-item-meta">${escHtml(mapNames)}${mapIds.length > 2 ? ` 他${mapIds.length - 2}マップ` : ''}</div>
+      </div>
+      <span style="font-size:11px;color:var(--text-muted)">${mapIds.length}マップ</span>
+    </div>`;
+  }).join('');
+
+  res.querySelectorAll('.search-item[data-bid]').forEach(el => {
+    el.addEventListener('click', () => {
+      const bid = parseInt(el.dataset.bid, 10);
+      closeSearch();
+      document.getElementById('search-input').value = '';
+      currentMapId = null;
+      buildMapList(document.getElementById('map-filter').value);
+      hideFormulaView();
+      renderSingleBreed(bid);
+    });
+  });
+
+  res.classList.add('show');
+}
+
+function closeSearch() {
+  document.getElementById('search-results').classList.remove('show');
+}
+
+/* ══════════════════════════════════════════════════
+   レベル制御
+══════════════════════════════════════════════════ */
+function setupLvControl() {
+  const inp = document.getElementById('lv-input');
+  const btn = document.getElementById('btn-apply-lv');
+
+  const apply = () => {
+    const v = parseInt(inp.value, 10);
+    if (isNaN(v) || v < 1) return;
+    currentLv = v;
+    if (currentMapId !== null) renderMapMonsters(currentMapId);
+  };
+
+  btn.addEventListener('click', () => {
+    document.getElementById('lv-auto-hint').textContent = '';
+    apply();
+  });
+  inp.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      document.getElementById('lv-auto-hint').textContent = '';
+      apply();
+    }
+  });
+}
+
+function setupFormulaPanel() {
+  const btn  = document.getElementById('btn-formula');
+  btn.addEventListener('click', () => {
+    const showing = !btn.classList.contains('active');
+    btn.classList.toggle('active', showing);
+    document.getElementById('formula-view').classList.toggle('show', showing);
+    document.getElementById('main').classList.toggle('formula-mode', showing);
+    document.getElementById('main-title').textContent =
+      showing ? '📐 計算式一覧' : lastViewTitle;
+  });
+}
+
+function hideFormulaView() {
+  const btn = document.getElementById('btn-formula');
+  btn.classList.remove('active');
+  document.getElementById('formula-view').classList.remove('show');
+  document.getElementById('main').classList.remove('formula-mode');
+}
+
+/* ══════════════════════════════════════════════════
+   ユーティリティ
+══════════════════════════════════════════════════ */
+function escHtml(s) {
+  return String(s ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+</script>
+</body>
+</html>
