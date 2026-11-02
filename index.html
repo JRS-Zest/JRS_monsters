@@ -2500,14 +2500,13 @@ function buildCardHtml(b, lv, mapInfo, showAllMaps = false, groupInfo = null) {
 
   const cardClass = 'card' + (groupInfo ? ' entity-card' : '');
   const cardAttrs = groupInfo ? ` data-gno="${String(cardNo)}"` : '';
-  const moveSpd = (Number(b.move_spd) / 100).toFixed(2);
   const atkSpd = (Number(b.atk_spd) / 100).toFixed(2);
   return `<div class="${cardClass}"${cardAttrs}>
     <div class="card-header">
       <div>
         <div class="card-name">${cardNoHtml}<span class="card-species-label">種族</span>${escHtml(speciesName)} ${corrHtml}</div>
         <div class="card-sub">
-          ${aliasHtml}${aliasHtml ? ' &nbsp;|&nbsp; ' : ''}${escHtml(b.race)} / ${escHtml(b.lineage)} &nbsp;|&nbsp; 移動速度:${moveSpd} &nbsp;攻撃速度:${atkSpd}秒
+          ${aliasHtml}${aliasHtml ? ' &nbsp;|&nbsp; ' : ''}${escHtml(b.race)} / ${escHtml(b.lineage)} &nbsp;|&nbsp; 移動速度:${b.move_spd} &nbsp;攻撃速度:${atkSpd}秒
           ${mapInfo && mapInfo.pop > 0 ? ` &nbsp;|&nbsp; <span title="マップデータ上の再出現周期（秒）。サーバ設定で短縮・延長される場合があります">🔄 ${mapInfo.pop}秒<span class="pop-note">（MAPデータ値）</span></span>` : ''}
           ${mapInfo && mapInfo.cnt ? `<span class="cnt-badge">${mapInfo.cnt}体</span>` : ''}
         </div>
