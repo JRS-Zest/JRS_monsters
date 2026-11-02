@@ -744,6 +744,7 @@ html, body { height: 100%; overflow: hidden; font-family: 'Segoe UI', 'Meiryo UI
 .cc-val.def { color: var(--yellow); }
 .cc-val.exp { color: #9ccc65; }
 .cc-val.corr { color: #ffb74d; }
+.cc-val .cc-sub { font-size: 10px; font-weight: normal; color: var(--text-muted); margin-left: 3px; }
 
 /* ── 補正・フラグバッジ ── */
 .corr-badge, .cnt-badge {
@@ -1041,7 +1042,7 @@ html, body { height: 100%; overflow: hidden; font-family: 'Segoe UI', 'Meiryo UI
         <div class="fp-row">
           <div class="fp-formula">Min = ( AtkMin + (Lv−1) × AtkMinG/100 ) × ( 1 + STR/200 )</div>
           <div class="fp-formula">Max = ( AtkMax + (Lv−1) × AtkMaxG/100 ) × ( 1 + STR/200 )</div>
-          <div class="fp-note">攻撃力はレベル・STR・種類ごとの成長値で決まります。マップの「与ダメ補正」は攻撃力表示とは別に、実際のダメージへ掛かります。</div>
+          <div class="fp-note">攻撃力はレベル・STR・種類ごとの成長値で決まります。マップの「モンスター攻撃倍率」は攻撃力表示とは別に、実際のダメージへ掛かります。</div>
           <details class="fp-details"><summary>調査メモ（技術的な内容）</summary><div class="fp-note">AtkMin = 0x11C / AtkMax = 0x11E / AtkMinG = 0x36 / AtkMaxG = 0x38。旧データの Max/Min ラベルは逆だったため整理。</div></details>
         </div>
       </div>
@@ -1086,8 +1087,14 @@ html, body { height: 100%; overflow: hidden; font-family: 'Segoe UI', 'Meiryo UI
         <div class="fp-title">マップ側の補正値（cCHARACTER / RMD 6.1）</div>
         <div class="fp-row">
           <div class="fp-formula">correct_hp / correct_exp / correct_ap / correct_final_damage / scale_x / scale_y / max_level</div>
-          <div class="fp-note">同じモンスターでも、マップによってHP・EXP・与ダメが変わる場合があります。カードのバッジはその補正です。</div>
-          <details class="fp-details"><summary>調査メモ（技術的な内容）</summary><div class="fp-note">MapActorGroup の 0x1A〜0x26。HP・EXP・与ダメ補正としてカードに表示（非100%のみバッジ）。</div></details>
+          <div class="fp-formula">モンスター攻撃倍率 = モンスターが与えるダメージ × correct_ap / 100</div>
+          <div class="fp-formula">被ダメ倍率 = モンスターが受けるダメージ × correct_final_damage / 10000</div>
+          <div class="fp-note">同じモンスターでも、マップによってHP・EXP・モンスターの攻撃倍率・被ダメ倍率が変わる場合があります。カードのバッジはその補正です。</div>
+          <div class="fp-note">モンスター攻撃倍率は、モンスターがプレイヤーに与える物理・魔法ダメージ（防御・抵抗で減った後）に掛かります。100=等倍、1=1%。プレイヤーが与えるダメージとは関係ありません。<br>
+            被ダメ倍率は、このモンスターがプレイヤーから受けるダメージに掛かります。10000=等倍、100=1%（バッジは%表示）。<br>
+            プレイヤー側の同じ位置には m_wCorrectAP があり、通常100（等倍）です。プレイヤーで近いのは「攻撃力増加%」（前段）と「最終ダメージ増加%」（後段）です。</div>
+          <details class="fp-details"><summary>調査メモ（技術的な内容）</summary><div class="fp-note">MapActorGroup の 0x1A〜0x26。HP・EXP・モンスター攻撃倍率・被ダメ倍率としてカードに表示（非100%のみバッジ）。<br>
+            サーバ側では correct_ap を防御計算後の物理・魔法ダメージに、correct_final_damage を被ダメ側に適用。攻撃側の最終ダメージ増加はその後に計算されます。被ダメ倍率の適用後は、0でない場合 max(...,100) の下限があります。</div></details>
         </div>
       </div>
 
@@ -2045,11 +2052,11 @@ function buildCard(b, lv, mapInfo, showAllMaps = false, groupInfo = null) {
   const corr = [];
   if (c.chp !== 100)    corr.push(`HP×${(c.chp / 100).toFixed(2)}`);
   if (c.cexp !== 100)   corr.push(`EXP×${(c.cexp / 100).toFixed(2)}`);
-  if (c.cap !== 100)    corr.push(`与ダメ×${(c.cap / 100).toFixed(2)}`);
-  if (c.cfinal !== 10000) corr.push(`最終×${(c.cfinal / 10000).toFixed(2)}`);
+  if (c.cap !== 100)    corr.push(`敵攻撃×${(c.cap / 100).toFixed(2)}`);
+  if (c.cfinal !== 10000) corr.push(`被ダメ${Number((c.cfinal / 100).toFixed(2))}%`);
   if (mapInfo && mapInfo.sx && mapInfo.sx !== 100) corr.push(`表示×${(mapInfo.sx / 100).toFixed(2)}`);
   const corrHtml = corr.length
-    ? `<span class="corr-badge" title="マップ側の補正値（cCHARACTER）">${escHtml(corr.join(' / '))}</span>`
+    ? `<span class="corr-badge" title="マップ側の補正値。HP/EXP=モンスターのHP・EXP、敵攻撃=モンスターが与えるダメージ、被ダメ=モンスターが受けるダメージ、表示=見た目の大きさ">${escHtml(corr.join(' / '))}</span>`
     : '';
 
   // マップグループのフラグ（無敵・ボスなど）
@@ -2153,7 +2160,7 @@ function buildCard(b, lv, mapInfo, showAllMaps = false, groupInfo = null) {
       const corr = [];
       if (bm.chp !== 100) corr.push(`HP×${(bm.chp/100).toFixed(2)}`);
       if (bm.cexp !== 100) corr.push(`EXP×${(bm.cexp/100).toFixed(2)}`);
-      if (bm.cap !== 100) corr.push(`与ダメ×${(bm.cap/100).toFixed(2)}`);
+      if (bm.cap !== 100) corr.push(`敵攻撃×${(bm.cap/100).toFixed(2)}`);
       const corrTxt = corr.length ? ` [${corr.join(' ')}]` : '';
       return `<button class="tag tag-map-link" data-mid="${bm.mid}">${npcLabel} / ${lvTxt} / ${bm.cnt}体${popTxt}${escHtml(corrTxt)}</button>`;
     }).join('');
@@ -2234,9 +2241,9 @@ function buildCard(b, lv, mapInfo, showAllMaps = false, groupInfo = null) {
           <div class="cc-label">取得EXP</div>
           <div class="cc-val exp">${c.exp.toLocaleString()}</div>
         </div>
-        <div class="combat-cell" title="このマップでの与ダメージ補正（攻撃力表示とは別）">
-          <div class="cc-label">与ダメ補正</div>
-          <div class="cc-val corr">×${(c.cap / 100).toFixed(2)}</div>
+        <div class="combat-cell" title="このマップでのモンスターの攻撃倍率。モンスターがプレイヤーに与える物理・魔法ダメージ（防御・抵抗で減った後）に掛かる。100=等倍、1=1%。プレイヤーが与えるダメージには関係しない。上の「攻撃力」表示には掛けていない。">
+          <div class="cc-label">モンスター攻撃倍率</div>
+          <div class="cc-val corr">×${(c.cap / 100).toFixed(2)}<span class="cc-sub">(${c.cap}%)</span></div>
         </div>
       </div>
 
