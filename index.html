@@ -238,6 +238,36 @@ html, body { height: 100%; overflow: hidden; font-family: 'Segoe UI', 'Meiryo UI
   outline: none;
 }
 #map-filter:focus { border-color: var(--accent); }
+#sidebar-header .side-filter {
+  margin-top: 8px;
+  padding: 6px 8px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  letter-spacing: normal;
+  text-transform: none;
+}
+#sidebar-header .side-filter label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text);
+  font-size: 11px;
+  cursor: pointer;
+  user-select: none;
+}
+#sidebar-header .side-filter input {
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+  accent-color: var(--accent2);
+}
+#sidebar-header .side-filter-hint {
+  margin-top: 2px;
+  color: var(--text-muted);
+  font-size: 9px;
+  line-height: 1.45;
+}
 .map-item {
   padding: 9px 14px;
   cursor: pointer;
@@ -250,7 +280,16 @@ html, body { height: 100%; overflow: hidden; font-family: 'Segoe UI', 'Meiryo UI
 .map-item:hover   { background: var(--card); }
 .map-item.active  { background: var(--card); border-left: 3px solid var(--accent); }
 .map-item-name    { font-size: 12px; line-height: 1.4; }
-.map-item-count   { font-size: 11px; color: var(--text-muted); white-space: nowrap; margin-left: 6px; }
+.map-item-count   { font-size: 11px; color: var(--text-muted); white-space: nowrap; margin-left: 6px; text-align: right; }
+.map-tame-count   { color: var(--accent2); font-size: 10px; margin-left: 3px; }
+.map-tame-count.zero { color: var(--text-muted); opacity: .6; }
+.map-empty {
+  padding: 20px 14px;
+  color: var(--text-muted);
+  font-size: 11px;
+  line-height: 1.7;
+  text-align: center;
+}
 
 /* ══════════════════════════════════════════════════
    メインエリア
@@ -586,6 +625,16 @@ html, body { height: 100%; overflow: hidden; font-family: 'Segoe UI', 'Meiryo UI
   white-space: nowrap;
 }
 .entity-meta { font-size: 9px; color: var(--text-muted); text-align: right; line-height: 1.35; white-space: nowrap; }
+.entity-empty-note {
+  margin: 8px 10px;
+  padding: 8px;
+  border: 1px dashed var(--border);
+  border-radius: 5px;
+  color: var(--text-muted);
+  font-size: 10px;
+  line-height: 1.6;
+  text-align: center;
+}
 
 /* ── 右：カード（常時展開・マルチカラム） ── */
 .card.entity-card {
@@ -657,6 +706,23 @@ html, body { height: 100%; overflow: hidden; font-family: 'Segoe UI', 'Meiryo UI
 }
 .card-alias { color: #a8c0dc; }
 .card-sub   { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+.tame-badge {
+  display: inline-block;
+  margin-top: 3px;
+  padding: 1px 6px;
+  border: 1px solid #2f6b46;
+  border-radius: 8px;
+  background: #0d2e1c;
+  color: #9ae6b4;
+  font-size: 10px;
+  line-height: 1.5;
+}
+.tame-badge.blocked {
+  border-color: #5e2a2a;
+  background: #2a0f0f;
+  color: #ffab91;
+}
+.tame-icon { font-size: 11px; margin-right: 2px; }
 .card-lv-badge {
   background: var(--accent);
   color: #fff;
@@ -948,6 +1014,13 @@ html, body { height: 100%; overflow: hidden; font-family: 'Segoe UI', 'Meiryo UI
                  style="flex:1;padding:5px 8px;background:var(--bg);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:12px;outline:none;">
           <button id="btn-lv-filter-clear" style="padding:4px 9px;border:none;border-radius:4px;cursor:pointer;font-size:11px;background:#2a3a6a;color:var(--text-muted);" title="クリア">✕</button>
         </div>
+      </div>
+      <div class="side-filter">
+        <label title="job2.dat のテイム対象フラグで絞り込みます。スキルLv・転生回数・ペット数などは別条件です。">
+          <input type="checkbox" id="tame-only">
+          <span>🐾 テイム対象のみ</span>
+        </label>
+        <div class="side-filter-hint">MAP一覧と選択中のモンスターを絞り込み</div>
       </div>
     </div>
     <div id="map-list"></div>
@@ -1398,6 +1471,7 @@ let currentLv       = 100;
 let currentMapId    = null;
 let currentSearchBid = null;
 let currentLvFilter = 0;
+let currentTameOnly = false;
 let searchTimer     = null;
 let mapFilterTimer  = null;
 let lvFilterTimer   = null;
@@ -1407,7 +1481,7 @@ let mapMaxLevelsCache = null;
 let dedupedMapsCache = null;
 let mapByIdCache = null;
 let mapSpawnIndexCache = null;
-let mapLevelRangesCache = null;
+let mapTameCountsCache = null;
 const mapAutoLvCache = new Map();
 const breedDropsCache = new WeakMap();
 
@@ -1494,28 +1568,24 @@ init();
 function buildMapList(filter = '') {
   const el   = document.getElementById('map-list');
   const maps = getDedupedMaps();
+  const tameCounts = getMapTameCounts();
 
   const lf = filter.toLowerCase();
-  const ranges = currentLvFilter > 0 ? getMapLevelRanges() : null;
-  const lo = currentLvFilter - 50;
-  const hi = currentLvFilter + 50;
   let html = '';
 
   maps.forEach(m => {
     if (lf && !m.name.toLowerCase().includes(lf)) return;
-
-    if (ranges) {
-      const list = ranges.get(m.id);
-      if (!list || !list.some(([min, max]) => max >= lo && min <= hi)) return;
-    }
+    if (!mapMatchesFilters(m)) return;
 
     const active = m.id === currentMapId ? ' active' : '';
+    const tameCnt = tameCounts.get(m.id) || 0;
     html += `<div class="map-item${active}" data-mid="${m.id}">` +
       `<span class="map-item-name">${escHtml(m.name)}</span>` +
-      `<span class="map-item-count">${m.bids.length}種</span>` +
-      `</div>`;
+      `<span class="map-item-count" title="出現種族数 / 🐾はテイム対象の種族数">${m.bids.length}種 ` +
+      `<span class="map-tame-count${tameCnt ? '' : ' zero'}">🐾${tameCnt}</span>` +
+      `</span></div>`;
   });
-  el.innerHTML = html;
+  el.innerHTML = html || '<div class="map-empty">条件に合うマップがありません。</div>';
 }
 
 function updateMapListActive() {
@@ -1559,16 +1629,27 @@ function setupMapList() {
     buildMapList(document.getElementById('map-filter').value);
     if (currentMapId !== null) renderMapMonsters(currentMapId);
   });
+
+  document.getElementById('tame-only').addEventListener('change', e => {
+    currentTameOnly = e.target.checked;
+    clearTimeout(mapFilterTimer);
+    clearTimeout(lvFilterTimer);
+    buildMapList(document.getElementById('map-filter').value);
+    if (currentMapId !== null) renderMapMonsters(currentMapId);
+  });
 }
 
 /* ══════════════════════════════════════════════════
    マップ代表レベル自動計算
 ══════════════════════════════════════════════════ */
 function calcMapLv(mid) {
-  if (mapAutoLvCache.has(mid)) return mapAutoLvCache.get(mid);
+  // テイム絞り込み中は、表示対象になるモンスターだけで代表レベルを出す。
+  const cacheKey = currentTameOnly ? `${mid}:tame` : String(mid);
+  if (mapAutoLvCache.has(cacheKey)) return mapAutoLvCache.get(cacheKey);
 
   const entries = [];
-  mapSpawns(mid).forEach(({ sp }) => {
+  mapSpawns(mid).forEach(({ b, sp }) => {
+    if (currentTameOnly && !isTameable(b, sp)) return;
     const lo = sp.min || 0, hi = sp.max || lo;
     if (lo === 0 && hi === 0) return;
     const midLv = (lo + hi) / 2;
@@ -1592,7 +1673,7 @@ function calcMapLv(mid) {
   const wSum  = inBin.reduce((s, e) => s + e.midLv * e.cnt, 0);
   const cSum  = inBin.reduce((s, e) => s + e.cnt, 0);
   const autoLv = Math.max(1, Math.round(wSum / cSum));
-  mapAutoLvCache.set(mid, autoLv);
+  mapAutoLvCache.set(cacheKey, autoLv);
   return autoLv;
 }
 
@@ -1639,18 +1720,40 @@ function mapSpawns(mid) {
   return getMapSpawnIndex().get(mid) || [];
 }
 
-function getMapLevelRanges() {
-  if (mapLevelRangesCache) return mapLevelRangesCache;
-  mapLevelRangesCache = new Map();
+/* テイム対象判定。ブリード側の tame と、MAPグループ側の block_tame を両方見る。 */
+function isTameable(b, sp) {
+  return Boolean(b && b.tame) && !(sp && sp.block_tame);
+}
+
+/* マップ一覧用。テイム対象の「種族数」を数える（同じ種族の複数グループは1）。 */
+function getMapTameCounts() {
+  if (mapTameCountsCache) return mapTameCountsCache;
+  mapTameCountsCache = new Map();
   getMapSpawnIndex().forEach((spawns, mid) => {
-    const ranges = [];
-    spawns.forEach(({ sp }) => {
-      if (sp.min === undefined || sp.max === undefined) return;
-      ranges.push([sp.min, sp.max]);
+    const bids = new Set();
+    spawns.forEach(({ b, sp }) => {
+      if (isTameable(b, sp)) bids.add(b.id);
     });
-    mapLevelRangesCache.set(mid, ranges);
+    mapTameCountsCache.set(mid, bids.size);
   });
-  return mapLevelRangesCache;
+  return mapTameCountsCache;
+}
+
+/* レベル絞り込みとテイム絞り込みは、同じスポーンが両方を満たす場合だけ通す。 */
+function mapMatchesFilters(m) {
+  if (!currentTameOnly && currentLvFilter <= 0) return true;
+
+  const lo = currentLvFilter - 50;
+  const hi = currentLvFilter + 50;
+  return mapSpawns(m.id).some(({ b, sp }) => {
+    if (currentTameOnly && !isTameable(b, sp)) return false;
+    if (currentLvFilter > 0) {
+      const min = Number(sp.min) || 0;
+      const max = Number(sp.max) || min;
+      if (max < lo || min > hi) return false;
+    }
+    return true;
+  });
 }
 
 function mapLevelText(min, max) {
@@ -1683,10 +1786,18 @@ function breedDisplayName(b, sp) {
 
 function buildMapGroups(map, mid) {
   let spawns = mapSpawns(mid);
+  const lvFilter = currentLvFilter;
 
   if (currentLvFilter > 0) {
     const lo = currentLvFilter - 50, hi = currentLvFilter + 50;
     spawns = spawns.filter(({ sp }) => sp.max >= lo && sp.min <= hi);
+  }
+
+  // 絞り込み前の件数。テイム絞り込み時に「5 / 12」と出すために保持する。
+  const monsterTotal = spawns.length;
+  const tameOnly = currentTameOnly;
+  if (tameOnly) {
+    spawns = spawns.filter(({ b, sp }) => isTameable(b, sp));
   }
 
   // 1つの MapActorGroup（spawn）を1カード・1番号として扱う。
@@ -1729,6 +1840,7 @@ function buildMapGroups(map, mid) {
   return {
     map, npcGroups, monsterGroups, allGroups, byNo,
     portals, secretEntrances, namedAreas,
+    monsterTotal, tameOnly, lvFilter,
   };
 }
 
@@ -1748,9 +1860,13 @@ function renderMapMonsters(mid) {
   selectedGroupNo = null;
   currentMapView = buildMapGroups(map, mid);
 
+  const view = currentMapView;
+  const groupTxt = view.tameOnly
+    ? `🐾 ${view.monsterGroups.length} / ${view.monsterTotal}グループ`
+    : `${view.monsterGroups.length}グループ`;
   const imgNote = map.img ? '' : '  [画像なし]';
-  title.textContent = `📍 ${map.name}  (${currentMapView.monsterGroups.length}グループ / ` +
-    `${currentMapView.npcGroups.length}NPC)${imgNote}`;
+  title.textContent = `📍 ${map.name}  (${groupTxt} / ` +
+    `${view.npcGroups.length}NPC)${imgNote}`;
   lastViewTitle = title.textContent;
 
   renderMapPanel(currentMapView);
@@ -1810,9 +1926,19 @@ function renderMapPanel(view) {
   if (view.secretEntrances.length) markerParts.push(`秘密入口${view.secretEntrances.length}`);
   if (view.namedAreas.length) markerParts.push(`エリア${view.namedAreas.length}`);
 
+  const groupTxt = view.tameOnly
+    ? `🐾 ${view.monsterGroups.length} / ${view.monsterTotal}グループ`
+    : `${view.monsterGroups.length}グループ`;
+  const emptyMsg = view.tameOnly && view.monsterGroups.length === 0
+    ? (view.lvFilter > 0
+        ? '現在のレベル・テイム条件に合うモンスターがいません。'
+        : (view.monsterTotal > 0
+            ? 'このMAPにはテイム対象モンスターがいません。サイドバーの「テイム対象のみ」を解除すると全モンスターを表示します。'
+            : '現在の絞り込み条件に合うモンスターがいません。'))
+    : '';
   nameEl.textContent = map.name || '';
   nameEl.title = map.name || '';
-  meta.textContent = `${view.monsterGroups.length}グループ / ${view.npcGroups.length}NPC` +
+  meta.textContent = `${groupTxt} / ${view.npcGroups.length}NPC` +
     `${hasImage ? '' : ' ・ 画像なし'}` +
     (markerParts.length ? ` ・ ${markerParts.join(' / ')}` : '');
   main.classList.toggle('map-no-image', !hasImage);
@@ -1822,7 +1948,8 @@ function renderMapPanel(view) {
     img.removeAttribute('src');
     img.alt = '';
     markerRoot.innerHTML = '';
-    status.textContent = 'このマップには表示用画像がありません。左の一覧から対象を選択できます（同じ項目をもう一度クリックで解除）。';
+    status.textContent = emptyMsg ||
+      'このマップには表示用画像がありません。左の一覧から対象を選択できます（同じ項目をもう一度クリックで解除）。';
     currentMapView = view;
     return;
   }
@@ -1849,8 +1976,9 @@ function renderMapPanel(view) {
     ? '縦長マップのため、全体が収まる倍率に自動調整しています'
     : '';
   renderMapMarkers(view, markerRoot);
-  status.textContent = '左のNPC／モンスター一覧から選ぶと、その地点を強調します（同じ項目をもう一度クリックで解除）。' +
-    ' ポータルは移動先へ、✕はエリア名を表示します。';
+  status.textContent = emptyMsg ||
+    ('左のNPC／モンスター一覧から選ぶと、その地点を強調します（同じ項目をもう一度クリックで解除）。' +
+     ' ポータルは移動先へ、✕はエリア名を表示します。');
 }
 
 function initialMapZoom(map) {
@@ -1990,8 +2118,11 @@ function renderEntityList(view) {
   const list = document.getElementById('entity-list');
   const sub = document.querySelector('#entity-head .entity-head-sub');
   if (sub) {
+    const monsterTxt = view.tameOnly
+      ? `${view.monsterGroups.length} / ${view.monsterTotal}（テイム対象）`
+      : String(view.monsterGroups.length);
     sub.textContent = `左: マップ表示名 / 右カード: 種族名 ｜ ` +
-      `NPC ${view.npcGroups.length} / モンスター ${view.monsterGroups.length}`;
+      `NPC ${view.npcGroups.length} / モンスター ${monsterTxt}`;
   }
 
   let html = '';
@@ -2002,6 +2133,15 @@ function renderEntityList(view) {
   if (view.monsterGroups.length) {
     html += '<div class="entity-section-title">モンスター</div>';
     html += view.monsterGroups.map(entityRowHtml).join('');
+  }
+  if (view.tameOnly && view.monsterGroups.length === 0) {
+    html += '<div class="entity-empty-note">' +
+      (view.lvFilter > 0
+        ? '現在のレベル・テイム条件に合うモンスターがいません。'
+        : (view.monsterTotal > 0
+            ? 'このMAPにはテイム対象モンスターがいません。'
+            : '現在の絞り込み条件に合うモンスターがいません。')) +
+      '</div>';
   }
   if (!html) {
     html = '<div class="placeholder" style="margin:30px 10px;font-size:12px;">表示できる地点がありません。</div>';
@@ -2026,7 +2166,14 @@ function renderMonsterCards(view) {
   const grid = document.getElementById('monster-grid');
 
   if (!view.monsterGroups.length) {
-    grid.innerHTML = '<div class="placeholder">このマップには表示対象のモンスターがいません。</div>';
+    const msg = view.tameOnly
+      ? (view.lvFilter > 0
+          ? '現在のレベル・テイム条件に合うモンスターがいません。'
+          : (view.monsterTotal > 0
+              ? 'このマップにはテイム対象モンスターがいません。'
+              : '現在の絞り込み条件に合うモンスターがいません。'))
+      : 'このマップには表示対象のモンスターがいません。';
+    grid.innerHTML = `<div class="placeholder">${msg}</div>`;
     return;
   }
 
@@ -2230,6 +2377,24 @@ function buildCardHtml(b, lv, mapInfo, showAllMaps = false, groupInfo = null) {
     ? `<div class="state-row">${immuneBadges.map(s => `<span class="state-badge">${escHtml(s)}</span>`).join('')}</div>`
     : '';
 
+  // テイム対象（job2.dat の基礎データ）。MAP側の BlockToTame がある場合は禁止表示にする。
+  const tameBlocked = Boolean(mapInfo && mapInfo.block_tame);
+  let tameBadge = '';
+  if (b.tame) {
+    const tameRes = Number.isFinite(Number(b.tame_res)) ? Number(b.tame_res) : 0;
+    const tameRebirth = Number.isFinite(Number(b.tame_rebirth)) ? Number(b.tame_rebirth) : 0;
+    const tameTip = [
+      'テイム対象（job2.dat の IsEnableTameMonster）',
+      `テイム抵抗値: ${tameRes}`,
+      `必要転生回数: ${tameRebirth}`,
+      tameBlocked ? 'このMAPではテイム禁止（BlockToTame）' : '',
+      '※スキルLv・転生回数・ペット数などは別条件',
+    ].filter(Boolean).join('\n');
+    const tameTipAttr = escHtml(tameTip).replace(/\n/g, '&#10;');
+    tameBadge = `<span class="tame-badge${tameBlocked ? ' blocked' : ''}" title="${tameTipAttr}">` +
+      `🐾 ${tameBlocked ? 'このMAPではテイム禁止' : 'テイム対象'}</span>`;
+  }
+
   // 状態異常（全表示）
   const abnPills = b.abn.map((v, i) => {
     const cls = v > 0 ? 'abn-pos' : v < 0 ? 'abn-neg' : '';
@@ -2338,6 +2503,7 @@ function buildCardHtml(b, lv, mapInfo, showAllMaps = false, groupInfo = null) {
           ${mapInfo && mapInfo.pop > 0 ? ` &nbsp;|&nbsp; <span title="マップデータ上の再出現周期（秒）。サーバ設定で短縮・延長される場合があります">🔄 ${mapInfo.pop}秒<span class="pop-note">（MAPデータ値）</span></span>` : ''}
           ${mapInfo && mapInfo.cnt ? `<span class="cnt-badge">${mapInfo.cnt}体</span>` : ''}
         </div>
+        ${tameBadge}
       </div>
       <div class="card-lv-badge">${escHtml(lvStr)}</div>
     </div>
@@ -2498,7 +2664,7 @@ function doSearch(q) {
       : '';
     return `<div class="search-item" data-bid="${b.id}">
       <div>
-        <div class="search-item-name">${escHtml(b.name)}</div>
+        <div class="search-item-name">${b.tame ? '<span class="tame-icon" title="テイム対象（基礎データ）">🐾</span>' : ''}${escHtml(b.name)}</div>
         <div class="search-item-meta">${escHtml(b.race)} / ${escHtml(b.lineage)} &nbsp;${escHtml(lvRange)}</div>
         ${aliasTxt}
         <div class="search-item-meta">${escHtml(mapNames)}${mapIds.length > 2 ? ` 他${mapIds.length - 2}マップ` : ''}</div>
