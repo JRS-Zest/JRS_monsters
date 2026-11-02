@@ -963,7 +963,7 @@ html, body { height: 100%; overflow: hidden; font-family: 'Segoe UI', 'Meiryo UI
               <div id="map-markers"></div>
             </div>
           </div>
-          <div id="map-status">左のNPC／モンスター一覧から選ぶと、その地点を強調します。</div>
+          <div id="map-status">左のNPC／モンスター一覧から選ぶと、その地点を強調します（同じ項目をもう一度クリックで解除）。</div>
         </section>
 
         <div id="monster-grid">
@@ -1732,7 +1732,7 @@ function renderMapPanel(view) {
     img.removeAttribute('src');
     img.alt = '';
     markerRoot.innerHTML = '';
-    status.textContent = 'このマップには表示用画像がありません。左の一覧から対象を選択できます。';
+    status.textContent = 'このマップには表示用画像がありません。左の一覧から対象を選択できます（同じ項目をもう一度クリックで解除）。';
     currentMapView = view;
     return;
   }
@@ -1759,7 +1759,7 @@ function renderMapPanel(view) {
     ? '縦長マップのため、全体が収まる倍率に自動調整しています'
     : '';
   renderMapMarkers(view, markerRoot);
-  status.textContent = '左のNPC／モンスター一覧から選ぶと、その地点を強調します。' +
+  status.textContent = '左のNPC／モンスター一覧から選ぶと、その地点を強調します（同じ項目をもう一度クリックで解除）。' +
     ' ポータルは移動先へ、✕はエリア名を表示します。';
 }
 
@@ -1889,7 +1889,7 @@ function entityRowHtml(g) {
     meta = `${mapLevelText(g.min, g.max)}<br>${g.cnt}体`;
   }
   return `<button type="button" class="entity-row ${isNpc ? 'npc' : 'monster'}"` +
-    ` data-no="${g.no}" data-kind="${g.kind}">` +
+    ` data-no="${g.no}" data-kind="${g.kind}" aria-pressed="false">` +
     `<span class="entity-no">${g.no}</span>` +
     `<span class="entity-main"><span class="entity-name">${name}</span>` +
     `<span class="entity-sub">${escHtml(sub)}</span></span>` +
@@ -1951,7 +1951,8 @@ function activateGroup(no) {
   const group = currentMapView.byNo.get(no);
   if (!group) return;
 
-  selectedGroupNo = no;
+  // 同じ項目をもう一度クリックしたら強調を解除する。
+  selectedGroupNo = selectedGroupNo === no ? null : no;
   updateGroupSelectionUI();
 }
 
@@ -1960,7 +1961,9 @@ function updateGroupSelectionUI() {
   if (!view) return;
 
   document.querySelectorAll('#entity-list .entity-row').forEach(row => {
-    row.classList.toggle('active', selectedGroupNo !== null && Number(row.dataset.no) === selectedGroupNo);
+    const active = selectedGroupNo !== null && Number(row.dataset.no) === selectedGroupNo;
+    row.classList.toggle('active', active);
+    row.setAttribute('aria-pressed', active ? 'true' : 'false');
   });
   document.querySelectorAll('#map-markers .map-marker').forEach(marker => {
     const active = selectedGroupNo !== null && Number(marker.dataset.no) === selectedGroupNo;
@@ -1972,18 +1975,20 @@ function updateGroupSelectionUI() {
 
   const status = document.getElementById('map-status');
   if (selectedGroupNo === null) {
-    status.textContent = '左のNPC／モンスター一覧から選ぶと、その地点を強調します。';
+    status.textContent = '左のNPC／モンスター一覧から選ぶと、その地点を強調します（同じ項目をもう一度クリックで解除）。';
     return;
   }
   const g = view.byNo.get(selectedGroupNo);
   if (!g) return;
   if (g.kind === 'npc') {
-    status.innerHTML = `<b>[${g.no}] ${escHtml(g.name)}</b> の ${g.cnt}地点を強調中（NPC）`;
+    status.innerHTML = `<b>[${g.no}] ${escHtml(g.name)}</b> の ${g.cnt}地点を強調中（NPC）` +
+      ' ・ もう一度クリックで解除';
   } else {
     const species = g.species || breedSpeciesName(g.b);
     const speciesTxt = species && species !== g.name ? `（種族: ${escHtml(species)}）` : '';
     status.innerHTML = `<b>[${g.no}] ${escHtml(g.name)}${speciesTxt}</b> / ` +
-      `${escHtml(mapLevelText(g.min, g.max))} / ${g.cnt}地点を強調中`;
+      `${escHtml(mapLevelText(g.min, g.max))} / ${g.cnt}地点を強調中` +
+      ' ・ もう一度クリックで解除';
   }
 }
 
