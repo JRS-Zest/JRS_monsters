@@ -2041,8 +2041,10 @@ function buildCard(b, lv, mapInfo, showAllMaps = false, groupInfo = null) {
     ? `<span class="corr-badge" title="マップ側の補正値（cCHARACTER）">${escHtml(corr.join(' / '))}</span>`
     : '';
 
-  // マップグループの無効・特殊フラグ
+  // マップグループのフラグ（無敵・ボスなど）
   const stateBadges = [];
+  // 状態異常抵抗の下に表示する無効バッジ
+  const immuneBadges = [];
   if (mapInfo) {
     if (mapInfo.invincible) stateBadges.push('無敵');
     if (mapInfo.boss) stateBadges.push('ボス');
@@ -2055,10 +2057,13 @@ function buildCard(b, lv, mapInfo, showAllMaps = false, groupInfo = null) {
       physical: '物理無効', magic: '魔法無効', stun: '気絶無効', stone: '石化無効',
       charm: '魅了無効', freeze: '氷結無効', knockback: 'ノックバック無効', confuse: '混乱無効',
     };
-    Object.keys(imLabels).forEach(k => { if (im[k]) stateBadges.push(imLabels[k]); });
+    Object.keys(imLabels).forEach(k => { if (im[k]) immuneBadges.push(imLabels[k]); });
   }
   const stateHtml = stateBadges.length
     ? `<div class="state-row">${stateBadges.map(s => `<span class="state-badge">${escHtml(s)}</span>`).join('')}</div>`
+    : '';
+  const immuneHtml = immuneBadges.length
+    ? `<div class="state-row">${immuneBadges.map(s => `<span class="state-badge">${escHtml(s)}</span>`).join('')}</div>`
     : '';
 
   // 状態異常（全表示）
@@ -2230,6 +2235,7 @@ function buildCard(b, lv, mapInfo, showAllMaps = false, groupInfo = null) {
       </div>
 
       ${abnPills || allAbn ? `<div class="sec-title">🎲 状態異常抵抗（固定値）</div><div class="abn-wrap">${abnPills}${allAbn}</div>` : ''}
+      ${immuneHtml}
 
       ${dropTags ? `<div class="sec-title">${dropHeading}</div><div class="tag-row">${dropTags}</div>` : ''}
       ${skillTags ? `<div class="sec-title">✨ スキル</div><div class="tag-row">${skillTags}</div>` : ''}
