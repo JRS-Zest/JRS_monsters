@@ -1016,7 +1016,7 @@ html, body { height: 100%; overflow: hidden; font-family: 'Segoe UI', 'Meiryo UI
         </div>
       </div>
       <div class="side-filter">
-        <label title="job2.dat のテイム対象フラグで絞り込みます。スキルLv・転生回数・ペット数などは別条件です。">
+        <label title="job2.dat のテイム対象フラグと階級（一般4まで）で絞り込みます。スキルLv・転生回数・ペット数などは別条件です。">
           <input type="checkbox" id="tame-only">
           <span>🐾 テイム対象のみ</span>
         </label>
@@ -1581,7 +1581,7 @@ function buildMapList(filter = '') {
     const tameCnt = tameCounts.get(m.id) || 0;
     html += `<div class="map-item${active}" data-mid="${m.id}">` +
       `<span class="map-item-name">${escHtml(m.name)}</span>` +
-      `<span class="map-item-count" title="出現種族数 / 🐾はテイム対象の種族数">${m.bids.length}種 ` +
+      `<span class="map-item-count" title="出現種族数 / 🐾はテイム対象（一般4まで）の種族数">${m.bids.length}種 ` +
       `<span class="map-tame-count${tameCnt ? '' : ' zero'}">🐾${tameCnt}</span>` +
       `</span></div>`;
   });
@@ -1720,9 +1720,13 @@ function mapSpawns(mid) {
   return getMapSpawnIndex().get(mid) || [];
 }
 
-/* テイム対象判定。ブリード側の tame と、MAPグループ側の block_tame を両方見る。 */
+/* テイム対象判定。job2 の tame に加えて、階級（一般4まで）と MAP の block_tame を見る。
+   サーバーはテイムスキルの iValue4 <= m_wMonsterLevel で拒否する（説得の上限は一般4）。 */
+function isTameableBreed(b) {
+  return Boolean(b && b.tame) && Number(b.lineage_id) <= 3; // 一般4。4以上（セミボス1以上）はテイム不可。
+}
 function isTameable(b, sp) {
-  return Boolean(b && b.tame) && !(sp && sp.block_tame);
+  return isTameableBreed(b) && !(sp && sp.block_tame);
 }
 
 /* マップ一覧用。テイム対象の「種族数」を数える（同じ種族の複数グループは1）。 */
@@ -2380,11 +2384,12 @@ function buildCardHtml(b, lv, mapInfo, showAllMaps = false, groupInfo = null) {
   // テイム対象（job2.dat の基礎データ）。MAP側の BlockToTame がある場合は禁止表示にする。
   const tameBlocked = Boolean(mapInfo && mapInfo.block_tame);
   let tameBadge = '';
-  if (b.tame) {
+  if (isTameableBreed(b)) {
     const tameRes = Number.isFinite(Number(b.tame_res)) ? Number(b.tame_res) : 0;
     const tameRebirth = Number.isFinite(Number(b.tame_rebirth)) ? Number(b.tame_rebirth) : 0;
     const tameTip = [
       'テイム対象（job2.dat の IsEnableTameMonster）',
+      `階級: ${b.lineage}（テイム可能階級は一般4まで）`,
       `テイム抵抗値: ${tameRes}`,
       `必要転生回数: ${tameRebirth}`,
       tameBlocked ? 'このMAPではテイム禁止（BlockToTame）' : '',
@@ -2664,7 +2669,7 @@ function doSearch(q) {
       : '';
     return `<div class="search-item" data-bid="${b.id}">
       <div>
-        <div class="search-item-name">${b.tame ? '<span class="tame-icon" title="テイム対象（基礎データ）">🐾</span>' : ''}${escHtml(b.name)}</div>
+        <div class="search-item-name">${isTameableBreed(b) ? '<span class="tame-icon" title="テイム対象（基礎データ・一般4まで）">🐾</span>' : ''}${escHtml(b.name)}</div>
         <div class="search-item-meta">${escHtml(b.race)} / ${escHtml(b.lineage)} &nbsp;${escHtml(lvRange)}</div>
         ${aliasTxt}
         <div class="search-item-meta">${escHtml(mapNames)}${mapIds.length > 2 ? ` 他${mapIds.length - 2}マップ` : ''}</div>
