@@ -2330,10 +2330,8 @@ function getBreedDrops(b) {
 }
 
 function buildCardHtml(b, lv, mapInfo, showAllMaps = false, groupInfo = null) {
-  // マップ表示では、そのスポーンのレベル範囲内にクランプして計算する
-  const calcLv = mapInfo
-    ? Math.max(1, Math.min(Math.max(lv, mapInfo.min), mapInfo.max))
-    : lv;
+  // 入力された計算レベルをそのまま使う（画面上の一時的な試算）
+  const calcLv = lv;
   const c   = calcStats(b, calcLv, mapInfo);
   const baseW = c.swapIntWis ? b.int : b.wis;
   const baseI = c.swapIntWis ? b.wis : b.int;
@@ -2698,7 +2696,10 @@ function setupLvControl() {
     const v = parseInt(inp.value, 10);
     if (isNaN(v) || v < 1) return;
     currentLv = v;
-    if (currentMapId !== null) renderMapMonsters(currentMapId);
+    if (currentMapId !== null && currentMapView) {
+      renderMonsterCards(currentMapView);
+      if (selectedGroupNo !== null) setGroupHighlight(selectedGroupNo, true);
+    }
   };
 
   btn.addEventListener('click', () => {
