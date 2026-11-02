@@ -369,7 +369,6 @@ html, body { height: 100%; overflow: hidden; font-family: 'Segoe UI', 'Meiryo UI
   position: relative;
   width: 100%;
   min-width: 100px;
-  transition: width .12s ease-out;
 }
 #map-image {
   display: block;
@@ -1260,19 +1259,22 @@ function pickRepresentativeMap(a, b) {
 }
 
 function getMapMaxLevels() {
+  if (mapMaxLevelsCache) return mapMaxLevelsCache;
   const maxLv = new Map();
-  MONSTER_DATA.breeds.forEach(b => {
-    (b.maps || []).forEach(sp => {
+  getMapSpawnIndex().forEach(spawns => {
+    spawns.forEach(({ sp }) => {
       const lo = sp.min || 0;
       const hi = sp.max || lo;
       if (lo === 0 && hi === 0) return;
       maxLv.set(sp.mid, Math.max(maxLv.get(sp.mid) || 0, hi));
     });
   });
-  return maxLv;
+  mapMaxLevelsCache = maxLv;
+  return mapMaxLevelsCache;
 }
 
 function getDedupedMaps() {
+  if (dedupedMapsCache) return dedupedMapsCache;
   const byKey = new Map();
   MONSTER_DATA.maps.forEach(map => {
     if (isExcludedMapName(map.name)) return;
@@ -1288,9 +1290,20 @@ function getDedupedMaps() {
   });
   // 各マップに出現するモンスターの最高Lvで降順。同Lvは従来どおりID降順。
   const maxLv = getMapMaxLevels();
-  return Array.from(byKey.values()).sort((a, b) =>
+  dedupedMapsCache = Array.from(byKey.values()).sort((a, b) =>
     (maxLv.get(b.id) || 0) - (maxLv.get(a.id) || 0) || b.id - a.id
   );
+  return dedupedMapsCache;
+}
+
+function getMapById(mid) {
+  if (!mapByIdCache) {
+    mapByIdCache = new Map();
+    MONSTER_DATA.maps.forEach(map => {
+      if (!mapByIdCache.has(map.id)) mapByIdCache.set(map.id, map);
+    });
+  }
+  return mapByIdCache.get(mid) || null;
 }
 
 /* ══════════════════════════════════════════════════
@@ -1360,6 +1373,17 @@ let currentMapId    = null;
 let currentSearchBid = null;
 let currentLvFilter = 0;
 let searchTimer     = null;
+let mapFilterTimer  = null;
+let lvFilterTimer   = null;
+
+// 静的データの索引・キャッシュ（monster_data.js はページ表示中に変化しない）
+let mapMaxLevelsCache = null;
+let dedupedMapsCache = null;
+let mapByIdCache = null;
+let mapSpawnIndexCache = null;
+let mapLevelRangesCache = null;
+const mapAutoLvCache = new Map();
+const breedDropsCache = new WeakMap();
 
 // マップビューの状態（番号→グループ、現在の選択）
 const MAP_ZOOM_DEFAULT = 0.5;
@@ -1420,6 +1444,9 @@ function init() {
     }
 
     buildMapList();
+    setupMapList();
+    setupEntityList();
+    setupMonsterGrid();
     setupSearch();
     setupLvControl();
     setupFormulaPanel();
@@ -1441,61 +1468,85 @@ init();
 function buildMapList(filter = '') {
   const el   = document.getElementById('map-list');
   const maps = getDedupedMaps();
-  el.innerHTML = '';
 
   const lf = filter.toLowerCase();
+  const ranges = currentLvFilter > 0 ? getMapLevelRanges() : null;
+  const lo = currentLvFilter - 50;
+  const hi = currentLvFilter + 50;
+  let html = '';
+
   maps.forEach(m => {
     if (lf && !m.name.toLowerCase().includes(lf)) return;
 
-    if (currentLvFilter > 0) {
-      const lo = currentLvFilter - 50, hi = currentLvFilter + 50;
-      const hasBreed = MONSTER_DATA.breeds.some(b =>
-        b.maps.some(sp => sp.mid === m.id && sp.max >= lo && sp.min <= hi)
-      );
-      if (!hasBreed) return;
+    if (ranges) {
+      const list = ranges.get(m.id);
+      if (!list || !list.some(([min, max]) => max >= lo && min <= hi)) return;
     }
 
-    const item = document.createElement('div');
-    item.className = 'map-item' + (m.id === currentMapId ? ' active' : '');
-    item.innerHTML =
+    const active = m.id === currentMapId ? ' active' : '';
+    html += `<div class="map-item${active}" data-mid="${m.id}">` +
       `<span class="map-item-name">${escHtml(m.name)}</span>` +
-      `<span class="map-item-count">${m.bids.length}種</span>`;
-    item.addEventListener('click', () => selectMap(m.id));
-    el.appendChild(item);
+      `<span class="map-item-count">${m.bids.length}種</span>` +
+      `</div>`;
   });
+  el.innerHTML = html;
 }
 
-document.getElementById('map-filter').addEventListener('input', e => {
-  buildMapList(e.target.value);
-});
+function updateMapListActive() {
+  const list = document.getElementById('map-list');
+  if (!list) return;
+  const prev = list.querySelector('.map-item.active');
+  if (prev) prev.classList.remove('active');
+  if (currentMapId === null) return;
+  const next = list.querySelector(`.map-item[data-mid="${currentMapId}"]`);
+  if (next) next.classList.add('active');
+}
 
-document.getElementById('lv-filter').addEventListener('input', e => {
-  const v = parseInt(e.target.value, 10);
-  currentLvFilter = isNaN(v) || v < 1 ? 0 : v;
-  buildMapList(document.getElementById('map-filter').value);
-  if (currentMapId !== null) renderMapMonsters(currentMapId);
-});
+function setupMapList() {
+  document.getElementById('map-list').addEventListener('click', e => {
+    const item = e.target.closest('.map-item');
+    if (!item) return;
+    const mid = parseInt(item.dataset.mid, 10);
+    if (Number.isFinite(mid)) selectMap(mid);
+  });
 
-document.getElementById('btn-lv-filter-clear').addEventListener('click', () => {
-  document.getElementById('lv-filter').value = '';
-  currentLvFilter = 0;
-  buildMapList(document.getElementById('map-filter').value);
-  if (currentMapId !== null) renderMapMonsters(currentMapId);
-});
+  document.getElementById('map-filter').addEventListener('input', e => {
+    clearTimeout(mapFilterTimer);
+    const value = e.target.value;
+    mapFilterTimer = setTimeout(() => buildMapList(value), 120);
+  });
+
+  document.getElementById('lv-filter').addEventListener('input', e => {
+    const v = parseInt(e.target.value, 10);
+    currentLvFilter = isNaN(v) || v < 1 ? 0 : v;
+    clearTimeout(lvFilterTimer);
+    lvFilterTimer = setTimeout(() => {
+      buildMapList(document.getElementById('map-filter').value);
+      if (currentMapId !== null) renderMapMonsters(currentMapId);
+    }, 150);
+  });
+
+  document.getElementById('btn-lv-filter-clear').addEventListener('click', () => {
+    clearTimeout(lvFilterTimer);
+    document.getElementById('lv-filter').value = '';
+    currentLvFilter = 0;
+    buildMapList(document.getElementById('map-filter').value);
+    if (currentMapId !== null) renderMapMonsters(currentMapId);
+  });
+}
 
 /* ══════════════════════════════════════════════════
    マップ代表レベル自動計算
 ══════════════════════════════════════════════════ */
 function calcMapLv(mid) {
+  if (mapAutoLvCache.has(mid)) return mapAutoLvCache.get(mid);
+
   const entries = [];
-  MONSTER_DATA.breeds.forEach(b => {
-    b.maps.forEach(sp => {
-      if (sp.mid !== mid) return;
-      const lo = sp.min || 0, hi = sp.max || lo;
-      if (lo === 0 && hi === 0) return;
-      const midLv = (lo + hi) / 2;
-      entries.push({ midLv, cnt: sp.cnt || 1 });
-    });
+  mapSpawns(mid).forEach(({ sp }) => {
+    const lo = sp.min || 0, hi = sp.max || lo;
+    if (lo === 0 && hi === 0) return;
+    const midLv = (lo + hi) / 2;
+    entries.push({ midLv, cnt: sp.cnt || 1 });
   });
   if (entries.length === 0) return currentLv;
 
@@ -1514,7 +1565,9 @@ function calcMapLv(mid) {
   const inBin = entries.filter(({ midLv }) => Math.max(1, Math.round(midLv / 5) * 5) === bestBin);
   const wSum  = inBin.reduce((s, e) => s + e.midLv * e.cnt, 0);
   const cSum  = inBin.reduce((s, e) => s + e.cnt, 0);
-  return Math.max(1, Math.round(wSum / cSum));
+  const autoLv = Math.max(1, Math.round(wSum / cSum));
+  mapAutoLvCache.set(mid, autoLv);
+  return autoLv;
 }
 
 function selectMap(mid) {
@@ -1530,7 +1583,7 @@ function selectMap(mid) {
   inp.value = autoLv;
   document.getElementById('lv-auto-hint').textContent = `(自動: Lv ${autoLv})`;
 
-  buildMapList(document.getElementById('map-filter').value);
+  updateMapListActive();
   renderMapMonsters(mid);
   document.getElementById('main').scrollTop = 0;
   hideFormulaView();
@@ -1540,14 +1593,38 @@ function selectMap(mid) {
 /* ══════════════════════════════════════════════════
    モンスター描画
 ══════════════════════════════════════════════════ */
-function mapSpawns(mid) {
-  const out = [];
+function getMapSpawnIndex() {
+  if (mapSpawnIndexCache) return mapSpawnIndexCache;
+  mapSpawnIndexCache = new Map();
   MONSTER_DATA.breeds.forEach(b => {
     (b.maps || []).forEach(sp => {
-      if (sp.mid === mid) out.push({ b, sp });
+      let out = mapSpawnIndexCache.get(sp.mid);
+      if (!out) {
+        out = [];
+        mapSpawnIndexCache.set(sp.mid, out);
+      }
+      out.push({ b, sp });
     });
   });
-  return out;
+  return mapSpawnIndexCache;
+}
+
+function mapSpawns(mid) {
+  return getMapSpawnIndex().get(mid) || [];
+}
+
+function getMapLevelRanges() {
+  if (mapLevelRangesCache) return mapLevelRangesCache;
+  mapLevelRangesCache = new Map();
+  getMapSpawnIndex().forEach((spawns, mid) => {
+    const ranges = [];
+    spawns.forEach(({ sp }) => {
+      if (sp.min === undefined || sp.max === undefined) return;
+      ranges.push([sp.min, sp.max]);
+    });
+    mapLevelRangesCache.set(mid, ranges);
+  });
+  return mapLevelRangesCache;
 }
 
 function mapLevelText(min, max) {
@@ -1630,7 +1707,7 @@ function buildMapGroups(map, mid) {
 }
 
 function renderMapMonsters(mid) {
-  const map = MONSTER_DATA.maps.find(m => m.id === mid);
+  const map = getMapById(mid);
   const grid = document.getElementById('monster-grid');
   const title = document.getElementById('main-title');
   const main = document.getElementById('main');
@@ -1671,8 +1748,7 @@ function renderSingleBreed(bid) {
   document.getElementById('entity-panel').style.display = '';
   title.textContent = `🔍 種族「${breed.name}」の検索結果`;
   lastViewTitle = title.textContent;
-  grid.innerHTML = '';
-  grid.appendChild(buildCard(breed, currentLv, null, true));
+  grid.innerHTML = buildCardHtml(breed, currentLv, null, true);
 }
 
 /* ══════════════════════════════════════════════════
@@ -1841,6 +1917,7 @@ function renderMapMarkers(view, markerRoot) {
   });
 
   view.allGroups.forEach(g => {
+    const tooltip = groupTooltip(g);
     g.points.forEach(([x, y]) => {
       const marker = document.createElement('span');
       marker.className = `map-marker ${g.kind}`;
@@ -1849,14 +1926,13 @@ function renderMapMarkers(view, markerRoot) {
       marker.style.left = markerPercent(Number(x), xMax) + '%';
       marker.style.top = markerPercent(Number(y), yMax) + '%';
       marker.textContent = String(g.no);
-      marker.title = groupTooltip(g) + `\n(${x}, ${y})`;
-      marker.setAttribute('aria-label', `${g.no} ${groupTooltip(g)}`);
+      marker.title = tooltip + `\n(${x}, ${y})`;
+      marker.setAttribute('aria-label', `${g.no} ${tooltip}`);
       frag.appendChild(marker);
     });
   });
 
-  markerRoot.innerHTML = '';
-  markerRoot.appendChild(frag);
+  markerRoot.replaceChildren(frag);
 }
 
 /* ══════════════════════════════════════════════════
@@ -1906,10 +1982,14 @@ function renderEntityList(view) {
   }
 
   list.innerHTML = html;
-  list.querySelectorAll('.entity-row').forEach(row => {
-    row.addEventListener('click', () => {
-      activateGroup(parseInt(row.dataset.no, 10));
-    });
+}
+
+function setupEntityList() {
+  document.getElementById('entity-list').addEventListener('click', e => {
+    const row = e.target.closest('.entity-row');
+    if (!row) return;
+    const no = parseInt(row.dataset.no, 10);
+    if (Number.isFinite(no)) activateGroup(no);
   });
 }
 
@@ -1918,17 +1998,38 @@ function renderEntityList(view) {
 ══════════════════════════════════════════════════ */
 function renderMonsterCards(view) {
   const grid = document.getElementById('monster-grid');
-  grid.innerHTML = '';
 
   if (!view.monsterGroups.length) {
     grid.innerHTML = '<div class="placeholder">このマップには表示対象のモンスターがいません。</div>';
     return;
   }
 
-  view.monsterGroups.forEach(g => {
-    const card = buildCard(g.b, currentLv, g.sp, false, { no: g.no });
-    grid.appendChild(card);
+  grid.innerHTML = view.monsterGroups
+    .map(g => buildCardHtml(g.b, currentLv, g.sp, false, { no: g.no }))
+    .join('');
+}
+
+function setupMonsterGrid() {
+  const grid = document.getElementById('monster-grid');
+
+  grid.addEventListener('click', e => {
+    const btn = e.target.closest('.tag-map-link[data-mid]');
+    if (!btn) return;
+    const mid = parseInt(btn.dataset.mid, 10);
+    if (Number.isFinite(mid)) selectMap(mid);
   });
+
+  // カード画像の読み込み失敗は、カード生成のたびに個別登録せず一度だけ委譲する。
+  grid.addEventListener('error', e => {
+    const img = e.target;
+    if (!img || img.tagName !== 'IMG' || !img.classList.contains('card-thumb')) return;
+    const ph = document.createElement('span');
+    ph.className = 'card-thumb card-thumb-empty';
+    ph.title = '画像なし';
+    ph.setAttribute('aria-hidden', 'true');
+    ph.textContent = '?';
+    img.replaceWith(ph);
+  }, true);
 }
 
 /* ══════════════════════════════════════════════════
@@ -1940,26 +2041,37 @@ function activateGroup(no) {
   if (!group) return;
 
   // 同じ項目をもう一度クリックしたら強調を解除する。
+  const previousNo = selectedGroupNo;
   selectedGroupNo = selectedGroupNo === no ? null : no;
-  updateGroupSelectionUI();
+  updateGroupSelectionUI(previousNo);
 }
 
-function updateGroupSelectionUI() {
+function setGroupHighlight(no, active) {
+  const row = document.querySelector(`#entity-list .entity-row[data-no="${no}"]`);
+  if (row) {
+    row.classList.toggle('active', active);
+    row.setAttribute('aria-pressed', active ? 'true' : 'false');
+  }
+
+  const card = document.querySelector(`#monster-grid .entity-card[data-gno="${no}"]`);
+  if (card) card.classList.toggle('active', active);
+
+  document.querySelectorAll(`#map-markers .map-marker[data-no="${no}"]`).forEach(marker => {
+    marker.classList.toggle('active', active);
+  });
+}
+
+function updateGroupSelectionUI(previousNo = null) {
   const view = currentMapView;
   if (!view) return;
 
-  document.querySelectorAll('#entity-list .entity-row').forEach(row => {
-    const active = selectedGroupNo !== null && Number(row.dataset.no) === selectedGroupNo;
-    row.classList.toggle('active', active);
-    row.setAttribute('aria-pressed', active ? 'true' : 'false');
-  });
-  document.querySelectorAll('#map-markers .map-marker').forEach(marker => {
-    const active = selectedGroupNo !== null && Number(marker.dataset.no) === selectedGroupNo;
-    marker.classList.toggle('active', active);
-  });
-  document.querySelectorAll('#monster-grid .entity-card').forEach(card => {
-    card.classList.toggle('active', selectedGroupNo !== null && Number(card.dataset.gno) === selectedGroupNo);
-  });
+  // 以前の選択と新しい選択だけを更新する（全マーカー・全カードの走査を避ける）。
+  if (previousNo !== null && previousNo !== selectedGroupNo) {
+    setGroupHighlight(previousNo, false);
+  }
+  if (selectedGroupNo !== null) {
+    setGroupHighlight(selectedGroupNo, true);
+  }
 
   const status = document.getElementById('map-status');
   if (selectedGroupNo === null) {
@@ -2025,7 +2137,22 @@ function applyMapZoom(nextZoom, preserveCenter = true) {
 /* ══════════════════════════════════════════════════
    カード生成
 ══════════════════════════════════════════════════ */
-function buildCard(b, lv, mapInfo, showAllMaps = false, groupInfo = null) {
+function getBreedDrops(b) {
+  const raw = b && b.drops;
+  if (typeof raw !== 'string') return raw || [];
+  let drops = breedDropsCache.get(b);
+  if (!drops) {
+    try {
+      drops = JSON.parse(raw) || [];
+    } catch (e) {
+      drops = [];
+    }
+    breedDropsCache.set(b, drops);
+  }
+  return drops;
+}
+
+function buildCardHtml(b, lv, mapInfo, showAllMaps = false, groupInfo = null) {
   // マップ表示では、そのスポーンのレベル範囲内にクランプして計算する
   const calcLv = mapInfo
     ? Math.max(1, Math.min(Math.max(lv, mapInfo.min), mapInfo.max))
@@ -2092,7 +2219,7 @@ function buildCard(b, lv, mapInfo, showAllMaps = false, groupInfo = null) {
   ].join('');
 
   // ドロップアイテム（job2 の m_aDroppingItem）
-  const drops = (typeof b.drops === 'string' ? JSON.parse(b.drops) : b.drops) || [];
+  const drops = getBreedDrops(b);
   const dropHeading = (mapInfo && mapInfo.no_drop_item)
     ? '💰 ドロップ（このマップでは無効）'
     : '💰 ドロップ';
@@ -2142,7 +2269,7 @@ function buildCard(b, lv, mapInfo, showAllMaps = false, groupInfo = null) {
       (x.min - y.min) || (x.max - y.max) || (x.mid - y.mid));
     const maxShow = 120;
     const mapLines = list.slice(0, maxShow).map(bm => {
-      const mp = MONSTER_DATA.maps.find(m => m.id === bm.mid);
+      const mp = getMapById(bm.mid);
       if (!mp || !mp.img) return '';
       const lvTxt = bm.min === bm.max ? `Lv ${bm.min}` : `Lv ${bm.min}–${bm.max}`;
       const popTxt = bm.pop > 0 ? ` / 🔄${bm.pop}秒` : '';
@@ -2174,10 +2301,9 @@ function buildCard(b, lv, mapInfo, showAllMaps = false, groupInfo = null) {
     ? `<img class="card-thumb" src="${escHtml(imagePath)}" alt="">`
     : `<span class="card-thumb card-thumb-empty" title="画像なし" aria-hidden="true">?</span>`;
 
-  const card = document.createElement('div');
-  card.className = 'card' + (groupInfo ? ' entity-card' : '');
-  if (groupInfo) card.dataset.gno = String(cardNo);
-  card.innerHTML = `
+  const cardClass = 'card' + (groupInfo ? ' entity-card' : '');
+  const cardAttrs = groupInfo ? ` data-gno="${String(cardNo)}"` : '';
+  return `<div class="${cardClass}"${cardAttrs}>
     <div class="card-header">
       <div>
         <div class="card-name">${cardNoHtml}<span class="card-species-label">種族</span>${escHtml(speciesName)} ${corrHtml}</div>
@@ -2251,23 +2377,7 @@ function buildCard(b, lv, mapInfo, showAllMaps = false, groupInfo = null) {
       ${dropTags ? `<div class="sec-title">${dropHeading}</div><div class="tag-row">${dropTags}</div>` : ''}
       ${skillTags ? `<div class="sec-title">✨ スキル</div><div class="tag-row">${skillTags}</div>` : ''}
       ${mapSection}
-    </div>`;
-
-  card.querySelectorAll('img.card-thumb').forEach(img => {
-    img.addEventListener('error', () => {
-      const ph = document.createElement('span');
-      ph.className = 'card-thumb card-thumb-empty';
-      ph.title = '画像なし';
-      ph.setAttribute('aria-hidden', 'true');
-      ph.textContent = '?';
-      img.replaceWith(ph);
-    }, { once: true });
-  });
-
-  card.querySelectorAll('.tag-map-link[data-mid]').forEach(btn => {
-    btn.addEventListener('click', () => selectMap(parseInt(btn.dataset.mid, 10)));
-  });
-  return card;
+    </div></div>`;
 }
 
 function statCell(label, val, base) {
@@ -2304,6 +2414,19 @@ function setupSearch() {
     if (e.key === 'Escape') closeSearch();
   });
 
+  res.addEventListener('click', e => {
+    const el = e.target.closest('.search-item[data-bid]');
+    if (!el) return;
+    const bid = parseInt(el.dataset.bid, 10);
+    if (!Number.isFinite(bid)) return;
+    closeSearch();
+    document.getElementById('search-input').value = '';
+    currentMapId = null;
+    updateMapListActive();
+    hideFormulaView();
+    renderSingleBreed(bid);
+  });
+
   document.addEventListener('click', e => {
     if (!res.contains(e.target) && e.target !== inp) closeSearch();
   });
@@ -2326,11 +2449,11 @@ function doSearch(q) {
 
   res.innerHTML = hits.map(b => {
     const mapIds = [...new Set(b.maps.map(bm => bm.mid))].filter(mid => {
-      const mp = MONSTER_DATA.maps.find(m => m.id === mid);
+      const mp = getMapById(mid);
       return mp && mp.img;
     });
     const mapNames = mapIds.slice(0, 2).map(mid => {
-      const mp = MONSTER_DATA.maps.find(m => m.id === mid);
+      const mp = getMapById(mid);
       return mp ? mp.name : '';
     }).filter(Boolean).join(', ');
     const lvs = b.maps.map(bm => [bm.min, bm.max]).flat().filter(v => v > 0);
@@ -2357,18 +2480,6 @@ function doSearch(q) {
       <span style="font-size:11px;color:var(--text-muted)">${mapIds.length}マップ</span>
     </div>`;
   }).join('');
-
-  res.querySelectorAll('.search-item[data-bid]').forEach(el => {
-    el.addEventListener('click', () => {
-      const bid = parseInt(el.dataset.bid, 10);
-      closeSearch();
-      document.getElementById('search-input').value = '';
-      currentMapId = null;
-      buildMapList(document.getElementById('map-filter').value);
-      hideFormulaView();
-      renderSingleBreed(bid);
-    });
-  });
 
   res.classList.add('show');
 }
