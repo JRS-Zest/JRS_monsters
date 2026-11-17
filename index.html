@@ -1149,7 +1149,7 @@ html, body { height: 100%; overflow: hidden; font-family: 'Segoe UI', 'Meiryo UI
         </div>
       </div>
       <div class="side-filter">
-        <label title="job2.dat のテイム対象フラグと階級（一般4まで）で絞り込みます。スキルLv・転生回数・ペット数などは別条件です。">
+        <label title="job2.dat のテイム対象フラグ・階級（一般4まで）と、MAP側のBlockToTameで絞り込みます。スキルLv・転生回数・ペット数などは別条件です。">
           <input type="checkbox" id="tame-only">
           <span>🐾 テイム対象のみ</span>
         </label>
@@ -1245,7 +1245,7 @@ html, body { height: 100%; overflow: hidden; font-family: 'Segoe UI', 'Meiryo UI
             <summary>調査メモ（技術的な内容）</summary>
             <div class="fp-note">
               job2.dat offset 0x2E bit6（IsReviseIntCalc）と
-              RMD グループ flags1 bit5（IsReviseIntelligence）の OR が 0 のとき入れ替え。
+              RMD グループ flags 0x28 bit26（IsReviseIntelligence）の OR が 0 のとき入れ替え。
               参考サーバ CActor.cpp / cACTOR::setStatus() の分岐。
             </div>
           </details>
