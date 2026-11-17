@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>JRS モンスター図鑑</title>
+<link rel="icon" type="image/svg+xml" href="qr/site.svg">
 <style>
 /* ══════════════════════════════════════════════════
    リセット & ベース
@@ -280,6 +281,18 @@ html, body { height: 100%; overflow: hidden; font-family: 'Segoe UI', 'Meiryo UI
 .map-item:hover   { background: var(--card); }
 .map-item.active  { background: var(--card); border-left: 3px solid var(--accent); }
 .map-item-name    { font-size: 12px; line-height: 1.4; }
+.map-mirror-badge {
+  display: inline-block;
+  margin-left: 5px;
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-size: 9px;
+  font-weight: 700;
+  vertical-align: 1px;
+  color: #fff;
+  background: var(--accent);
+}
+.map-mirror-badge.count { color: #1a1a2e; background: var(--accent2); }
 .map-item-count   { font-size: 11px; color: var(--text-muted); white-space: nowrap; margin-left: 6px; text-align: right; }
 .map-tame-count   { color: var(--accent2); font-size: 10px; margin-left: 3px; }
 .map-tame-count.zero { color: var(--text-muted); opacity: .6; }
@@ -347,6 +360,126 @@ html, body { height: 100%; overflow: hidden; font-family: 'Segoe UI', 'Meiryo UI
 #main.formula-mode #map-panel,
 #main.formula-mode #entity-panel,
 #main.formula-mode #monster-grid { display: none !important; }
+
+/* ══════════════════════════════════════════════════
+   ミラー差分（ページ下部）
+══════════════════════════════════════════════════ */
+#mirror-section { display: none; margin-top: 14px; }
+#main.map-mode:not(.formula-mode) #mirror-section.has-content { display: block; }
+#main.formula-mode #mirror-section { display: none !important; }
+.mirror-details {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+.mirror-details > summary {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  list-style: none;
+}
+.mirror-details > summary::-webkit-details-marker { display: none; }
+.mirror-details > summary::before {
+  content: '▶';
+  color: var(--text-muted);
+  font-size: 10px;
+  transition: transform .15s;
+}
+.mirror-details[open] > summary::before { transform: rotate(90deg); }
+.mirror-badge {
+  display: inline-block;
+  padding: 2px 7px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  background: var(--bg);
+}
+.mirror-badge.has-diff { color: #fff; background: var(--accent); border-color: var(--accent); }
+.mirror-badge.count-only { color: #1a1a2e; background: var(--accent2); border-color: var(--accent2); }
+.mirror-badge.same { color: var(--green); border-color: var(--green); }
+.mirror-count { color: var(--text-muted); font-size: 11px; font-weight: 400; }
+.mirror-body { margin-top: 10px; }
+.mirror-note { color: var(--text-muted); font-size: 11px; line-height: 1.6; margin: 6px 0; }
+.mirror-members { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+.mirror-member {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  max-width: 100%;
+  padding: 3px 7px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  font-size: 11px;
+  text-decoration: none;
+}
+.mirror-member.current { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent) inset; }
+.mirror-member.hidden { opacity: .55; }
+.mirror-member a { color: var(--blue); text-decoration: none; }
+.mirror-member .mirror-role { color: var(--accent2); font-weight: 700; }
+.mirror-table-wrap {
+  overflow-x: auto;
+  margin: 8px 0 2px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+.mirror-table {
+  border-collapse: collapse;
+  width: max-content;
+  min-width: 100%;
+  font-size: 11px;
+}
+.mirror-table th,
+.mirror-table td {
+  padding: 5px 7px;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+  text-align: right;
+}
+.mirror-table th:first-child,
+.mirror-table td:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: var(--surface);
+  text-align: left;
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mirror-table thead th {
+  background: #1b2a4a;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+.mirror-table tbody tr:last-child td { border-bottom: none; }
+.mirror-table tr.mirror-current td { background: rgba(233, 69, 96, .10); }
+.mirror-table tr.mirror-current td:first-child { background: rgba(233, 69, 96, .16); }
+.mirror-table td.diff-cell { color: var(--accent2); font-weight: 700; }
+.mirror-table td.diff-up::after { content: ' ▲'; font-size: 9px; }
+.mirror-table td.diff-down::after { content: ' ▼'; font-size: 9px; }
+.mirror-table td.diff-none { color: var(--text-muted); }
+.mirror-monster { margin-top: 14px; }
+.mirror-monster h4 {
+  font-size: 12px;
+  color: var(--accent2);
+  margin: 0 0 4px;
+  font-weight: 700;
+}
+.mirror-monster .mirror-sub { color: var(--text-muted); font-size: 10px; font-weight: 400; margin-left: 4px; }
+@media (max-width: 820px) {
+  .mirror-table th, .mirror-table td { padding: 4px 5px; }
+  .mirror-table th:first-child, .mirror-table td:first-child { max-width: 140px; }
+}
 
 #map-panel {
   background: var(--surface);
@@ -1073,6 +1206,8 @@ html, body { height: 100%; overflow: hidden; font-family: 'Segoe UI', 'Meiryo UI
       </div>
     </div>
 
+    <div id="mirror-section" aria-label="ミラー差分"></div>
+
     <div id="formula-view">
 
       <div class="fp-intro">
@@ -1213,6 +1348,7 @@ html, body { height: 100%; overflow: hidden; font-family: 'Segoe UI', 'Meiryo UI
 
 <!-- 生成された各データJSを読み込む -->
 <script src="monster_data.js"></script>
+<script src="mirror_data.js"></script>
 <script src="monster_image_map.js"></script>
 <script src="skill_data.js"></script>
 <script>
@@ -1328,7 +1464,22 @@ function isExcludedMapName(name) {
   return EXCLUDED_MAP_NAME_PARTS.some(part => name.includes(part));
 }
 
+function mirrorInfo(map) {
+  if (typeof MIRROR_DATA === 'undefined' || !MIRROR_DATA || !MIRROR_DATA.byMap) return null;
+  return MIRROR_DATA.byMap[String(map && map.id)] || null;
+}
+
+function mirrorRoleScore(role) {
+  const r = String(role || '');
+  if (r === 'オリジナル' || r.startsWith('オリジナル（通常）')) return 0;
+  if (r.startsWith('高レベル用オリジナル')) return 1;
+  const m = r.match(/ミラー(\d+)/);
+  return m ? 10 + parseInt(m[1], 10) : 100;
+}
+
 function mapDataKey(map) {
+  const mi = mirrorInfo(map);
+  if (mi && mi.variantKey) return `m:${mi.variantKey}`;
   if (map.sig) return map.sig;
   const bids = Array.isArray(map.bids) ? [...new Set(map.bids)].sort((a, b) => a - b) : [];
   return bids.join(',');
@@ -1346,6 +1497,17 @@ function mapFileScore(fileName) {
 }
 
 function pickRepresentativeMap(a, b) {
+  // ミラー情報がある場合は「オリジナル → 超級1 → ミラー番号」を優先する。
+  const ia = mirrorInfo(a);
+  const ib = mirrorInfo(b);
+  if (ia || ib) {
+    const sa = ia ? mirrorRoleScore(ia.role) : 999;
+    const sb = ib ? mirrorRoleScore(ib.role) : 999;
+    if (sa !== sb) return sa < sb ? a : b;
+    const da = ia ? ia.display !== false : true;
+    const db = ib ? ib.display !== false : true;
+    if (da !== db) return da ? a : b;
+  }
   // 画像（TGA）があるマップを優先する。同じ内容ならファイル名の短い方を代表にする。
   if (!!a.img !== !!b.img) return a.img ? a : b;
   const sa = mapFileScore(a.file);
@@ -1379,6 +1541,8 @@ function getDedupedMaps() {
     if (isExcludedMapName(map.name)) return;
     if (!map.bids || map.bids.length === 0) return;
     if (!map.img) return; // 画像の無いマップは一覧・マップ表示から除外
+    const mi = mirrorInfo(map);
+    if (mi && mi.display === false) return; // 同一内容のミラーは代表1枚だけ表示
     const key = mapDataKey(map);
     const current = byKey.get(key);
     if (!current) {
@@ -1579,8 +1743,14 @@ function buildMapList(filter = '') {
 
     const active = m.id === currentMapId ? ' active' : '';
     const tameCnt = tameCounts.get(m.id) || 0;
+    const mi = mirrorInfo(m);
+    const mirrorBadge = mi && mi.hasStatDiff
+      ? ' <span class="map-mirror-badge">ミラー差分</span>'
+      : mi && mi.hasCountDiff
+        ? ' <span class="map-mirror-badge count">出現数</span>'
+        : '';
     html += `<div class="map-item${active}" data-mid="${m.id}">` +
-      `<span class="map-item-name">${escHtml(m.name)}</span>` +
+      `<span class="map-item-name">${escHtml(m.name)}${mirrorBadge}</span>` +
       `<span class="map-item-count" title="出現種族数 / 🐾はテイム対象（一般4まで）の種族数">${m.bids.length}種 ` +
       `<span class="map-tame-count${tameCnt ? '' : ' zero'}">🐾${tameCnt}</span>` +
       `</span></div>`;
@@ -1848,6 +2018,155 @@ function buildMapGroups(map, mid) {
   };
 }
 
+/* ══════════════════════════════════════════════════
+   ミラー差分（ページ下部）
+   ══════════════════════════════════════════════════ */
+function mirrorValueText(key, values) {
+  if (!values) return '出現なし';
+  switch (key) {
+    case 'lv': return values.lv;
+    case 'cfinal': {
+      const n = Number(values.cfinal);
+      const pct = n / 100;
+      return `${n} (${pct % 1 ? pct.toFixed(1) : pct.toFixed(0)}%)`;
+    }
+    case 'sx': return `${values.sx}/${values.sy}`;
+    case 'pop': return `${values.pop}秒`;
+    case 'cnt': return `${values.cnt}`;
+    case 'state': {
+      const parts = [];
+      if (values.rev) parts.push('INT⇔WIS');
+      if (values.immune && values.immune !== 'なし') parts.push(`無効: ${values.immune}`);
+      return parts.length ? parts.join(' / ') : '-';
+    }
+    default: return values[key] ?? '-';
+  }
+}
+
+function mirrorCellClass(key, baseRow, row, variant) {
+  if (!row || !row.exists) return 'diff-cell';
+  if (!baseRow || !baseRow.exists) return 'diff-cell';
+  if (variant.isBaseline || variant.isReference) return '';
+  const a = baseRow.values;
+  const b = row.values;
+  if (!a || !b) return 'diff-cell';
+  if (key === 'sx') {
+    return (a.sx !== b.sx || a.sy !== b.sy) ? 'diff-cell' : '';
+  }
+  if (key === 'state') {
+    return mirrorValueText('state', a) !== mirrorValueText('state', b) ? 'diff-cell' : '';
+  }
+  const av = a[key];
+  const bv = b[key];
+  if (av === bv) return '';
+  if (typeof av === 'number' && typeof bv === 'number') {
+    return bv > av ? 'diff-cell diff-up' : 'diff-cell diff-down';
+  }
+  return 'diff-cell';
+}
+
+function renderMirrorSection(mid) {
+  const root = document.getElementById('mirror-section');
+  if (!root) return;
+  root.classList.remove('has-content');
+  root.innerHTML = '';
+
+  const info = (typeof MIRROR_DATA !== 'undefined' && MIRROR_DATA && MIRROR_DATA.byMap && mid !== null)
+    ? MIRROR_DATA.byMap[String(mid)] : null;
+  if (!info) return;
+  const group = (MIRROR_DATA.groups || []).find(g => g.id === info.groupId);
+  if (!group || !group.variants || !group.variants.length) return;
+
+  const hasDiff = Boolean(group.hasStatDiff || group.hasCountDiff);
+  const badgeClass = group.hasStatDiff ? 'has-diff' : group.hasCountDiff ? 'count-only' : 'same';
+  const badgeText = group.hasStatDiff ? 'ミラー差分あり'
+    : group.hasCountDiff ? '出現数のみ差分' : '全ミラー同一';
+
+  const memberHtml = (group.members || []).map(m => {
+    const role = escHtml(m.role);
+    const file = escHtml(m.file);
+    const current = m.mapId === mid;
+    const baseClass = 'mirror-member' + (current ? ' current' : '') +
+      (m.display ? '' : ' hidden');
+    if (current) {
+      return `<span class="${baseClass}" title="${file}"><span class="mirror-role">${role}</span> このマップ</span>`;
+    }
+    if (m.display && m.hasImage) {
+      return `<a class="${baseClass}" href="${escHtml(buildMapUrl(m.mapId))}" title="${file}">` +
+        `<span class="mirror-role">${role}</span> ${escHtml(m.name)}</a>`;
+    }
+    let note = '同一内容';
+    if (!m.hasImage) {
+      note = m.sameAs ? `同一: ${escHtml(m.sameAs)}（画像なし）` : '画像なし';
+    } else if (m.sameAs) {
+      note = `同一: ${escHtml(m.sameAs)}${m.countDiff ? '（出現数差分）' : ''}`;
+    }
+    return `<span class="${baseClass}" title="${file}"><span class="mirror-role">${role}</span> ${note}</span>`;
+  }).join('');
+
+  const notes = [];
+  if (group.category === '超級シリーズ') {
+    notes.push('比較基準は高レベル用オリジナル（超級1）。通常版→超級1の差は高レベル用のため、ミラー差には含めていません。');
+  } else {
+    notes.push('比較基準はオリジナルです。');
+  }
+  if (!group.hasStatDiff && group.hasCountDiff) {
+    notes.push('モンスターのステータス差はなく、出現数だけが違います。');
+  }
+  if (!hasDiff) {
+    notes.push(group.category === '超級シリーズ'
+      ? '超級1とそのミラーは全項目で同じです。通常版は高レベル用で別です。'
+      : 'このマップのミラーは全項目で同じです。');
+  }
+  for (const n of (group.notes || [])) notes.push(n);
+
+  const cols = [
+    ['lv', 'Lv'], ['chp', 'HP補正'], ['cexp', 'EXP補正'], ['cap', '攻撃倍率'],
+    ['cfinal', '被ダメ'], ['sx', '表示'], ['pop', 'リポップ'], ['cnt', '出現数'], ['state', '状態'],
+  ];
+
+  let tables = '';
+  for (const mon of (group.monsters || [])) {
+    const baseRow = (mon.rows || []).find(r => r.mapId === group.baselineId) || null;
+    const rows = (group.variants || []).map(v => {
+      const row = (mon.rows || []).find(r => r.mapId === v.mapId);
+      const cells = cols.map(([key, label]) => {
+        const cls = mirrorCellClass(key, baseRow, row, v);
+        return `<td class="${cls}">${escHtml(mirrorValueText(key, row && row.values))}</td>`;
+      }).join('');
+      let diffTxt = '変化なし';
+      if (v.isBaseline) diffTxt = '基準';
+      else if (v.isReference) diffTxt = '参考（通常版）';
+      else if (row && row.diffLabels && row.diffLabels.length) diffTxt = row.diffLabels.join(' / ');
+      const trClass = 'mirror-row' + (v.mapId === mid ? ' mirror-current' : '') +
+        (v.isReference ? ' mirror-reference' : '');
+      return `<tr class="${trClass}"><td title="${escHtml(v.file)}">${escHtml(v.name)}</td>` +
+        `<td>${escHtml(v.role)}</td>${cells}<td>${escHtml(diffTxt)}</td></tr>`;
+    }).join('');
+    const sub = mon.name && mon.name !== mon.npc ? `（種族: ${escHtml(mon.name)}）` : '';
+    tables += `<div class="mirror-monster"><h4>${escHtml(mon.npc || mon.name)}<span class="mirror-sub">${sub}</span></h4>` +
+      `<div class="mirror-table-wrap"><table class="mirror-table"><thead><tr>` +
+      `<th>マップ</th><th>役割</th>${cols.map(([, l]) => `<th>${l}</th>`).join('')}<th>差分</th>` +
+      `</tr></thead><tbody>${rows}</tbody></table></div></div>`;
+  }
+
+  const noDiffNote = (group.monsters.length > 0 && group.noDiffCount > 0)
+    ? `<div class="mirror-note">他の ${group.noDiffCount} 種は全項目で変化なし。</div>` : '';
+  const detailsOpen = group.hasStatDiff ? ' open' : '';
+
+  root.innerHTML =
+    `<details class="mirror-details"${detailsOpen}>` +
+    `<summary><span class="mirror-badge ${badgeClass}">${badgeText}</span>` +
+    `マップ補正・ミラー差分` +
+    `<span class="mirror-count">${group.monsters.length}件の差分 / 基準側 ${group.monsterCount}種</span>` +
+    `</summary><div class="mirror-body">` +
+    `<div class="mirror-members">${memberHtml}</div>` +
+    notes.map(n => `<div class="mirror-note">${escHtml(n)}</div>`).join('') +
+    tables + noDiffNote +
+    `</div></details>`;
+  root.classList.add('has-content');
+}
+
 function renderMapMonsters(mid) {
   const map = getMapById(mid);
   const grid = document.getElementById('monster-grid');
@@ -1857,6 +2176,7 @@ function renderMapMonsters(mid) {
   if (!map) {
     title.textContent = 'マップが見つかりません';
     grid.innerHTML = '';
+    renderMirrorSection(null);
     return;
   }
 
@@ -1876,6 +2196,7 @@ function renderMapMonsters(mid) {
   renderMapPanel(currentMapView);
   renderEntityList(currentMapView);
   renderMonsterCards(currentMapView);
+  renderMirrorSection(mid);
 }
 
 function renderSingleBreed(bid) {
@@ -1895,6 +2216,7 @@ function renderSingleBreed(bid) {
   title.textContent = `🔍 種族「${breed.name}」の検索結果`;
   lastViewTitle = title.textContent;
   grid.innerHTML = buildCardHtml(breed, currentLv, null, true);
+  renderMirrorSection(null);
 }
 
 /* ══════════════════════════════════════════════════
